@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #003f87;
+  --color-primary-hover: #0056b3;
+  --color-surface: #fbf9f8;
+  --color-surface-tint: #d7e2ff;
+  --color-outline: #727784;
+  --color-outline-variant: #c2c6d4;
+  --color-on-surface: #1b1c1c;
+  --color-on-surface-variant: #424752;
+  --color-banner-accent: #ffdad6;
+  --color-banner-text: #d7e2ff;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}

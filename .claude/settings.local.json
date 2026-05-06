@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\" -Recurse -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)",
+      "Bash(npm install *)",
+      "Bash(npm run *)"
+    ]
+  }
+}
