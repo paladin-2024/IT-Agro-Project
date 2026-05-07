@@ -26,7 +26,12 @@ export default function LoginPage() {
     const [error, setError] = useState('')
     const navigate = useNavigate()
     const { login, isAuthenticated, user } = useAuth()
-    if (isAuthenticated) return <Navigate to={user?.role === 'owner' ? '/owner/dashboard' : '/dashboard'} replace />
+    if (isAuthenticated) {
+        const dest = user?.role === 'owner' ? '/owner/dashboard'
+            : user?.role === 'employee' ? '/employee/dashboard'
+            : '/dashboard'
+        return <Navigate to={dest} replace />
+    }
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target
@@ -41,15 +46,19 @@ export default function LoginPage() {
             if (!API_URL) {
                 // Dev mode: no backend, use mock credentials
                 const mockUsers = {
-                    'owner@agrordc.cd':   { role: 'owner',  name: 'Kabangu Mulumba' },
-                    'admin@agrordc.cd':   { role: 'admin',  name: 'Administrateur' },
+                    'owner@agrordc.cd':    { role: 'owner',    name: 'Kabangu Mulumba' },
+                    'admin@agrordc.cd':    { role: 'admin',    name: 'Administrateur' },
+                    'employee@agrordc.cd': { role: 'employee', name: 'Samuel Mwamba' },
                 }
                 const mockUser = mockUsers[form.email]
                 if (!mockUser || form.password !== 'password') {
                     throw new Error('Email ou mot de passe incorrect (mode dev)')
                 }
                 login(mockUser, 'dev-token')
-                navigate(mockUser.role === 'owner' ? '/owner/dashboard' : '/dashboard')
+                const dest = mockUser.role === 'owner' ? '/owner/dashboard'
+                    : mockUser.role === 'employee' ? '/employee/dashboard'
+                    : '/dashboard'
+                navigate(dest)
                 return
             }
             const res = await fetch(`${API_URL}/api/auth/login`, {

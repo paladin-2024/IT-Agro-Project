@@ -17,6 +17,7 @@ import OwnerOverviewParcelPage from './pages/OwnerOverviewParcelPage.jsx'
 import OwnerDetailParcell from './pages/OwnerDetailParcell.jsx'
 import OwnerAffectation from './pages/OwnerAffectation.jsx'
 import OwnerFarmDetailPage from './pages/OwnerFarmDetailPage.jsx'
+import EmployeeDashboard from './pages/EmployeeDashboard.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -141,6 +142,14 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <OwnerAffectation />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/dashboard',
+        element: (
+            <ProtectedRoute>
+                <EmployeeDashboard />
             </ProtectedRoute>
         ),
     },
