@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 /* ─── Static data ────────────────────────────────────────────────────── */
 
 const harvests = [
-    { date: "14 Nov 2023", variety: "Maïs Jaune Z-10",   qty: "4.2 Tonnes" },
-    { date: "22 Jul 2023", variety: "Sorgho Rugale",      qty: "2.8 Tonnes" },
-    { date: "05 Mar 2023", variety: "Soja Prima",         qty: "3.5 Tonnes" },
-    { date: "12 Oct 2022", variety: "Maïs Jaune Z-10",   qty: "3.9 Tonnes" },
+    { id: "PRD-2023-084", date: "14 Nov 2023", variety: "Maïs Jaune Z-10",   qty: "4.2 Tonnes" },
+    { id: "PRD-2023-047", date: "22 Jul 2023", variety: "Sorgho Rugale",      qty: "2.8 Tonnes" },
+    { id: "PRD-2023-012", date: "05 Mar 2023", variety: "Soja Prima",         qty: "3.5 Tonnes" },
+    { id: "PRD-2022-098", date: "12 Oct 2022", variety: "Maïs Jaune Z-10",   qty: "3.9 Tonnes" },
 ];
 
 const workers = [
@@ -150,7 +150,7 @@ export default function EmployeeParcelDetailPage() {
                             <table className="w-full text-left text-sm">
                                 <thead>
                                     <tr className="border-b border-slate-100 bg-slate-50">
-                                        {["Date de Récolte", "Variété", "Quantité", "Statut"].map((h) => (
+                                        {["Date de Récolte", "Variété", "Quantité", "Statut", ""].map((h) => (
                                             <th key={h} className="px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
                                                 {h}
                                             </th>
@@ -159,7 +159,7 @@ export default function EmployeeParcelDetailPage() {
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
                                     {harvests.map((row, i) => (
-                                        <tr key={row.date} className={`transition-colors hover:bg-slate-50/60 ${i % 2 === 1 ? "bg-slate-50/30" : ""}`}>
+                                        <tr key={row.id} className={`cursor-pointer transition-colors hover:bg-blue-50/40 ${i % 2 === 1 ? "bg-slate-50/30" : ""}`}>
                                             <td className="px-6 py-4 font-semibold text-[#171c25]">{row.date}</td>
                                             <td className="px-6 py-4 text-slate-500">{row.variety}</td>
                                             <td className="px-6 py-4 font-semibold text-[#171c25]">{row.qty}</td>
@@ -167,6 +167,15 @@ export default function EmployeeParcelDetailPage() {
                                                 <span className="rounded-full bg-green-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-green-800">
                                                     Terminé
                                                 </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <Link
+                                                    to={`/employee/productions/${row.id}`}
+                                                    className="flex items-center gap-1 text-xs font-bold text-[#003f87] hover:underline"
+                                                >
+                                                    Détails
+                                                    <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                                </Link>
                                             </td>
                                         </tr>
                                     ))}

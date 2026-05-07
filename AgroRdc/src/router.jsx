@@ -19,6 +19,7 @@ import OwnerAffectation from './pages/OwnerAffectation.jsx'
 import OwnerFarmDetailPage from './pages/OwnerFarmDetailPage.jsx'
 import EmployeeDashboard from './pages/EmployeeDashboard.jsx'
 import EmployeeParcelDetailPage from './pages/EmployeeParcelDetailPage.jsx'
+import EmployeeProductionDetailPage from './pages/EmployeeProductionDetailPage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -159,6 +160,14 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <EmployeeParcelDetailPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/productions/:id',
+        element: (
+            <ProtectedRoute>
+                <EmployeeProductionDetailPage />
             </ProtectedRoute>
         ),
     },

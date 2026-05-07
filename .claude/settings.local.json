@@ -12,7 +12,9 @@
       "Bash(New-Item -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\\\\src\\\\pages\\\\AdminFermesGestion.jsx\" -ItemType File -Force)",
       "Bash(Out-Null)",
       "Bash(Write-Output \"created\")",
-      "PowerShell(New-Item *)"
+      "PowerShell(New-Item *)",
+      "Bash(dir C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\\\\src\\\\components *)",
+      "Bash(del *)"
     ]
   }
 }
