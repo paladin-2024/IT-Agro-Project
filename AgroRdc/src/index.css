@@ -22,3 +22,19 @@ body {
 #root {
   min-height: 100vh;
 }
+
+.field-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #DEE2E6;
+  background-color: #F8FAFC;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.field-input:focus {
+  border-color: #003f87;
+  box-shadow: 0 0 0 2px rgba(0, 63, 135, 0.12);
+}

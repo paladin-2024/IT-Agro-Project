@@ -4,9 +4,9 @@ import { useAuth } from '../contexts/AuthContext.jsx'
 const navItems = [
     { label: 'Tableau de bord', icon: 'space_dashboard', to: '/dashboard' },
     { label: 'Utilisateurs', icon: 'group', to: '/utilisateurs' },
-    { label: 'Fermes', icon: 'agriculture', to: '/dashboard/fermes' },
+    { label: 'Fermes', icon: 'agriculture', to: '/fermes' },
     { label: 'Santé du système', icon: 'monitor_heart', to: '/sante-systeme' },
-    { label: 'Paramètres', icon: 'settings', to: '/dashboard/parametres' },
+    { label: 'Paramètres', icon: 'settings', to: '/parametres' },
 ]
 
 export default function AdminSidebar() {

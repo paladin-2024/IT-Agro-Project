@@ -35,7 +35,6 @@ const SERVICES = [
     { name: 'API Gateway', status: 'ok', latency: '42ms', uptime: '99.99%' },
     { name: 'Auth Service', status: 'ok', latency: '18ms', uptime: '100%' },
     { name: 'Base PostgreSQL', status: 'ok', latency: '6ms', uptime: '99.97%' },
-    { name: 'Capteurs IoT', status: 'warn', latency: '2140ms', uptime: '97.3%' },
     { name: 'Service Email', status: 'ok', latency: '95ms', uptime: '99.8%' },
     { name: 'Stockage fichiers', status: 'ok', latency: '31ms', uptime: '100%' },
     { name: 'Worker tâches', status: 'error', latency: '—', uptime: '81.2%' },
@@ -55,7 +54,7 @@ const STATUS_LABEL = { ok: 'Actif', warn: 'Dégradé', error: 'Hors ligne' }
 
 const ALERTS = [
     { level: 'error', msg: 'Worker tâches — arrêt inattendu', time: 'il y a 5 min', icon: 'cancel' },
-    { level: 'warn', msg: 'Capteurs Kivu 3 — latence > 2000ms', time: 'il y a 15 min', icon: 'warning' },
+    { level: 'warn', msg: 'Ferme « Agro-Katanga Sud » — validation documentaire expirée', time: 'il y a 15 min', icon: 'warning' },
     { level: 'warn', msg: 'Utilisation RAM à 74% — seuil approché', time: 'il y a 32 min', icon: 'warning' },
     { level: 'ok', msg: 'Sauvegarde base de données — succès', time: 'il y a 1h', icon: 'check_circle' },
     { level: 'ok', msg: 'Certificat SSL renouvelé automatiquement', time: 'il y a 3h', icon: 'check_circle' },
@@ -71,7 +70,7 @@ const AUDIT_LOGS = [
     { user: 'Admin Système', action: 'Nouvelle route logistique KIN-MAT-04 approuvée', time: 'il y a 2 min', type: 'info' },
     { user: 'Système', action: 'Worker tâches redémarré automatiquement (échec × 3)', time: 'il y a 5 min', type: 'error' },
     { user: 'Pierre Kalala', action: 'Connexion depuis 196.217.x.x (Kinshasa)', time: 'il y a 12 min', type: 'info' },
-    { user: 'Système', action: 'Alerte latence capteurs IoT — secteur Kivu 3', time: 'il y a 15 min', type: 'warn' },
+    { user: 'Système', action: 'Ferme « Agro-Katanga Sud » — validation documentaire expirée (J+3)', time: 'il y a 15 min', type: 'warn' },
     { user: 'Admin Système', action: 'Utilisateur Sarah Amina approuvée (rôle Conseillère)', time: 'il y a 28 min', type: 'info' },
     { user: 'Système', action: 'Sauvegarde quotidienne base PostgreSQL — 4.2 GB', time: 'il y a 1h', type: 'ok' },
     { user: 'Jean M\'Boku', action: 'Rapport de rendement généré et exporté (PDF)', time: 'il y a 1h 20min', type: 'info' },

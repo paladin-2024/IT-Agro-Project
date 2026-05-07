@@ -6,6 +6,8 @@ import AdminDashboard from './pages/AdminDashboard.jsx'
 import AdminHealthPage from './pages/AdminHeathPage.jsx'
 import AdminUsersPage from './pages/AdminUserPage.jsx'
 import AdminUsersCreatePage from './pages/AdminUsersCreatePage.jsx'
+import AdminSettingsPage from './pages/AdminSettingsPage.jsx'
+import AdminFermesGestion from './pages/AdminFermesGestion.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -42,6 +44,22 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <AdminUsersCreatePage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/fermes',
+        element: (
+            <ProtectedRoute>
+                <AdminFermesGestion />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/parametres',
+        element: (
+            <ProtectedRoute>
+                <AdminSettingsPage />
             </ProtectedRoute>
         ),
     },

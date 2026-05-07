@@ -400,10 +400,10 @@ export default function AdminDashboard() {
                                     </div>
                                     <div>
                                         <p className="text-sm font-semibold text-[#b6171e]">
-                                            Alerte de latence des capteurs
+                                            Ferme en attente de validation
                                         </p>
                                         <p className="text-xs text-slate-500">
-                                            Les capteurs d'humidité du secteur Kivu 3 signalent une latence élevée (&gt;2000ms)
+                                            La ferme « Agro-Katanga Sud » attend une vérification documentaire depuis 3 jours
                                         </p>
                                         <p className="mt-1 text-[10px] text-slate-400">il y a 15 minutes</p>
                                     </div>
