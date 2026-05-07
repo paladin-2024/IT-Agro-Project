@@ -1,20 +1,20 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-import App from './App.jsx'
-import ContacteAdmin from './ContacteAdmin.jsx'
-import MotPasseOublie from './MotPasseOublie.jsx'
-import Dashboard from './pages/Dashboard.jsx'
+import LoginPage from './pages/LoginPage.jsx'
+import ContacteAdmin from './pages/ContacteAdmin.jsx'
+import MotPasseOublie from './pages/MotPasseOublie.jsx'
+import AdminDashboard from './pages/AdminDashboard.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
-    { path: '/', element: <App /> },
-    { path: '/login', element: <App /> },
+    { path: '/', element: <LoginPage /> },
+    { path: '/login', element: <LoginPage /> },
     { path: '/mot-de-passe-oublie', element: <MotPasseOublie /> },
     { path: '/contact-admin', element: <ContacteAdmin /> },
     {
         path: '/dashboard',
         element: (
             <ProtectedRoute>
-                <Dashboard />
+                <AdminDashboard />
             </ProtectedRoute>
         ),
     },

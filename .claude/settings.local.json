@@ -5,7 +5,10 @@
       "Bash(Select-Object FullName, PSIsContainer)",
       "Bash(Sort-Object FullName)",
       "Bash(npm install *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(Start-Sleep -Seconds 3)",
+      "Bash(Get-Content \"C:\\\\Users\\\\HP\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-HP-WebstormProjects-AgroRdc\\\\7cf1b50a-91d1-4127-9c8e-a42b8c4efa65\\\\tasks\\\\b7cik2kcg.output\")",
+      "Bash(Get-ChildItem *)"
     ]
   }
 }
