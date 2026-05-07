@@ -201,7 +201,7 @@ export default function EmployeeDashboard() {
 
 function ParcelCard({ parcel }) {
     const {
-        name, farm, area, crop, cropIcon, cropIconColor,
+        id, name, farm, area, crop, cropIcon, cropIconColor,
         metric2Label, metric2Value, metric2Icon, metric2Color,
         status, statusBg, image,
     } = parcel;
@@ -258,9 +258,12 @@ function ParcelCard({ parcel }) {
                 </div>
 
                 {/* CTA button */}
-                <button className="mt-auto w-full rounded-lg bg-[#003f87] py-3 text-sm font-bold text-white transition-all hover:bg-[#0056b3] active:scale-[0.98]">
+                <Link
+                    to={`/employee/parcelles/${id}`}
+                    className="mt-auto w-full rounded-lg bg-[#003f87] py-3 text-sm font-bold text-white transition-all hover:bg-[#0056b3] active:scale-[0.98] block text-center"
+                >
                     Voir Détails / Saisir Récolte
-                </button>
+                </Link>
             </div>
         </div>
     );
