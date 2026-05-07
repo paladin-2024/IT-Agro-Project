@@ -140,7 +140,7 @@ export default function AdminDashboard() {
                                     Administration rapide
                                 </h4>
                                 <div className="flex flex-col gap-2">
-                                    <Link to="/utilisateurs" className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-[#c2c6d4] hover:bg-slate-100">
+                                    <Link to="/utilisateurs/nouveau" className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-[#c2c6d4] hover:bg-slate-100">
                     <span className="material-symbols-outlined text-[#0056B3]">
                       person_add
                     </span>

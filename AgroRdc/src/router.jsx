@@ -5,6 +5,7 @@ import MotPasseOublie from './pages/MotPasseOublie.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
 import AdminHealthPage from './pages/AdminHeathPage.jsx'
 import AdminUsersPage from './pages/AdminUserPage.jsx'
+import AdminUsersCreatePage from './pages/AdminUsersCreatePage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -33,6 +34,14 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <AdminUsersPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/utilisateurs/nouveau',
+        element: (
+            <ProtectedRoute>
+                <AdminUsersCreatePage />
             </ProtectedRoute>
         ),
     },

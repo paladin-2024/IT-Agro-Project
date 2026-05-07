@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import AdminSidebar from '../components/AdminSidebar.jsx'
 
 export default function AdminUsersPage() {
@@ -60,10 +61,10 @@ export default function AdminUsersPage() {
                                 <span className="material-symbols-outlined text-sm">file_download</span>
                                 Exporter la liste
                             </button>
-                            <button className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#0056b3]">
+                            <Link to="/utilisateurs/nouveau" className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#0056b3]">
                                 <span className="material-symbols-outlined text-sm">person_add</span>
                                 Nouvel utilisateur
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -173,9 +174,9 @@ export default function AdminUsersPage() {
 
             {/* FAB */}
             <div className="fixed bottom-8 right-8 z-50">
-                <button className="flex h-14 w-14 items-center justify-center rounded-full bg-[#003f87] text-white shadow-lg transition-transform hover:scale-110 active:scale-95">
+                <Link to="/utilisateurs/nouveau" className="flex h-14 w-14 items-center justify-center rounded-full bg-[#003f87] text-white shadow-lg transition-transform hover:scale-110 active:scale-95">
                     <span className="material-symbols-outlined text-2xl">add</span>
-                </button>
+                </Link>
             </div>
         </div>
     )
