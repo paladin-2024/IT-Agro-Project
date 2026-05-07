@@ -1,296 +1,482 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar";
 
-const parcelRows = [
+/* ─── Static data ────────────────────────────────────────────────────── */
+
+const stats = [
+    { icon: "grid_view",  iconBg: "bg-blue-50 text-blue-700",   label: "Total Parcelles",  value: "124" },
+    { icon: "eco",        iconBg: "bg-green-50 text-green-700",  label: "Surface Totale",   value: "2 450 Ha" },
+    { icon: "warning",    iconBg: "bg-orange-50 text-orange-700",label: "Alertes Actives",  value: "12" },
+    { icon: "groups",     iconBg: "bg-red-50 text-red-700",      label: "Main d'œuvre",     value: "458" },
+];
+
+const tableRows = [
     {
-        id: "PAR-2023-001",
-        crop: "Maïs Hybride",
-        cropIcon: "grain",
-        cropClass: "text-green-600",
-        area: "4.5 Hectares",
-        date: "12 Oct 2023",
-        status: "En Croissance",
-        statusClass: "bg-green-100 text-green-800",
-        dotClass: "bg-green-600",
+        code: "C5",
+        name: "Plaine de Kipushi",
+        site: "Kipushi Sud",
+        crop: "Soja",
+        area: "112.5 Ha",
+        status: "Productif",
+        statusClass: "bg-green-100 text-green-700 border-green-200",
+        avatars: [
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuCrdwtlODLy51OuNVCD5ea1u4nNMZXXHPv0WYKRj0JvimRiiBMWhCW0PBZy0sislVfSi5-4cdLKhiHVj9ME4TvqKXziUXMir0EVKojJFoAVpTwRNKxzkQApDqcSLHAwF8pQm0l61sRqi_Ua2H8lmi9OuoNkuCojJ-UgkTjG2e3wFSjwvCvydUwxh2gnGswS54LjZAqFqX1cllllWhK1XjLCYoQDJw3xomSomKCT-DU4DiCs49JF3qfquTJgU4E_wxfErX96OeduB3k",
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuDlRK-CTg50hrZLCpncKTanbuTiiAWI3cDqazEiB76u4I6l5vjKgO7pE0LbkEctq-zYDpdue4GOdGY4OjnJpM5vmdGxurP44A5yJZGJYm0WntwBdyyVasLChgg_trY-YPNIJbGX2IFaJmwZXHyxo0Ucvec9dNYGt29jDvrkpXQvDz3JCHVda7avSqSbgqF0jTCvnpc6xHrQ5DC8ZyYxzMLyU_z8f1RmAVM0rABL5tfaKnZbWSpMRjVONDb1p3iBeppIKGDBy9c33jk",
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuDEEPTFzag7gPc6GBMqgyKL-_Gp578NkvYFV_LuA0RQsGZyUBQEhYF1v2iyKh5mNP8eC-2D6m33UiCnnvn3WpJBU2NixBJG23QG2YwpsFCZfVaQ2fkuG2MS4ZdQuQq74wIN_-JDbDYiRVtwuq8lk0pTBnxGfyjvcbUeSG7JIGNf2gL6l2Ma3aMZlUhjuhHFRcJVvD0t0WWfaKxCb07Cl67XqiHBIu8tA5_9z7zu6woqLlXfTcBs72qo2dcGESGQeJEpm--t1kCB9U4",
+        ],
     },
     {
-        id: "PAR-2023-002",
-        crop: "Café Robusta",
-        cropIcon: "coffee",
-        cropClass: "text-amber-600",
-        area: "12.0 Hectares",
-        date: "05 Sep 2023",
-        status: "Planté",
-        statusClass: "bg-blue-100 text-blue-800",
-        dotClass: "bg-blue-600",
+        code: "D1",
+        name: "Périphérie Nord",
+        site: "Lubumbashi Ouest",
+        crop: "Haricots",
+        area: "24.0 Ha",
+        status: "Attention",
+        statusClass: "bg-red-100 text-red-700 border-red-200",
+        avatars: [
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuCrnLA4LrusIIfu07bwBF40KngEoMbl9xOuyIrVuWUnBeBguPsyRyKqJbQoVLaMv6nyH6LLgfuRlRAI7oB-AW3O6UykI2Ewl5nU-O8x2MQo6QQFY-aQv4XvT8CjSr7g6IyXIkGVWQA8VVibft3x5SG0WdTiK0G5s_ar390SPeLDAR_VEBlV4tIU_gKURLh0iiUg2dDF8Tnsn9ickRXIoMQCkf5Md87vGEwFkt-uLy2OAdIdwMVa2Kp7xlCQ0W1eLMiva4ub7SgBMwU",
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuDwP-gk8aODREdPNQDlY0-oV6xvkf26NDQzBFNgvXSuNPDqZeETAoNGLubWzDjCk6pp2O7o7f34lFxDmFqhkAPn-wT6evguTy_zKAxtNrsy2IiaPxgclR6S9EoDl3naSffTE7ZAvnCKOsWXBClP2E4i0PZxqIN0cINyoEsl7d73xXNoUtg_bo72gK5MI1TKd19OlJewyGn7GFtof4_uTFqr3yzm6RJspUnSNmWVFlbidJ684A1OFqQ7xS90R3VKo6Op9CyQ2UP5MGE",
+        ],
     },
     {
-        id: "PAR-2023-003",
-        crop: "Manioc",
-        cropIcon: "potted_plant",
-        cropClass: "text-[#424752]",
-        area: "2.8 Hectares",
-        date: "20 Nov 2023",
-        status: "En attente",
-        statusClass: "bg-[#ffdbcc] text-[#7b2f00]",
-        dotClass: "bg-[#722b00]",
+        code: "E8",
+        name: "Nouveaux Plateaux",
+        site: "Kundelungu",
+        crop: "En jachère",
+        area: "350.0 Ha",
+        status: "Repos",
+        statusClass: "bg-slate-100 text-slate-500 border-slate-200",
+        avatars: [],
     },
 ];
 
+/* ─── Page component ─────────────────────────────────────────────────── */
+
 export default function OwnerParcelsPage() {
+    const [showModal, setShowModal] = useState(false);
+
     return (
-        <div className="min-h-screen bg-[#fbf9f8] text-[#1b1c1c]">
-            <OwnerSidebar active="Parcels" />
+        <div className="min-h-screen bg-[#f4f6f9] text-[#1b1c1c]">
+            <OwnerSidebar />
 
-            <header className="fixed left-64 right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6">
-                <div className="flex items-center gap-4">
-                    <span className="text-sm text-[#424752]">Parcelles / Kinshasa Nord</span>
-                </div>
-
-                <div className="flex items-center gap-4">
+            <main className="ml-64 min-h-screen">
+                {/* Sticky header */}
+                <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8 shadow-sm">
+                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                        <Link to="/owner/fermes" className="hover:text-[#003f87] transition-colors">Mes Fermes</Link>
+                        <span className="material-symbols-outlined text-sm">chevron_right</span>
+                        <span className="font-semibold text-[#1b1c1c]">Inventaire des Parcelles</span>
+                    </div>
                     <div className="relative">
+                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">search</span>
                         <input
-                            className="w-64 rounded-full border border-[#c2c6d4] bg-[#f5f3f3] px-4 py-2 pr-10 text-sm outline-none focus:border-[#003f87] focus:ring-1 focus:ring-[#003f87]"
-                            placeholder="Rechercher une parcelle..."
+                            className="w-64 rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-4 text-sm outline-none focus:border-[#003f87] focus:ring-1 focus:ring-[#003f87]"
+                            placeholder="Rechercher une parcelle…"
                             type="text"
                         />
-                        <span className="material-symbols-outlined absolute right-3 top-2 text-sm text-[#424752]">
-              search
-            </span>
                     </div>
+                </header>
 
-                    <div className="flex items-center gap-2 border-l border-gray-200 pl-4">
-                        <IconButton icon="notifications" />
-                        <IconButton icon="help" />
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#d7e2ff] font-bold text-[#001a40]">
-                            JD
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <main className="ml-64 min-h-[calc(100vh-64px)] p-8 pt-24">
-                <div className="mb-8 flex items-end justify-between">
-                    <div>
-                        <h2 className="mb-2 text-[32px] font-semibold leading-10 text-[#1b1c1c]">
-                            Gestion des Parcelles
-                        </h2>
-                        <p className="max-w-2xl text-base text-[#424752]">
-                            Visualisez et gérez l'état de vos cultures, les zones de plantation et les dates de récolte prévues pour l'ensemble de votre exploitation.
-                        </p>
-                    </div>
-
-                    <button className="flex items-center gap-2 rounded-xl bg-[#003f87] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#003f87]/20 transition-transform hover:scale-105">
-                        <span className="material-symbols-outlined">add</span>
-                        Ajouter une Parcelle
-                    </button>
-                </div>
-
-                <div className="mb-8 grid grid-cols-12 gap-6">
-                    <section className="col-span-12 flex min-h-[400px] flex-col overflow-hidden rounded-xl border border-[#c2c6d4] bg-white lg:col-span-8">
-                        <div className="flex items-center justify-between border-b border-[#c2c6d4] bg-[#f5f3f3] px-6 py-4">
-                            <div className="flex items-center gap-2">
-                                <span className="material-symbols-outlined text-[#003f87]">map</span>
-                                <span className="text-sm font-semibold">Vue Géospatiale - Kinshasa Nord</span>
-                            </div>
-                            <div className="flex gap-2">
-                                <button className="rounded-full border border-[#727784] px-3 py-1 text-xs font-medium hover:bg-white transition-colors">
-                                    Satellite
-                                </button>
-                                <button className="rounded-full bg-[#003f87] px-3 py-1 text-xs font-medium text-white">
-                                    Terrain
-                                </button>
-                            </div>
+                <div className="p-8 space-y-8">
+                    {/* Page title + filters */}
+                    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                        <div>
+                            <h1 className="text-2xl font-bold text-[#003f87]">Inventaire des Parcelles</h1>
+                            <p className="mt-1 text-sm text-slate-500">
+                                Gérez et suivez l'état de vos cultures en temps réel à travers la province.
+                            </p>
                         </div>
 
-                        <div className="relative flex-1 bg-[#e4e2e1]">
-                            <img
-                                alt="Carte des parcelles"
-                                className="h-full w-full object-cover grayscale-[0.2] contrast-[1.1]"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMP-bH8qFP9KObpIBIhvBN0jYxQoh5nKpTqdymC3q3wYDdIt66wuH_GLQ6y9ShCpRGUuwUg93xW9-B-bGvz-H6HdZuLpX675Co4VD5iu-CsJp1xyCamJiPolofSCzK-LiQJVywSbom7komfresGAA8a-pXzY89G_lMaCjAS8f_0R_ZcD8mQu1plwHMgzgb0Pn6E9kLyO7KSwWEmLBAw4TqyXDRIpkglwbzTsvzcA-yTsYma2gUbLFp20VS5TzU67A9bw8EhiFLttw"
-                            />
-                            <div className="pointer-events-none absolute inset-0 bg-[#003f87]/10 mix-blend-multiply" />
-
-                            <MapTag className="top-1/4 left-1/3 border-[#003f87]" dot="bg-green-500" text="P-042: MAÏS" />
-                            <MapTag className="bottom-1/3 right-1/4 border-[#b6171e]" dot="bg-red-500" text="P-055: ALERTE" pulse />
+                        <div className="flex flex-wrap items-end gap-3">
+                            <FilterSelect label="Filtrer par Ferme">
+                                <option>Toutes les fermes</option>
+                                <option>Site de Lubumbashi</option>
+                                <option>Site de Kipushi</option>
+                                <option>Plateau de Kundelungu</option>
+                            </FilterSelect>
+                            <FilterSelect label="Type de Culture">
+                                <option>Toutes les cultures</option>
+                                <option>Maïs Grain</option>
+                                <option>Manioc</option>
+                                <option>Haricots</option>
+                                <option>Soja</option>
+                            </FilterSelect>
+                            <button
+                                onClick={() => setShowModal(true)}
+                                className="flex items-center gap-2 self-end rounded-lg bg-[#003f87] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95"
+                            >
+                                <span className="material-symbols-outlined text-base">add</span>
+                                Nouvelle Parcelle
+                            </button>
                         </div>
-                    </section>
+                    </div>
 
-                    <div className="col-span-12 space-y-6 lg:col-span-4">
-                        <section className="rounded-xl border border-[#c2c6d4] bg-white p-6">
-                            <h3 className="mb-4 text-sm font-semibold text-[#1b1c1c]">Répartition par État</h3>
-                            <div className="space-y-4">
-                                <ProgressItem label="Croissance" value="42%" width="42%" color="bg-green-600" />
-                                <ProgressItem label="Planté" value="38%" width="38%" color="bg-blue-600" />
-                                <ProgressItem label="En attente" value="20%" width="20%" color="bg-[#722b00]" />
-                            </div>
-                        </section>
+                    {/* Stat cards */}
+                    <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
+                        {stats.map((s) => (
+                            <StatCard key={s.label} {...s} />
+                        ))}
+                    </div>
 
-                        <section className="overflow-hidden rounded-xl border border-[#c2c6d4] bg-white">
-                            <div className="bg-[#0056b3] p-6 text-[#bbd0ff]">
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <p className="mb-1 text-xs uppercase tracking-widest opacity-80">Météo Locale</p>
-                                        <h4 className="text-2xl font-semibold text-white">Kinshasa</h4>
-                                        <span className="mt-2 block text-4xl font-black text-white">31°C</span>
-                                    </div>
-                                    <span className="material-symbols-outlined text-5xl text-white">sunny</span>
+                    {/* Bento grid */}
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+
+                        {/* Featured parcel card — col-span-8 */}
+                        <div className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:flex-row lg:col-span-8">
+                            <div className="relative h-52 w-full shrink-0 md:h-auto md:w-1/3">
+                                <img
+                                    alt="Vue aérienne du champ de maïs"
+                                    className="h-full w-full object-cover"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOnzlpUC49lopMOdgEtbe1rMeFEMZwEl_UjBxBXPb1_lyFxKAKiC7aYfh9FAQRzBv94t8MbdZtkz-pU3_u07zLoaGj1pcKQ2_mB8NPJ_e0DZbhsgc66kjau38OlqQJr0nS7uKeSUuOh9Dmh1YMOfhlaK1vs-geWnPJoeHUlgRZ5tiBEDdiLNbsgxzAvoiRBzFeYcxIVnx_UQLjh4CySNVZwGIdA3N_4UbanDlSJYrMYNlopS1OwhANHhRN0eNsvSeHqwDx-AG3QCI"
+                                />
+                                <div className="absolute top-3 left-3">
+                                    <span className="rounded-full bg-emerald-600 px-2.5 py-1 text-[10px] font-bold uppercase text-white">
+                                        Sain
+                                    </span>
                                 </div>
                             </div>
 
-                            <div className="flex justify-around bg-white p-4">
-                                <MiniMetric label="Humidité" value="78%" />
-                                <MiniMetric label="Vent" value="12km/h" bordered />
-                                <MiniMetric label="Pluie" value="10%" />
+                            <div className="flex flex-1 flex-col justify-between p-6">
+                                <div>
+                                    <div className="mb-2 flex items-start justify-between">
+                                        <div>
+                                            <h3 className="text-lg font-bold text-slate-900">Parcelle A-12 : Vallée Sud</h3>
+                                            <p className="text-xs text-slate-500">Site de Lubumbashi · Zone Fertile 1</p>
+                                        </div>
+                                        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+                                            Maïs Grain
+                                        </span>
+                                    </div>
+
+                                    <div className="mt-5 grid grid-cols-2 gap-4">
+                                        <FieldStat label="Surface"         value="45.2 Hectares" />
+                                        <FieldStat label="Dernière récolte" value="15 Mars 2024" />
+                                    </div>
+                                </div>
+
+                                <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
+                                    <div>
+                                        <span className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                            Équipe Assignée
+                                        </span>
+                                        <div className="flex -space-x-2">
+                                            {[
+                                                "https://lh3.googleusercontent.com/aida-public/AB6AXuC9WQrcwLbAQHgJPnuVEisvoWAptVt_FCVqG4QHjtF0khAa_EWOrOH6HLiYdMz1w9QB6yowE9Ii2cOVQYlzvHZtmyRrFJZJnM9MbEUFJ1lGaZXb-4umTUYQN0xCMHN3PTEqWQ-3-yEKi47uBkgfK9jKNqpJM_0WP5jHjGT5q6Jj881vW_PR6kMZi3qW1MFkEQn3DahCk1QgzFnglLFmpiRs19dJc0fy-D75uxoBawvh5M2qu2tpvRp3oLuG8waT9OBy6jQthEJ3aso",
+                                                "https://lh3.googleusercontent.com/aida-public/AB6AXuDbyHW-pzLtSVEnpAEbKZ6zTcusSRt3PNE6_emrLIFmCX65QT9vjZy3Nw6FfYsGw8StFxP4DkwE5OcumAVQLcr5VOlmXmbJz764HaVpmmJwHrAFZWCklP9k8ZCFgd_Thj_oLX-zGjjZiXIfuAekWgH5fXM7NU2Z8PxVACVXbWiXkJB_CZpQWPCV3YRDyzsbmNWZl6BNzQWFSHqKYqz47pGBMinEg-PC-WqC1BBphuHWmlrafSXOXQftGcDF1lwDUlaxsIVFoUCjNVE",
+                                                "https://lh3.googleusercontent.com/aida-public/AB6AXuCqRaQG8J2GydlEYJGOPMcdLICrIIzoPlYEPYfs89GDRLOLduX9oiGYrkdlyKlgKqHiGAY-6-rCc8yTdXXX1hjDE0hT32ctZqlUTQyw5ajUcYiMrb5qszrQAbg4qig6-jMWBjkP5vMZaNbQtn1Z3450ldSOK-AipE0TnexqVS4U1lgSe0gLfFUIQFzpN43JiI_rHGw-VihvsTQwLmcGx2O1APTvyzPgPd34Dup5yG7q6cnMwSpC9Ush6GIMfZTFM0GqX0mzV1AdnBY",
+                                            ].map((src, i) => (
+                                                <img key={i} alt="worker" className="h-8 w-8 rounded-full border-2 border-white object-cover" src={src} />
+                                            ))}
+                                            <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-slate-100 text-[10px] font-bold text-slate-500">
+                                                +4
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <Link
+                                        to="/owner/parcelles/detail"
+                                        className="flex items-center gap-1 text-sm font-semibold text-[#003f87] hover:underline"
+                                    >
+                                        Détails complets
+                                        <span className="material-symbols-outlined text-lg">chevron_right</span>
+                                    </Link>
+                                </div>
                             </div>
-                        </section>
+                        </div>
+
+                        {/* Irrigation mini-card — col-span-4 */}
+                        <div className="flex flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-4">
+                            <div className="mb-4 flex items-start justify-between">
+                                <div>
+                                    <span className="rounded bg-orange-50 px-2 py-0.5 text-[10px] font-bold text-orange-700">
+                                        Besoin d'irrigation
+                                    </span>
+                                    <h3 className="mt-2 text-lg font-bold text-slate-900">Parcelle B-04</h3>
+                                </div>
+                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50">
+                                    <span className="material-symbols-outlined text-slate-400">water_drop</span>
+                                </div>
+                            </div>
+
+                            <p className="mb-5 text-sm text-slate-600">
+                                Culture : <span className="font-semibold">Manioc</span> · 12 Ha
+                            </p>
+
+                            <div className="mb-6">
+                                <div className="mb-1 flex justify-between text-xs">
+                                    <span className="text-slate-500">Humidité du sol</span>
+                                    <span className="font-bold text-orange-600">22%</span>
+                                </div>
+                                <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                                    <div className="h-full w-[22%] rounded-full bg-orange-500" />
+                                </div>
+                            </div>
+
+                            <div className="mt-auto border-t border-slate-100 pt-4">
+                                <span className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                    Responsable
+                                </span>
+                                <div className="flex items-center gap-3">
+                                    <img
+                                        alt="Jean-Pierre Kalala"
+                                        className="h-8 w-8 rounded-full object-cover"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhLUWWRw9vq8yOPky4mg-pF_gL4g08uvGzbv83VhbJLMkEviJVeyduEVjXRWp5Eg3GezRCjIMBMOlC7mML28MN-TuPB34F3zw0W1zDgZB-h5tDG-DTLzxSPtF-fAcZy6l1d0lTbSJRzKtAmlYsVU9mCoDPAd7oanC-gRyvoqhm1PrsXWO0fcy0kJbfyAZCLUpNBAr7HA0UJqf4GDiuS8kTh6auS2Kz7dyycW-A1JiDNvwMkp4Qq2ThwylPep9XjfuSfD12pA3ztzw"
+                                    />
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-800">Jean-Pierre Kalala</p>
+                                        <p className="text-[10px] text-slate-500">Agronome Senior</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Full-width parcels table */}
+                        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm lg:col-span-12">
+                            <div className="flex items-center justify-between border-b border-slate-200 p-6">
+                                <h2 className="text-lg font-bold text-slate-900">Liste exhaustive des Parcelles</h2>
+                                <button className="flex items-center gap-2 text-sm font-medium text-slate-600 transition-colors hover:text-[#003f87]">
+                                    <span className="material-symbols-outlined text-lg">download</span>
+                                    Exporter CSV
+                                </button>
+                            </div>
+
+                            <div className="overflow-x-auto">
+                                <table className="w-full border-collapse text-left">
+                                    <thead>
+                                        <tr className="border-b border-slate-200 bg-slate-50">
+                                            {["ID / Nom", "Culture", "Surface", "Équipe", "État", ""].map((h) => (
+                                                <th key={h} className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                                    {h}
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100">
+                                        {tableRows.map((row, i) => (
+                                            <tr key={row.code} className={`group transition-colors hover:bg-slate-50 ${i % 2 === 1 ? "bg-slate-50/50" : ""}`}>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-sm font-bold text-blue-700">
+                                                            {row.code}
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-bold text-slate-900">{row.name}</p>
+                                                            <p className="text-xs text-slate-500">{row.site}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-sm font-medium text-slate-700">{row.crop}</td>
+                                                <td className="px-6 py-4 text-sm font-medium text-slate-700">{row.area}</td>
+                                                <td className="px-6 py-4">
+                                                    {row.avatars.length > 0 ? (
+                                                        <div className="flex -space-x-2">
+                                                            {row.avatars.map((src, j) => (
+                                                                <img key={j} alt="worker" className="h-7 w-7 rounded-full border-2 border-white object-cover" src={src} />
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-xs italic text-slate-400">Aucune assignation</span>
+                                                    )}
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase ${row.statusClass}`}>
+                                                        {row.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <button className="rounded-lg p-2 text-slate-400 transition-colors hover:text-[#003f87]">
+                                                        <span className="material-symbols-outlined">more_vert</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="flex items-center justify-between border-t border-slate-200 bg-slate-50 p-4">
+                                <p className="text-xs text-slate-500">Affichage de 3 sur 124 parcelles</p>
+                                <div className="flex gap-2">
+                                    <button className="cursor-not-allowed rounded border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-400" disabled>
+                                        Précédent
+                                    </button>
+                                    <button className="rounded border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-[#003f87] transition-colors hover:bg-slate-100">
+                                        Suivant
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Bottom row: weather + map */}
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:col-span-12">
+                            {/* Weather widget */}
+                            <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-700 to-blue-900 p-8 text-white md:col-span-2">
+                                <div className="relative z-10 w-2/3">
+                                    <h3 className="mb-2 text-xl font-bold">Conditions Locales : Lubumbashi</h3>
+                                    <div className="mb-6 flex items-end gap-4">
+                                        <span className="text-6xl font-black">28°C</span>
+                                        <div className="mb-2 flex flex-col">
+                                            <span className="material-symbols-outlined text-4xl text-yellow-400">sunny</span>
+                                            <span className="text-xs opacity-80">Ensoleillé</span>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-4 border-t border-white/20 pt-4">
+                                        <WeatherStat label="Précipitations" value="2%" />
+                                        <WeatherStat label="Vent" value="12 km/h" />
+                                        <WeatherStat label="UV Index" value="Haut (8)" />
+                                    </div>
+                                </div>
+                                <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-20">
+                                    <img
+                                        alt="lumière solaire"
+                                        className="h-full w-full object-cover"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFIYP_fX2aHLjcSe5l-6ee02oCtWce7EF_4BABZdfiC49sSRNZeWP6_4nJ0vzn_PjE4E5-vHE0o6VtMOOfehxfnPetN1DT53GejVfvUPiWQ3d7jxVAofhkgSh6RzAl-EnsRjdl4zOn-EquyffxjDKqoOVjnNssnG9ljqq4oO85cAp51p-CtRvpX9uD1AddH6u5hQ_UbgSrQioc9EvMHxWWbS02IiKA_QSkAnop9a2tjJXtG1yI1aEr79XKSGrLHo5ICgFjUqJqk5c"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Map preview */}
+                            <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white">
+                                <div className="absolute left-3 top-3 z-10">
+                                    <span className="rounded bg-white/90 px-2 py-1 text-xs font-black text-slate-900 shadow-sm backdrop-blur-sm">
+                                        Géolocalisation des sites
+                                    </span>
+                                </div>
+                                <img
+                                    alt="Carte satellite Lubumbashi"
+                                    className="h-full min-h-[200px] w-full object-cover grayscale brightness-75 transition-all hover:grayscale-0"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjGDTfmMBmvXKeki6x0u7kCKCj7YHNWTywAErivqBjgHPYVYClX2W-pkFdE2ENJBcsHbv8etT01o7aEhbzphEX5utoQfsR4fx-rh1JWndISbgROUgEikWa13l0DY3smtd8ErblulWqfeZYEji-0lghf1i5Vk-Bin-j_-n74xANCvM6pjBrt6vfSBRywxy8vpH0Kl1fSmMalcy-dBX5-WEozRUY7tDFSmitdA1LDFPcmHPTcANVicTA2rK7dX03qIg694ckaC_gfEM"
+                                />
+                                <button className="absolute bottom-3 right-3 z-10 flex items-center justify-center rounded-full bg-white p-2 shadow-lg text-[#003f87]">
+                                    <span className="material-symbols-outlined">fullscreen</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <section className="overflow-hidden rounded-xl border border-[#c2c6d4] bg-white shadow-sm">
-                    <div className="flex items-center justify-between border-b border-[#c2c6d4] px-6 py-5">
-                        <div className="flex items-center gap-3">
-                            <h3 className="text-sm font-semibold text-[#1b1c1c]">Registre des Parcelles</h3>
-                            <span className="rounded-full bg-[#f0eded] px-2 py-0.5 text-[10px] font-bold text-[#424752]">
-                TOTAL: 12
-              </span>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            <ActionLink icon="filter_list" label="Filtrer" />
-                            <ActionLink icon="download" label="Exporter" />
-                        </div>
-                    </div>
-
-                    <div className="overflow-x-auto">
-                        <table className="w-full border-collapse text-left">
-                            <thead>
-                            <tr className="border-b border-[#c2c6d4] bg-[#f5f3f3]">
-                                <Th>Identifiant</Th>
-                                <Th>Culture</Th>
-                                <Th>Superficie</Th>
-                                <Th>Date de Plantation</Th>
-                                <Th>Statut</Th>
-                                <Th align="right">Actions</Th>
-                            </tr>
-                            </thead>
-                            <tbody className="divide-y divide-[#c2c6d4]">
-                            {parcelRows.map((row) => (
-                                <tr key={row.id} className="transition-colors hover:bg-slate-50">
-                                    <td className="px-6 py-4 font-bold text-[#003f87]">{row.id}</td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2">
-                                            <span className={`material-symbols-outlined ${row.cropClass}`}>{row.cropIcon}</span>
-                                            <span>{row.crop}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 font-medium">{row.area}</td>
-                                    <td className="px-6 py-4 text-[#424752]">{row.date}</td>
-                                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold uppercase ${row.statusClass}`}>
-                        <span className={`h-1.5 w-1.5 rounded-full ${row.dotClass}`} />
-                          {row.status}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4 text-right">
-                                        <button className="rounded p-1 transition-colors hover:bg-[#f0eded]">
-                                            <span className="material-symbols-outlined text-[#424752]">more_vert</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className="flex items-center justify-between bg-[#f5f3f3] px-6 py-4 text-xs font-semibold text-[#424752]">
-                        <span>Affichage de 3 sur 12 parcelles</span>
-                        <div className="flex gap-2">
-                            <button className="rounded border border-[#c2c6d4] bg-white px-3 py-1 disabled:opacity-50" disabled>
-                                Précédent
-                            </button>
-                            <button className="rounded border border-[#c2c6d4] bg-white px-3 py-1 hover:bg-gray-100">
-                                Suivant
-                            </button>
-                        </div>
-                    </div>
-                </section>
             </main>
 
-            <CreateParcelModal />
+            {/* FAB */}
+            <button className="fixed bottom-8 right-8 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#003f87] text-white shadow-xl transition-transform hover:scale-110 active:scale-95">
+                <span className="material-symbols-outlined text-2xl">map</span>
+            </button>
+
+            {showModal && <CreateParcelModal onClose={() => setShowModal(false)} />}
         </div>
     );
 }
 
-function CreateParcelModal() {
+/* ─── Sub-components ─────────────────────────────────────────────────── */
+
+function StatCard({ icon, iconBg, label, value }) {
     return (
-        <div className="fixed inset-0 z-[60] flex justify-end bg-[#1b1c1c]/40 backdrop-blur-sm">
-            <div className="flex h-full w-full max-w-md flex-col border-l border-[#c2c6d4] bg-white p-8 shadow-2xl">
-                <div className="mb-8 flex items-center justify-between">
-                    <h3 className="text-2xl font-semibold text-[#1b1c1c]">Ajouter une Parcelle</h3>
-                    <button className="rounded-full p-2 transition-colors hover:bg-[#f0eded]">
-                        <span className="material-symbols-outlined">close</span>
+        <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${iconBg}`}>
+                <span className="material-symbols-outlined">{icon}</span>
+            </div>
+            <div>
+                <p className="text-sm font-medium text-slate-500">{label}</p>
+                <p className="text-2xl font-bold text-slate-900">{value}</p>
+            </div>
+        </div>
+    );
+}
+
+function FilterSelect({ label, children }) {
+    return (
+        <div className="flex flex-col gap-1">
+            <label className="ml-1 text-xs font-semibold text-slate-500">{label}</label>
+            <select className="min-w-[160px] rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20">
+                {children}
+            </select>
+        </div>
+    );
+}
+
+function FieldStat({ label, value }) {
+    return (
+        <div>
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</p>
+            <p className="text-base font-bold text-slate-800">{value}</p>
+        </div>
+    );
+}
+
+function WeatherStat({ label, value }) {
+    return (
+        <div>
+            <p className="mb-1 text-[10px] font-bold uppercase opacity-70">{label}</p>
+            <p className="font-bold">{value}</p>
+        </div>
+    );
+}
+
+function CreateParcelModal({ onClose }) {
+    return (
+        <div
+            className="fixed inset-0 z-[60] flex justify-end bg-[#1b1c1c]/40 backdrop-blur-sm"
+            onClick={onClose}
+        >
+            <div
+                className="flex h-full w-full max-w-md flex-col bg-white shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-6 py-4">
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#003f87]/10">
+                            <span className="material-symbols-outlined text-base text-[#003f87]">add_location_alt</span>
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-bold text-[#1b1c1c]">Nouvelle Parcelle</h3>
+                            <p className="text-[11px] text-slate-500">Enregistrement d'une zone de culture</p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-200"
+                    >
+                        <span className="material-symbols-outlined text-lg">close</span>
                     </button>
                 </div>
 
-                <form className="flex-1 space-y-6 overflow-y-auto pr-2">
-                    <div className="space-y-2">
-                        <label className="block text-sm font-semibold text-[#424752]">ID de la Ferme</label>
-                        <div className="relative">
-                            <select
-                                className="w-full cursor-not-allowed appearance-none rounded-lg border border-[#c2c6d4] bg-[#f5f3f3] p-3 text-[#424752] outline-none transition-all focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]"
-                                disabled
-                            >
-                                <option>Kinshasa Nord - Site Principal</option>
-                            </select>
-                            <span className="material-symbols-outlined absolute right-3 top-3 text-[#424752] opacity-50">
-                lock
-              </span>
-                        </div>
+                <form className="flex-1 space-y-5 overflow-y-auto p-6">
+                    <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">Ferme associée</label>
+                        <select className="w-full cursor-not-allowed rounded-lg border border-slate-200 bg-slate-100 p-3 text-sm text-slate-500 outline-none" disabled>
+                            <option>Kinshasa Nord — Site Principal</option>
+                        </select>
                     </div>
-
                     <Field label="Type de Culture" as="select">
-                        <option value="">Sélectionnez une culture</option>
-                        <option value="maize">Maïs</option>
-                        <option value="cassava">Manioc</option>
-                        <option value="coffee">Café</option>
-                        <option value="cocoa">Cacao</option>
+                        <option value="">Sélectionnez une culture…</option>
+                        <option>Maïs Grain</option>
+                        <option>Manioc</option>
+                        <option>Haricots</option>
+                        <option>Soja</option>
+                        <option>Café</option>
                     </Field>
-
                     <div className="grid grid-cols-2 gap-4">
-                        <Field label="Superficie (Ha)" type="number" placeholder="0.0" />
+                        <Field label="Superficie (Ha)" type="number" placeholder="ex. 4.5" />
                         <Field label="Date de Plantation" type="date" />
                     </div>
-
-                    <div className="rounded-xl border border-[#003f87]/20 bg-[#d7e2ff] p-4">
-                        <p className="text-xs leading-relaxed text-[#004491]">
-                            <span className="material-symbols-outlined mr-1 align-middle text-sm">info</span>
-                            L'identifiant de la parcelle sera généré automatiquement selon les conventions de l'exploitation Kinshasa Nord.
+                    <Field label="Coordonnées GPS (optionnel)" placeholder="ex. -4.3317, 15.3822" />
+                    <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
+                        <p className="flex items-start gap-2 text-xs leading-relaxed text-blue-700">
+                            <span className="material-symbols-outlined mt-0.5 shrink-0 text-sm">info</span>
+                            L'identifiant sera généré automatiquement selon les conventions de la ferme sélectionnée.
                         </p>
-                    </div>
-
-                    <div className="pt-8">
-                        <div className="relative mb-4 h-[150px] w-full overflow-hidden rounded-xl border border-[#c2c6d4]">
-                            <img
-                                alt="Exemple de parcelle"
-                                className="h-full w-full object-cover opacity-60"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuChGgD9cy4ITwOt95-RCwmWqO_xF4vVMXSLIXS1g3q8i1nTlFUQNWybhumb0u5FOLbxYZAaAAQJvAbGU_xbmtH_xV_V2KkF5Hwk9SHq-Isp7u2Gzsjcm_bxvbK92a9X5DHnxJ1tgcKs74CYGVToEawC7ACMeasCnEGAkMTZjvYIz98aRRyBql2LQDabqhwN7plJVIGy4Pd08P6ikcPyHxjG3Nl7i0axj9cvIMgM362YDZOqyCF2TkY9tsfm_pI175u0lXKgHwgPMF4"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent" />
-                            <div className="absolute bottom-4 left-4">
-                <span className="rounded bg-white/80 px-2 py-1 text-[10px] font-bold text-[#003f87] backdrop-blur">
-                  PRÉVISUALISATION
-                </span>
-                            </div>
-                        </div>
                     </div>
                 </form>
 
-                <div className="flex gap-3 border-t border-[#c2c6d4] pt-6">
-                    <button className="flex-1 rounded-xl border border-[#c2c6d4] py-3 text-sm font-semibold text-[#424752] transition-colors hover:bg-[#f0eded]">
+                <div className="flex gap-3 border-t border-slate-100 bg-slate-50 px-6 py-4">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100"
+                    >
                         Annuler
                     </button>
-                    <button className="flex-[2] rounded-xl bg-[#003f87] py-3 text-sm font-semibold text-white shadow-lg shadow-[#003f87]/20 transition-opacity hover:opacity-90">
+                    <button className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95">
                         Confirmer la création
                     </button>
                 </div>
@@ -300,73 +486,15 @@ function CreateParcelModal() {
 }
 
 function Field({ label, type = "text", placeholder, as = "input", children }) {
-    const common =
-        "w-full rounded-lg border border-[#c2c6d4] bg-white p-3 outline-none transition-all focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]";
-
+    const cls = "w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none transition-all focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20 placeholder:text-slate-400";
     return (
-        <div className="space-y-2">
-            <label className="block text-sm font-semibold text-[#1b1c1c]">{label}</label>
+        <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</label>
             {as === "select" ? (
-                <select className={common}>{children}</select>
+                <select className={cls}>{children}</select>
             ) : (
-                <input className={common} type={type} placeholder={placeholder} />
+                <input className={cls} type={type} placeholder={placeholder} />
             )}
         </div>
-    );
-}
-
-function MapTag({ className, text, dot, pulse = false }) {
-    return (
-        <div className={`absolute flex items-center gap-2 rounded-lg border bg-white/90 px-3 py-1.5 shadow-lg backdrop-blur ${className}`}>
-            <div className={`h-2 w-2 rounded-full ${dot} ${pulse ? "animate-pulse" : ""}`} />
-            <span className="text-[10px] font-bold text-[#1b1c1c]">{text}</span>
-        </div>
-    );
-}
-
-function ProgressItem({ label, value, width, color }) {
-    return (
-        <div>
-            <div className="mb-1 flex items-center justify-between">
-        <span className="flex items-center gap-2 text-sm text-[#424752]">
-          <span className={`h-2 w-2 rounded-full ${color}`} />
-            {label}
-        </span>
-                <span className="text-sm font-bold">{value}</span>
-            </div>
-            <div className="h-1.5 w-full rounded-full bg-[#f0eded]">
-                <div className={`h-1.5 rounded-full ${color}`} style={{ width }} />
-            </div>
-        </div>
-    );
-}
-
-function MiniMetric({ label, value, bordered = false }) {
-    return (
-        <div className={`text-center ${bordered ? "border-x border-[#c2c6d4] px-6" : ""}`}>
-            <span className="block text-[10px] uppercase text-[#424752]">{label}</span>
-            <span className="text-sm font-bold text-[#1b1c1c]">{value}</span>
-        </div>
-    );
-}
-
-function ActionLink({ icon, label }) {
-    return (
-        <button className="flex items-center gap-2 text-sm text-[#424752] transition-colors hover:text-[#003f87]">
-            <span className="material-symbols-outlined text-lg">{icon}</span>
-            {label}
-        </button>
-    );
-}
-
-function Th({ children, align = "left" }) {
-    return <th className={`px-6 py-4 text-xs font-semibold uppercase tracking-wider text-[#424752] text-${align}`}>{children}</th>;
-}
-
-function IconButton({ icon }) {
-    return (
-        <button className="rounded-full p-2 text-[#424752] transition-colors hover:bg-gray-100">
-            <span className="material-symbols-outlined">{icon}</span>
-        </button>
     );
 }

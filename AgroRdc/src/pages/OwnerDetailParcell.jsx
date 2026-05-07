@@ -1,6 +1,7 @@
 import React from "react";
+import OwnerSidebar from "../components/OwnerSidebar.jsx";
 
-export default function App() {
+export default function OwnerDetailParcell() {
     const historyRows = [
         ["2022-2023 Q3", "Maïs Jaune", "45.2", "Terminé", "bg-blue-100 text-blue-800"],
         ["2021-2022 Q4", "Soja", "28.8", "Terminé", "bg-blue-100 text-blue-800"],
@@ -27,10 +28,9 @@ export default function App() {
 
     return (
         <div className="min-h-screen bg-[#fbf9f8] text-[#1b1c1c]">
-            <TopBar />
-            <SideNav />
+            <OwnerSidebar />
 
-            <main className="ml-64 pt-16 min-h-screen">
+            <main className="ml-64 min-h-screen">
                 <div className="mx-auto max-w-[1440px] p-8">
                     <BreadcrumbHeader />
                     <div className="grid grid-cols-12 gap-6">
@@ -51,93 +51,6 @@ export default function App() {
 
             <SuccessToast />
         </div>
-    );
-}
-
-function TopBar() {
-    return (
-        <header className="fixed top-0 left-0 z-40 flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-6">
-            <div className="flex items-center gap-8">
-                <span className="text-xl font-bold text-[#003f87]">AgroDirect DRC</span>
-                <nav className="hidden h-full gap-6 md:flex">
-                    <TopNavItem label="Tableau de bord" />
-                    <TopNavItem label="Parcelles" active />
-                    <TopNavItem label="Logistique" />
-                </nav>
-            </div>
-
-            <div className="flex items-center gap-4">
-                <IconButton icon="notifications" />
-                <IconButton icon="settings" />
-                <div className="mx-2 h-8 w-px bg-gray-200" />
-                <button className="rounded bg-[#003f87] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90">
-                    Generate Report
-                </button>
-                <img
-                    alt="Manager Profile"
-                    className="h-10 w-10 rounded-full border border-gray-200"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvDdGN7UTunypkrDtfcrxkytWuI8-Iw8Eo1T0VoFCjL_ivp96O5rfjUETSdTDTLDUihvoineGFbLVY3iGp-aaNPK5eZ29rOYXfgGnzAgVdLe0cOw15GxNE6KE99JRy3xRq6Il8NZ55OQ0L8qW1dyJNP2fTfnYxpvHDhZ9B1hLOyWOiDdFv85ES4bGc5yRs1Q0GttNKBQyr_9rRwiC69OscgzWKulAixlJwtea838VIiLjUXgXSMqvrXNSEJlqpJno0h-1NZkSr_OU"
-                />
-            </div>
-        </header>
-    );
-}
-
-function SideNav() {
-    const items = [
-        ["dashboard", "Dashboard", false],
-        ["potted_plant", "Parcels", true],
-        ["local_shipping", "Logistics", false],
-        ["groups", "Staff", false],
-        ["monitoring", "Analytics", false],
-    ];
-
-    return (
-        <aside className="fixed left-0 top-0 z-50 flex h-screen w-64 flex-col border-r border-gray-200 bg-gray-50 pt-16">
-            <div className="p-6">
-                <div className="mb-1 flex items-center gap-3">
-                    <span className="text-lg font-black text-[#003f87]">AgroDirect</span>
-                </div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">DRC Management</p>
-            </div>
-
-            <nav className="flex-1 space-y-1 px-3">
-                {items.map(([icon, label, active]) => (
-                    <a
-                        key={label}
-                        href="#"
-                        className={`flex items-center gap-3 rounded px-4 py-3 text-sm font-semibold transition-all ${
-                            active
-                                ? "border-r-4 border-[#003f87] bg-blue-50 text-[#003f87]"
-                                : "text-gray-600 hover:bg-gray-100"
-                        }`}
-                    >
-            <span className={`material-symbols-outlined ${active ? "sidebar-active" : ""}`} style={active ? { fontVariationSettings: "'FILL' 1" } : undefined}>
-              {icon}
-            </span>
-                        {label}
-                    </a>
-                ))}
-            </nav>
-
-            <div className="border-t border-gray-200 p-4">
-                <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#003f87] py-3 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90">
-                    <span className="material-symbols-outlined text-sm">add</span>
-                    Add New Parcel
-                </button>
-            </div>
-
-            <nav className="mt-auto space-y-1 px-3 pb-6">
-                <a href="#" className="flex items-center gap-3 rounded px-4 py-3 text-sm font-semibold text-gray-600 transition-all hover:bg-gray-100">
-                    <span className="material-symbols-outlined">settings</span>
-                    Settings
-                </a>
-                <a href="#" className="flex items-center gap-3 rounded px-4 py-3 text-sm font-semibold text-gray-600 transition-all hover:bg-gray-100">
-                    <span className="material-symbols-outlined">contact_support</span>
-                    Support
-                </a>
-            </nav>
-        </aside>
     );
 }
 
@@ -386,27 +299,6 @@ function SuccessToast() {
                 </div>
             </div>
         </div>
-    );
-}
-
-function TopNavItem({ label, active = false }) {
-    return (
-        <a
-            href="#"
-            className={`flex h-16 items-center px-2 text-sm font-medium transition-colors ${
-                active ? "border-b-2 border-[#003f87] text-[#003f87]" : "text-gray-600 hover:bg-gray-50"
-            }`}
-        >
-            {label}
-        </a>
-    );
-}
-
-function IconButton({ icon }) {
-    return (
-        <button className="rounded-full p-2 text-gray-600 transition-colors hover:bg-gray-50">
-            <span className="material-symbols-outlined">{icon}</span>
-        </button>
     );
 }
 

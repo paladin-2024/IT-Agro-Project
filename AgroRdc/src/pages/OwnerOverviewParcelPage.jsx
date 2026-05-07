@@ -13,7 +13,7 @@ const breakdown = [
     { label: "Attention", value: 10, color: "bg-red-600" },
 ];
 
-export default function OverviewParcels() {
+export default function OwnerOverviewParcelPage() {
     return (
         <section className="grid gap-6 lg:grid-cols-12">
             <div className="lg:col-span-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">

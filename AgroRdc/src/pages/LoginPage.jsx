@@ -25,9 +25,8 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const navigate = useNavigate()
-    const { login, isAuthenticated } = useAuth()
-
-    if (isAuthenticated) return <Navigate to="/dashboard" replace />
+    const { login, isAuthenticated, user } = useAuth()
+    if (isAuthenticated) return <Navigate to={user?.role === 'owner' ? '/owner/dashboard' : '/dashboard'} replace />
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target
@@ -39,6 +38,20 @@ export default function LoginPage() {
         setLoading(true)
         setError('')
         try {
+            if (!API_URL) {
+                // Dev mode: no backend, use mock credentials
+                const mockUsers = {
+                    'owner@agrordc.cd':   { role: 'owner',  name: 'Kabangu Mulumba' },
+                    'admin@agrordc.cd':   { role: 'admin',  name: 'Administrateur' },
+                }
+                const mockUser = mockUsers[form.email]
+                if (!mockUser || form.password !== 'password') {
+                    throw new Error('Email ou mot de passe incorrect (mode dev)')
+                }
+                login(mockUser, 'dev-token')
+                navigate(mockUser.role === 'owner' ? '/owner/dashboard' : '/dashboard')
+                return
+            }
             const res = await fetch(`${API_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -48,7 +61,9 @@ export default function LoginPage() {
             const data = await res.json()
             if (!res.ok) throw new Error(data.message || 'Connexion échouée')
             login(data.user, data.accessToken)
-            navigate('/dashboard')
+            const role = data.user?.role
+            if (role === 'owner') navigate('/owner/dashboard')
+            else navigate('/dashboard')
         } catch (err) {
             setError(err.message)
         } finally {
