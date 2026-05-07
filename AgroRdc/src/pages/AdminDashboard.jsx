@@ -1,67 +1,13 @@
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
+import AdminSidebar from '../components/AdminSidebar.jsx'
 
 export default function AdminDashboard() {
-    const { logout, user } = useAuth()
-    const navigate = useNavigate()
+    const { user } = useAuth()
 
-    const handleLogout = () => {
-        logout()
-        navigate('/login')
-    }
     return (
         <div className="min-h-screen bg-[#fbf9f8] text-[#1b1c1c] font-[Inter]">
-            <aside className="fixed left-0 top-0 z-40 flex h-full w-64 flex-col border-r border-[#DEE2E6] bg-white pt-4">
-                <div className="mb-8 px-6">
-                    <h1 className="font-[Work_Sans] text-xl font-black tracking-tight text-[#0056B3]">
-                        AgriPrecise
-                    </h1>
-                    <p className="text-xs text-slate-500">Portail agricole de la RDC</p>
-                </div>
-
-                <nav className="flex-1 space-y-1 px-4">
-                    <button className="flex w-full items-center gap-3 border-r-4 border-[#0056B3] bg-slate-100 px-4 py-3 text-left text-sm font-medium text-[#0056B3] transition-colors">
-                        <span className="material-symbols-outlined">space_dashboard</span>
-                        <span>Tableau de bord</span>
-                    </button>
-                    <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0056B3]">
-                        <span className="material-symbols-outlined">opacity</span>
-                        <span>Humidité du sol</span>
-                    </button>
-                    <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0056B3]">
-                        <span className="material-symbols-outlined">grass</span>
-                        <span>Rendements agricoles</span>
-                    </button>
-                    <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0056B3]">
-                        <span className="material-symbols-outlined">local_shipping</span>
-                        <span>Logistique</span>
-                    </button>
-                    <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0056B3]">
-                        <span className="material-symbols-outlined">group</span>
-                        <span>Gestion des utilisateurs</span>
-                    </button>
-                    <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#0056B3]">
-                        <span className="material-symbols-outlined">settings</span>
-                        <span>Paramètres du système</span>
-                    </button>
-                </nav>
-
-                <div className="border-t border-[#DEE2E6] px-4 py-6">
-                    <button className="mb-6 w-full rounded bg-[#0056B3] py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90">
-                        Générer un rapport
-                    </button>
-                    <div className="space-y-1">
-                        <button className="flex w-full items-center gap-3 px-4 py-2 text-left text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50">
-                            <span className="material-symbols-outlined">contact_support</span>
-                            <span>Assistance</span>
-                        </button>
-                        <button onClick={handleLogout} className="flex w-full items-center gap-3 px-4 py-2 text-left text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50">
-                            <span className="material-symbols-outlined">logout</span>
-                            <span>Déconnexion</span>
-                        </button>
-                    </div>
-                </div>
-            </aside>
+            <AdminSidebar />
 
             <main className="ml-64 min-h-screen">
                 <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-[#DEE2E6] bg-white px-6">
@@ -147,7 +93,7 @@ export default function AdminDashboard() {
                                 <p className="text-xs text-slate-400">Réparties dans 14 provinces</p>
                             </div>
 
-                            <div className="col-span-1 flex flex-col gap-2 border border-[#DEE2E6] bg-white p-6">
+                            <Link to="/sante-systeme" className="col-span-1 flex flex-col gap-2 border border-[#DEE2E6] bg-white p-6 hover:border-green-400 transition-colors">
                                 <div className="flex items-center justify-between">
                   <span className="material-symbols-outlined rounded bg-green-50 p-2 text-green-600">
                     monitor_heart
@@ -158,8 +104,8 @@ export default function AdminDashboard() {
                                     <p className="text-xs text-[#424752]">Santé du système</p>
                                     <h3 className="text-xl font-semibold">99.9%</h3>
                                 </div>
-                                <p className="text-xs text-slate-400">Latence : 142ms</p>
-                            </div>
+                                <p className="text-xs text-slate-400">Latence : 142ms ↗</p>
+                            </Link>
 
                             <div className="col-span-3 overflow-hidden border border-[#DEE2E6] bg-white">
                                 <div className="flex items-center justify-between border-b border-[#DEE2E6] p-6">
@@ -194,12 +140,12 @@ export default function AdminDashboard() {
                                     Administration rapide
                                 </h4>
                                 <div className="flex flex-col gap-2">
-                                    <button className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-[#c2c6d4] hover:bg-slate-100">
+                                    <Link to="/utilisateurs" className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-[#c2c6d4] hover:bg-slate-100">
                     <span className="material-symbols-outlined text-[#0056B3]">
                       person_add
                     </span>
                                         Ajouter un nouvel admin
-                                    </button>
+                                    </Link>
                                     <button className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-[#c2c6d4] hover:bg-slate-100">
                     <span className="material-symbols-outlined text-[#0056B3]">
                       domain_verification
@@ -264,13 +210,18 @@ export default function AdminDashboard() {
                                 </h4>
                                 <div className="flex gap-2">
                                     <button className="border border-[#DEE2E6] p-2 transition-colors hover:bg-slate-50">
-                    <span className="material-symbols-outlined text-sm">
-                      filter_list
-                    </span>
+                                        <span className="material-symbols-outlined text-sm">filter_list</span>
                                     </button>
                                     <button className="border border-[#DEE2E6] p-2 transition-colors hover:bg-slate-50">
                                         <span className="material-symbols-outlined text-sm">download</span>
                                     </button>
+                                    <Link
+                                        to="/utilisateurs"
+                                        className="flex items-center gap-1 border border-[#003f87] px-3 py-1.5 text-xs font-medium text-[#003f87] transition-colors hover:bg-blue-50"
+                                    >
+                                        <span className="material-symbols-outlined text-sm">open_in_new</span>
+                                        Gérer
+                                    </Link>
                                 </div>
                             </div>
 

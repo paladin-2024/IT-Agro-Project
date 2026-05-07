@@ -3,6 +3,8 @@ import LoginPage from './pages/LoginPage.jsx'
 import ContacteAdmin from './pages/ContacteAdmin.jsx'
 import MotPasseOublie from './pages/MotPasseOublie.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
+import AdminHealthPage from './pages/AdminHeathPage.jsx'
+import AdminUsersPage from './pages/AdminUserPage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -15,6 +17,22 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <AdminDashboard />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/sante-systeme',
+        element: (
+            <ProtectedRoute>
+                <AdminHealthPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/utilisateurs',
+        element: (
+            <ProtectedRoute>
+                <AdminUsersPage />
             </ProtectedRoute>
         ),
     },
