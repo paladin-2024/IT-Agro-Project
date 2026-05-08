@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 
 /**
  * Props
@@ -9,6 +10,14 @@ import { Link } from 'react-router-dom'
  *  children  – extra action buttons placed between title and icons
  */
 export default function EmployeeTopNav({ backTo, backLabel, title, badge, children }) {
+    const { logout } = useAuth()
+    const navigate = useNavigate()
+
+    function handleLogout() {
+        logout()
+        navigate('/login', { replace: true })
+    }
+
     return (
         <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white/90 px-4 shadow-sm backdrop-blur-md md:px-6">
             {/* ── Left: logo + breadcrumb ───────────────────────────── */}
@@ -67,6 +76,13 @@ export default function EmployeeTopNav({ backTo, backLabel, title, badge, childr
                 </button>
                 <button className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#003f87]">
                     <span className="material-symbols-outlined">account_circle</span>
+                </button>
+                <button
+                    onClick={handleLogout}
+                    title="Se déconnecter"
+                    className="rounded-full p-2 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
+                >
+                    <span className="material-symbols-outlined">logout</span>
                 </button>
             </div>
         </header>

@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 
 /**
  * Props
@@ -6,6 +7,13 @@ import { Link, useLocation } from 'react-router-dom'
  */
 export default function EmployeeBottomNav({ parcelId }) {
     const { pathname } = useLocation()
+    const { logout } = useAuth()
+    const navigate = useNavigate()
+
+    function handleLogout() {
+        logout()
+        navigate('/login', { replace: true })
+    }
 
     const NAV = [
         {
@@ -68,6 +76,13 @@ export default function EmployeeBottomNav({ parcelId }) {
                     </Link>
                 )
             })}
+            <button
+                onClick={handleLogout}
+                className="flex flex-col items-center justify-center rounded-lg px-3 py-1 text-slate-500 transition-all hover:bg-red-50 hover:text-red-600"
+            >
+                <span className="material-symbols-outlined text-[22px]">logout</span>
+                <span className="mt-0.5 text-[10px] font-bold uppercase tracking-wider">Quitter</span>
+            </button>
         </nav>
     )
 }
