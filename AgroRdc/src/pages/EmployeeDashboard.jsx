@@ -166,9 +166,12 @@ export default function EmployeeDashboard() {
             </main>
 
             {/* FAB */}
-            <button className="fixed bottom-20 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#b6171e] text-white shadow-lg transition-transform hover:scale-110 active:scale-95 md:bottom-12 md:right-12">
+            <Link
+                to="/employee/saisir-recolte"
+                className="fixed bottom-20 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#b6171e] text-white shadow-lg transition-transform hover:scale-110 active:scale-95 md:bottom-12 md:right-12"
+            >
                 <span className="material-symbols-outlined text-2xl">add_task</span>
-            </button>
+            </Link>
 
             {/* Mobile bottom nav */}
             <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-[#DEE2E6] bg-white/95 px-4 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] backdrop-blur-sm md:hidden">

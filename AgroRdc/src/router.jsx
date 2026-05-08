@@ -22,6 +22,8 @@ import EmployeeParcelDetailPage from './pages/EmployeeParcelDetailPage.jsx'
 import EmployeeProductionDetailPage from './pages/EmployeeProductionDetailPage.jsx'
 import EmployeeParcelForecastPage from './pages/EmployeeParcelForecastPage.jsx'
 import EmployeeParcelTeamPage from './pages/EmployeeParcelTeamPage.jsx'
+import EmployeeHarvestLogPage from './pages/EmployeeHarvestLogPage.jsx'
+import EmployeeDailyReportPage from './pages/EmployeeDailyReportPage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -186,6 +188,30 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <EmployeeParcelTeamPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/saisir-recolte',
+        element: (
+            <ProtectedRoute>
+                <EmployeeHarvestLogPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/parcelles/:id/saisir-recolte',
+        element: (
+            <ProtectedRoute>
+                <EmployeeHarvestLogPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/parcelles/:id/rapport-quotidien',
+        element: (
+            <ProtectedRoute>
+                <EmployeeDailyReportPage />
             </ProtectedRoute>
         ),
     },

@@ -112,9 +112,17 @@ export default function EmployeeParcelDetailPage() {
                                 Le système de goutte-à-goutte du Secteur 2 présente des chutes de pression. Une inspection immédiate est prévue demain.
                             </p>
                         </div>
-                        <button className="mt-6 w-full rounded-lg bg-[#003f87] py-3 text-sm font-bold text-white transition-all hover:bg-[#0056b3] active:scale-[0.98]">
-                            Voir le Journal de Maintenance
-                        </button>
+                        <div className="mt-6 flex flex-col gap-2">
+                            <Link
+                                to={`/employee/parcelles/${parcelId}/rapport-quotidien`}
+                                className="block w-full rounded-lg bg-[#003f87] py-3 text-center text-sm font-bold text-white transition-all hover:bg-[#0056b3] active:scale-[0.98]"
+                            >
+                                Saisir le Rapport Quotidien
+                            </Link>
+                            <button className="w-full rounded-lg border border-[#003f87] py-3 text-sm font-bold text-[#003f87] transition-colors hover:bg-blue-50">
+                                Voir le Journal de Maintenance
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -143,10 +151,19 @@ export default function EmployeeParcelDetailPage() {
                         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                             <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-6 py-4">
                                 <h3 className="text-base font-bold text-[#171c25]">Historique des Récoltes</h3>
-                                <button className="flex items-center gap-1 text-xs font-semibold text-[#003f87] hover:underline">
-                                    <span className="material-symbols-outlined text-sm">download</span>
-                                    Exporter CSV
-                                </button>
+                                <div className="flex items-center gap-3">
+                                    <Link
+                                        to={`/employee/parcelles/${parcelId}/saisir-recolte`}
+                                        className="flex items-center gap-1 rounded-lg bg-[#003f87] px-3 py-1.5 text-xs font-bold text-white transition-all hover:bg-[#0056b3]"
+                                    >
+                                        <span className="material-symbols-outlined text-sm">add</span>
+                                        Saisir une récolte
+                                    </Link>
+                                    <button className="flex items-center gap-1 text-xs font-semibold text-[#003f87] hover:underline">
+                                        <span className="material-symbols-outlined text-sm">download</span>
+                                        Exporter CSV
+                                    </button>
+                                </div>
                             </div>
                             <table className="w-full text-left text-sm">
                                 <thead>
