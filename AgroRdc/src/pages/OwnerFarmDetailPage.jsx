@@ -224,7 +224,7 @@ export default function OwnerFarmDetailPage() {
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <Link
-                                                    to="/owner/parcelles/detail"
+                                                    to={`/owner/parcelles/${p.id}`}
                                                     className="inline-flex items-center gap-1 rounded-lg border border-transparent px-2.5 py-1 text-xs font-semibold text-[#003f87] transition-all group-hover:border-[#003f87] group-hover:bg-blue-50"
                                                 >
                                                     Voir

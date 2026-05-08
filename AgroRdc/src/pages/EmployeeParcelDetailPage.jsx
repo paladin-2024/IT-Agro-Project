@@ -158,6 +158,7 @@ export default function EmployeeParcelDetailPage() {
                                             <td className="px-6 py-4">
                                                 <Link
                                                     to={`/employee/productions/${row.id}`}
+                                                    state={{ parcelId }}
                                                     className="flex items-center gap-1 text-xs font-bold text-[#003f87] hover:underline"
                                                 >
                                                     Détails

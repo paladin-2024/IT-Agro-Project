@@ -303,7 +303,7 @@ export default function AdminFermesGestion() {
                         <p className="text-sm text-slate-500">Gérez et suivez toutes les fermes enregistrées</p>
                     </div>
                     <Link
-                        to="/fermes/nouvelle"
+                        to="/owner/fermes/creer"
                         className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
                     >
                         <span className="material-symbols-outlined text-base">add</span>

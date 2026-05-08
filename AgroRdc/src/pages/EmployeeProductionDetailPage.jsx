@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useLocation } from 'react-router-dom'
 import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
 import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
 
@@ -60,13 +60,15 @@ const TIMELINE = [
 export default function EmployeeProductionDetailPage() {
     const [activeTab, setActiveTab] = useState('Aperçu')
     const { id } = useParams()
+    const { state } = useLocation()
     const recordId = id || 'PRD-2023-084'
+    const parcelId = state?.parcelId || 'B-04'
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
             <EmployeeTopNav
-                backTo="/employee/dashboard"
-                backLabel="Parcelles"
+                backTo={`/employee/parcelles/${parcelId}`}
+                backLabel={`Parcelle ${parcelId}`}
                 title={`#${recordId}`}
             />
 
@@ -160,13 +162,13 @@ export default function EmployeeProductionDetailPage() {
                             </div>
                             <div className="flex flex-col gap-2">
                                 <Link
-                                    to="/employee/parcelles/B-04"
+                                    to={`/employee/parcelles/${parcelId}`}
                                     className="block w-full rounded-lg border border-[#003f87] px-4 py-3 text-center text-sm font-bold text-[#003f87] transition-colors hover:bg-blue-50"
                                 >
                                     Voir détails de la parcelle
                                 </Link>
                                 <Link
-                                    to="/employee/parcelles/B-04/previsions"
+                                    to={`/employee/parcelles/${parcelId}/previsions`}
                                     className="flex w-full items-center justify-center gap-1 rounded-lg bg-[#003f87] px-4 py-3 text-center text-sm font-bold text-white transition-all hover:bg-[#0056b3]"
                                 >
                                     <span className="material-symbols-outlined text-[16px]">query_stats</span>

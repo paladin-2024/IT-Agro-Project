@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
 import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import { useAuth } from '../contexts/AuthContext.jsx'
+import { createHarvest } from '../api/harvests.js'
 
 const PARCELS = [
     { id: 'B-04', label: 'Parcelle B-04 — Vallée Est',   crop: 'Café (Arabica)' },
@@ -19,6 +21,7 @@ const RECENT = [
 export default function EmployeeHarvestLogPage() {
     const { id: urlParcelId } = useParams()
     const navigate = useNavigate()
+    const { user } = useAuth()
 
     const defaultParcel = PARCELS.find((p) => p.id === urlParcelId) || PARCELS[0]
 
@@ -31,6 +34,7 @@ export default function EmployeeHarvestLogPage() {
     })
     const [submitted, setSubmitted] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
 
     const handleParcelChange = (e) => {
         const found = PARCELS.find((p) => p.id === e.target.value)
@@ -41,13 +45,26 @@ export default function EmployeeHarvestLogPage() {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
+        setError('')
+        try {
+            await createHarvest({
+                parcelId: selectedParcel.id,
+                quantity: form.quantity,
+                unit: form.unit,
+                date: form.date,
+                observations: form.observations,
+                employeeId: user?.id,
+                employeeName: user?.name,
+            })
             setSubmitted(true)
-        }, 800)
+        } catch (err) {
+            setError(err.message)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const backPath = urlParcelId
@@ -224,6 +241,12 @@ export default function EmployeeHarvestLogPage() {
                                             className="w-full resize-none rounded-lg bg-slate-50 py-3 px-4 text-sm outline-none focus:ring-2 focus:ring-[#003f87]/30"
                                         />
                                     </div>
+
+                                    {error && (
+                                        <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                                            {error}
+                                        </p>
+                                    )}
 
                                     {/* Actions */}
                                     <div className="flex gap-4 pt-2">

@@ -175,7 +175,7 @@ export default function OwnerParcelsPage() {
                                     </div>
 
                                     <Link
-                                        to="/owner/parcelles/detail"
+                                        to="/owner/parcelles/A-12"
                                         className="flex items-center gap-1 text-sm font-semibold text-[#003f87] hover:underline"
                                     >
                                         Détails complets

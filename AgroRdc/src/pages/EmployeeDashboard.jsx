@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import EmployeeTopNav from "../components/EmployeeTopNav.jsx";
 import EmployeeBottomNav from "../components/EmployeeBottomNav.jsx";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import { getAssignedParcels } from "../api/assignments.js";
 
 /* ─── Static data ────────────────────────────────────────────────────── */
 
@@ -61,6 +63,24 @@ const parcels = [
 
 export default function EmployeeDashboard() {
     const [activeTab, setActiveTab] = useState("assignments");
+    const [displayParcels, setDisplayParcels] = useState(parcels);
+    const { user } = useAuth();
+
+    useEffect(() => {
+        if (!user?.id) return;
+        getAssignedParcels(user.id).then((assigned) => {
+            if (assigned.length > 0) {
+                // Merge API parcel data with local display data for images/icons
+                const merged = assigned.map((ap) => {
+                    const local = parcels.find((p) => p.id === ap.id);
+                    return local ? { ...local, ...ap, id: ap.id } : ap;
+                });
+                setDisplayParcels(merged);
+            }
+        }).catch(() => {
+            // If assignment lookup fails, keep showing all parcels
+        });
+    }, [user?.id]);
 
     return (
         <div className="min-h-screen bg-[#fbf9f8] text-[#1b1c1c]">
@@ -141,7 +161,7 @@ export default function EmployeeDashboard() {
 
                 {/* Parcel cards grid */}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {parcels.map((p) => (
+                    {displayParcels.map((p) => (
                         <ParcelCard key={p.id} parcel={p} />
                     ))}
                 </div>

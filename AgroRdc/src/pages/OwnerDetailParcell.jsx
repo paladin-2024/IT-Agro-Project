@@ -1,7 +1,9 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar.jsx";
 
 export default function OwnerDetailParcell() {
+    const { id: parcelId = 'B-04' } = useParams();
     const historyRows = [
         ["2022-2023 Q3", "Maïs Jaune", "45.2", "Terminé", "bg-blue-100 text-blue-800"],
         ["2021-2022 Q4", "Soja", "28.8", "Terminé", "bg-blue-100 text-blue-800"],
@@ -32,7 +34,7 @@ export default function OwnerDetailParcell() {
 
             <main className="ml-64 min-h-screen">
                 <div className="mx-auto max-w-[1440px] p-8">
-                    <BreadcrumbHeader />
+                    <BreadcrumbHeader parcelId={parcelId} />
                     <div className="grid grid-cols-12 gap-6">
                         <div className="col-span-12 space-y-6 lg:col-span-8">
                             <MetricsRow />
@@ -54,7 +56,7 @@ export default function OwnerDetailParcell() {
     );
 }
 
-function BreadcrumbHeader() {
+function BreadcrumbHeader({ parcelId }) {
     return (
         <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div>
@@ -64,7 +66,7 @@ function BreadcrumbHeader() {
                     <span className="text-xs text-[#003f87]">Détail de la Parcelle</span>
                 </div>
                 <div className="flex items-center gap-4">
-                    <h1 className="text-[32px] font-semibold leading-10 text-[#1b1c1c]">Parcelle B-04</h1>
+                    <h1 className="text-[32px] font-semibold leading-10 text-[#1b1c1c]">Parcelle {parcelId}</h1>
                     <span className="flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
             <span className="h-2 w-2 rounded-full bg-green-600" />
             Sain

@@ -1,57 +1,110 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import OwnerSidebar from "../components/OwnerSidebar.jsx";
+import { setAssignment } from "../api/assignments.js";
+
+const PARCEL_LIST = [
+    {
+        id: "A-01",
+        title: "Parcelle A-01",
+        size: "12.5 Ha",
+        crop: "Maïs",
+        harvest: "Oct 2024",
+        status: "Actif",
+        statusClass: "bg-emerald-100 text-emerald-700",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDTXvuVs1bf1pbIrVcu6il0T-g06Neb-r82LPYdMNhyyG58_PHL5V1BvW6tZ8AgyvSQ9ptRa7hk9YPOJfczx2sd_x-kPtyGqeYFxTmel741u1KmRZd8fPXZTT99Q1tV3mpkLxkALUJgo0GDqAhk57SDdqfsK7_V36MXexepnV5qa_Yb81SoRladbwO_xAlBwTdoZZdAE4492E4xqeAgtOc_EjQkgPnZ79nCoe4YOrJCdczKaHRliMmNvWBPsLGw9GwjfnVZmoYc3JE",
+    },
+    {
+        id: "B-04",
+        title: "Parcelle B-04",
+        size: "8.2 Ha",
+        crop: "Caféier",
+        harvest: "Nov 2024",
+        status: "Besoin d'Attention",
+        statusClass: "bg-amber-100 text-amber-700",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuABkwnWul4AL6WN78AmFEPxRILjrbR2wRerEJS-brsT8E7BLeUPLA85EUNb0b5n4HZADwMVUA1oEwGDJmzubtAW4-C1Dbu4j_GZGeogg3sVui-eqRPbOcdfum8PmPdXahmbaEPOatUqdnjrTpQXEJOx4FJyxRG-LefwqYr5lfrbXbYHw2TzjoNs3BQhO0WuvzSVxvXGJTSp66QY3k8K3EK_LYDX5RDIarWpqTe2illCtWnMhKdC8hvp5u46BJvOyaEJBZG4fruDVv7w",
+    },
+    {
+        id: "C-12",
+        title: "Parcelle C-12",
+        size: "15.0 Ha",
+        crop: "Manioc",
+        harvest: "En jachère",
+        status: "Repos",
+        statusClass: "bg-slate-100 text-slate-600",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAd_6Xh5E_TL4isO6pkjuIuhCT8AZ_pV3Pr8DICCPPeDcd_qxHQSvZmk36OrG-dYf8OTVB2rZOz0j9FrMWM78TZdrUEXQh0JaN9SMso6AVMXTx5FOmH9WJoGkGRgYAjMxmgFVq5yfnbBARRitf47bZ-JGWGaVfgJ7gQJNII8hTliaYIcRnYMR8aYhSlnmu7L5FrB2zZnvsJVC_Z2gYrNQVxG6KIjGbSq6qvfiyQvexam4s0uqHiSqWEj45uDXrTEAyY0LwKommV_KA",
+    },
+];
+
+const EMPLOYEE_LIST = [
+    { id: "emp-001", name: "Samuel Mwamba",       role: "Agronome Principal" },
+    { id: "emp-002", name: "Clarisse Kabuya",      role: "Technicien Irrigation" },
+    { id: "emp-003", name: "Jean-Pierre Bolamba",  role: "Expert Sols" },
+    { id: "emp-004", name: "Arnaud Mutombo",       role: "Superviseur Récolte" },
+];
+
+const STORAGE_KEY = "agrordc_assignments";
+
+function loadAssignments() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : {};
+    } catch { return {}; }
+}
 
 export default function OwnerAffectation() {
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [selectedParcelId, setSelectedParcelId] = useState("B-04");
+    const [assignments, setAssignments] = useState(loadAssignments);
+    const [saving, setSaving] = useState(false);
+    const [savedMsg, setSavedMsg] = useState("");
 
-    const parcels = [
-        {
-            title: "Parcelle A-01",
-            size: "12.5 Ha",
-            crop: "Maïs",
-            harvest: "Oct 2024",
-            status: "Actif",
-            statusClass: "bg-emerald-100 text-emerald-700",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDTXvuVs1bf1pbIrVcu6il0T-g06Neb-r82LPYdMNhyyG58_PHL5V1BvW6tZ8AgyvSQ9ptRa7hk9YPOJfczx2sd_x-kPtyGqeYFxTmel741u1KmRZd8fPXZTT99Q1tV3mpkLxkALUJgo0GDqAhk57SDdqfsK7_V36MXexepnV5qa_Yb81SoRladbwO_xAlBwTdoZZdAE4492E4xqeAgtOc_EjQkgPnZ79nCoe4YOrJCdczKaHRliMmNvWBPsLGw9GwjfnVZmoYc3JE",
-            workers: "+2 assignés",
-            actionLabel: "Modifier",
-            actionStyle: "outline-blue",
-            selected: false,
-        },
-        {
-            title: "Parcelle B-04",
-            size: "8.2 Ha",
-            crop: "Caféier",
-            harvest: "Nov 2024",
-            status: "Besoin d'Attention",
-            statusClass: "bg-amber-100 text-amber-700",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuABkwnWul4AL6WN78AmFEPxRILjrbR2wRerEJS-brsT8E7BLeUPLA85EUNb0b5n4HZADwMVUA1oEwGDJmzubtAW4-C1Dbu4j_GZGeogg3sVui-eqRPbOcdfum8PmPdXahmbaEPOatUqdnjrTpQXEJOx4FJyxRG-LefwqYr5lfrbXbYHw2TzjoNs3BQhO0WuvzSVxvXGJTSp66QY3k8K3EK_LYDX5RDIarWpqTe2illCtWnMhKdC8hvp5u46BJvOyaEJBZG4fruDVv7w",
-            workers: "0 Personnel assigné",
-            actionLabel: "Affecter Personnel",
-            actionStyle: "filled",
-            selected: true,
-        },
-        {
-            title: "Parcelle C-12",
-            size: "15.0 Ha",
-            crop: "Manioc",
-            harvest: "En jachère",
-            status: "Repos",
-            statusClass: "bg-slate-100 text-slate-600",
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAd_6Xh5E_TL4isO6pkjuIuhCT8AZ_pV3Pr8DICCPPeDcd_qxHQSvZmk36OrG-dYf8OTVB2rZOz0j9FrMWM78TZdrUEXQh0JaN9SMso6AVMXTx5FOmH9WJoGkGRgYAjMxmgFVq5yfnbBARRitf47bZ-JGWGaVfgJ7gQJNII8hTliaYIcRnYMR8aYhSlnmu7L5FrB2zZnvsJVC_Z2gYrNQVxG6KIjGbSq6qvfiyQvexam4s0uqHiSqWEj45uDXrTEAyY0LwKommV_KA",
-            workers: "Aucun personnel requis",
-            actionLabel: "Gérer",
-            actionStyle: "outline",
-            selected: false,
-        },
-    ];
+    const openDrawer = (parcelId) => {
+        setSelectedParcelId(parcelId);
+        setDrawerOpen(true);
+    };
 
-    const employees = [
-        { name: "Samuel Mwamba",      role: "Agronome Principal",    assigned: false },
-        { name: "Clarisse Kabuya",    role: "Technicien Irrigation", assigned: false },
-        { name: "Jean-Pierre Bolamba",role: "Expert Sols",           assigned: true },
-        { name: "Arnaud Mutombo",     role: "Superviseur Récolte",   assigned: false },
-    ];
+    const toggleEmployee = (employeeId) => {
+        setAssignments((prev) => {
+            const current = prev[employeeId] ?? [];
+            const updated = current.includes(selectedParcelId)
+                ? current.filter((id) => id !== selectedParcelId)
+                : [...current, selectedParcelId];
+            return { ...prev, [employeeId]: updated };
+        });
+    };
+
+    const handleConfirm = async () => {
+        setSaving(true);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(assignments));
+        await new Promise((r) => setTimeout(r, 400));
+        setSaving(false);
+        setDrawerOpen(false);
+        setSavedMsg("Affectations sauvegardées !");
+        setTimeout(() => setSavedMsg(""), 3000);
+    };
+
+    const getParcelWorkers = (parcelId) => {
+        return EMPLOYEE_LIST.filter((emp) =>
+            (assignments[emp.id] ?? []).includes(parcelId)
+        );
+    };
+
+    const parcels = PARCEL_LIST.map((p) => {
+        const workers = getParcelWorkers(p.id);
+        const hasWorkers = workers.length > 0;
+        return {
+            ...p,
+            workers: hasWorkers ? `+${workers.length} assigné${workers.length > 1 ? "s" : ""}` : "0 Personnel assigné",
+            actionLabel: hasWorkers ? "Modifier" : "Affecter Personnel",
+            actionStyle: hasWorkers ? "outline-blue" : "filled",
+            selected: p.id === selectedParcelId && drawerOpen,
+        };
+    });
+
+    const employees = EMPLOYEE_LIST.map((emp) => ({
+        ...emp,
+        assigned: (assignments[emp.id] ?? []).includes(selectedParcelId),
+    }));
 
     return (
         <div className="min-h-screen bg-[#f4f6f9] text-[#1b1c1c]">
@@ -70,7 +123,7 @@ export default function OwnerAffectation() {
                             Filtrer
                         </button>
                         <button
-                            onClick={() => setDrawerOpen(true)}
+                            onClick={() => openDrawer(selectedParcelId)}
                             className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95"
                         >
                             <span className="material-symbols-outlined text-base">person_add</span>
@@ -80,10 +133,16 @@ export default function OwnerAffectation() {
                 </header>
 
                 <div className="p-8 space-y-8">
+                    {savedMsg && (
+                        <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm font-semibold text-emerald-700">
+                            {savedMsg}
+                        </div>
+                    )}
+
                     {/* Parcel cards */}
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
                         {parcels.map((p) => (
-                            <ParcelCard key={p.title} parcel={p} onAssign={() => setDrawerOpen(true)} />
+                            <ParcelCard key={p.id} parcel={p} onAssign={() => openDrawer(p.id)} />
                         ))}
                     </div>
 
@@ -124,7 +183,16 @@ export default function OwnerAffectation() {
             </main>
 
             {drawerOpen && (
-                <AssignmentDrawer onClose={() => setDrawerOpen(false)} employees={employees} />
+                <AssignmentDrawer
+                    parcelId={selectedParcelId}
+                    parcelTitle={PARCEL_LIST.find((p) => p.id === selectedParcelId)?.title ?? selectedParcelId}
+                    parcelCrop={PARCEL_LIST.find((p) => p.id === selectedParcelId)?.crop ?? ""}
+                    onClose={() => setDrawerOpen(false)}
+                    employees={employees}
+                    onToggle={toggleEmployee}
+                    onConfirm={handleConfirm}
+                    saving={saving}
+                />
             )}
         </div>
     );
@@ -207,7 +275,9 @@ function WorkforceStat({ icon, value, label }) {
     );
 }
 
-function AssignmentDrawer({ onClose, employees }) {
+function AssignmentDrawer({ parcelTitle, parcelCrop, onClose, employees, onToggle, onConfirm, saving }) {
+    const assignedCount = employees.filter((e) => e.assigned).length;
+
     return (
         <div className="fixed inset-0 z-[60] flex justify-end bg-[#1b1c1c]/40 backdrop-blur-sm" onClick={onClose}>
             <div
@@ -222,7 +292,7 @@ function AssignmentDrawer({ onClose, employees }) {
                         </div>
                         <div>
                             <h2 className="text-sm font-bold text-[#1b1c1c]">Affecter du Personnel</h2>
-                            <p className="text-[11px] text-slate-500">Parcelle B-04 · Caféier</p>
+                            <p className="text-[11px] text-slate-500">{parcelTitle} · {parcelCrop}</p>
                         </div>
                     </div>
                     <button onClick={onClose} className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-200">
@@ -257,7 +327,7 @@ function AssignmentDrawer({ onClose, employees }) {
                     <div className="space-y-3">
                         <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Employés Disponibles</h3>
                         {employees.map((emp) => (
-                            <EmployeeRow key={emp.name} {...emp} />
+                            <EmployeeRow key={emp.id} {...emp} onToggle={() => onToggle(emp.id)} />
                         ))}
                     </div>
                 </div>
@@ -270,8 +340,12 @@ function AssignmentDrawer({ onClose, employees }) {
                     >
                         Annuler
                     </button>
-                    <button className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95">
-                        Confirmer (1)
+                    <button
+                        onClick={onConfirm}
+                        disabled={saving}
+                        className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95 disabled:opacity-60"
+                    >
+                        {saving ? "Enregistrement…" : `Confirmer (${assignedCount})`}
                     </button>
                 </div>
             </div>
@@ -279,7 +353,7 @@ function AssignmentDrawer({ onClose, employees }) {
     );
 }
 
-function EmployeeRow({ name, role, assigned }) {
+function EmployeeRow({ name, role, assigned, onToggle }) {
     return (
         <div className={`flex items-center justify-between rounded-xl border p-3 transition-colors ${assigned ? "border-blue-200 bg-blue-50/40" : "border-slate-200 hover:bg-slate-50"}`}>
             <div className="flex items-center gap-3">
@@ -292,12 +366,18 @@ function EmployeeRow({ name, role, assigned }) {
                 </div>
             </div>
             {assigned ? (
-                <div className="flex items-center gap-1.5 text-emerald-600">
+                <button
+                    onClick={onToggle}
+                    className="flex items-center gap-1.5 text-emerald-600 hover:text-red-500 transition-colors"
+                >
                     <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                     <span className="text-xs font-bold">Assigné</span>
-                </div>
+                </button>
             ) : (
-                <button className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition-all hover:border-[#003f87] hover:bg-blue-50 hover:text-[#003f87]">
+                <button
+                    onClick={onToggle}
+                    className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition-all hover:border-[#003f87] hover:bg-blue-50 hover:text-[#003f87]"
+                >
                     Affecter
                 </button>
             )}

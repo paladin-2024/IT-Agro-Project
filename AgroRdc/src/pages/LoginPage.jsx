@@ -46,9 +46,9 @@ export default function LoginPage() {
             if (!API_URL) {
                 // Dev mode: no backend, use mock credentials
                 const mockUsers = {
-                    'owner@agrordc.cd':    { role: 'owner',    name: 'Kabangu Mulumba' },
-                    'admin@agrordc.cd':    { role: 'admin',    name: 'Administrateur' },
-                    'employee@agrordc.cd': { role: 'employee', name: 'Samuel Mwamba' },
+                    'owner@agrordc.cd':    { id: 'usr-owner-1',    role: 'owner',    name: 'Kabangu Mulumba' },
+                    'admin@agrordc.cd':    { id: 'usr-admin-1',    role: 'admin',    name: 'Administrateur' },
+                    'employee@agrordc.cd': { id: 'emp-001',        role: 'employee', name: 'Samuel Mwamba' },
                 }
                 const mockUser = mockUsers[form.email]
                 if (!mockUser || form.password !== 'password') {
@@ -72,6 +72,7 @@ export default function LoginPage() {
             login(data.user, data.accessToken)
             const role = data.user?.role
             if (role === 'owner') navigate('/owner/dashboard')
+            else if (role === 'employee') navigate('/employee/dashboard')
             else navigate('/dashboard')
         } catch (err) {
             setError(err.message)

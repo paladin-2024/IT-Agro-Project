@@ -34,7 +34,7 @@ export default createBrowserRouter([
     {
         path: '/dashboard',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['admin']}>
                 <AdminDashboard />
             </ProtectedRoute>
         ),
@@ -42,7 +42,7 @@ export default createBrowserRouter([
     {
         path: '/sante-systeme',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['admin']}>
                 <AdminHealthPage />
             </ProtectedRoute>
         ),
@@ -50,7 +50,7 @@ export default createBrowserRouter([
     {
         path: '/utilisateurs',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['admin']}>
                 <AdminUsersPage />
             </ProtectedRoute>
         ),
@@ -58,7 +58,7 @@ export default createBrowserRouter([
     {
         path: '/utilisateurs/nouveau',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['admin']}>
                 <AdminUsersCreatePage />
             </ProtectedRoute>
         ),
@@ -66,7 +66,7 @@ export default createBrowserRouter([
     {
         path: '/fermes',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['admin']}>
                 <AdminFermesGestion />
             </ProtectedRoute>
         ),
@@ -74,7 +74,7 @@ export default createBrowserRouter([
     {
         path: '/parametres',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['admin']}>
                 <AdminSettingsPage />
             </ProtectedRoute>
         ),
@@ -82,7 +82,7 @@ export default createBrowserRouter([
     {
         path: '/owner/dashboard',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['owner']}>
                 <OwnerDashboard />
             </ProtectedRoute>
         ),
@@ -90,7 +90,7 @@ export default createBrowserRouter([
     {
         path: '/owner/fermes',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['owner']}>
                 <OwnerFarmParcelPage />
             </ProtectedRoute>
         ),
@@ -98,7 +98,7 @@ export default createBrowserRouter([
     {
         path: '/owner/fermes/creer',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['owner']}>
                 <OwnerFarmCreatePage />
             </ProtectedRoute>
         ),
@@ -106,7 +106,7 @@ export default createBrowserRouter([
     {
         path: '/owner/fermes/:id',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['owner']}>
                 <OwnerFarmDetailPage />
             </ProtectedRoute>
         ),
@@ -114,7 +114,7 @@ export default createBrowserRouter([
     {
         path: '/owner/analytics',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['owner']}>
                 <OwnerYieldAnalyticsPage />
             </ProtectedRoute>
         ),
@@ -122,7 +122,7 @@ export default createBrowserRouter([
     {
         path: '/owner/parcelles',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['owner']}>
                 <OwnerParcelsPage />
             </ProtectedRoute>
         ),
@@ -130,15 +130,15 @@ export default createBrowserRouter([
     {
         path: '/owner/parcelles/apercu',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['owner']}>
                 <OwnerOverviewParcelPage />
             </ProtectedRoute>
         ),
     },
     {
-        path: '/owner/parcelles/detail',
+        path: '/owner/parcelles/:id',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['owner']}>
                 <OwnerDetailParcell />
             </ProtectedRoute>
         ),
@@ -146,7 +146,7 @@ export default createBrowserRouter([
     {
         path: '/owner/affectation',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['owner']}>
                 <OwnerAffectation />
             </ProtectedRoute>
         ),
@@ -154,7 +154,7 @@ export default createBrowserRouter([
     {
         path: '/employee/dashboard',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['employee']}>
                 <EmployeeDashboard />
             </ProtectedRoute>
         ),
@@ -162,7 +162,7 @@ export default createBrowserRouter([
     {
         path: '/employee/parcelles/:id',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['employee']}>
                 <EmployeeParcelDetailPage />
             </ProtectedRoute>
         ),
@@ -170,7 +170,7 @@ export default createBrowserRouter([
     {
         path: '/employee/productions/:id',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['employee']}>
                 <EmployeeProductionDetailPage />
             </ProtectedRoute>
         ),
@@ -178,7 +178,7 @@ export default createBrowserRouter([
     {
         path: '/employee/parcelles/:id/previsions',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['employee']}>
                 <EmployeeParcelForecastPage />
             </ProtectedRoute>
         ),
@@ -186,7 +186,7 @@ export default createBrowserRouter([
     {
         path: '/employee/parcelles/:id/equipe',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['employee']}>
                 <EmployeeParcelTeamPage />
             </ProtectedRoute>
         ),
@@ -194,7 +194,7 @@ export default createBrowserRouter([
     {
         path: '/employee/saisir-recolte',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['employee']}>
                 <EmployeeHarvestLogPage />
             </ProtectedRoute>
         ),
@@ -202,7 +202,7 @@ export default createBrowserRouter([
     {
         path: '/employee/parcelles/:id/saisir-recolte',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['employee']}>
                 <EmployeeHarvestLogPage />
             </ProtectedRoute>
         ),
@@ -210,7 +210,7 @@ export default createBrowserRouter([
     {
         path: '/employee/parcelles/:id/rapport-quotidien',
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute roles={['employee']}>
                 <EmployeeDailyReportPage />
             </ProtectedRoute>
         ),
