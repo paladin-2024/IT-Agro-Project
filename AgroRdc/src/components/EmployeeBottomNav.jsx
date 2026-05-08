@@ -50,6 +50,13 @@ export default function EmployeeBottomNav({ parcelId }) {
                 : '/employee/dashboard',
             isActive: (p) => p.includes('previsions'),
         },
+        {
+            id: 'cultures',
+            icon: 'eco',
+            label: 'Cultures',
+            to: '/employee/cultures',
+            isActive: (p) => p === '/employee/cultures',
+        },
     ]
 
     return (

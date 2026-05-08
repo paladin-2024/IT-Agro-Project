@@ -18,6 +18,7 @@ import OwnerDetailParcell from './pages/OwnerDetailParcell.jsx'
 import OwnerAffectation from './pages/OwnerAffectation.jsx'
 import OwnerFarmDetailPage from './pages/OwnerFarmDetailPage.jsx'
 import OwnerParcelCreatePage from './pages/OwnerParcelCreatePage.jsx'
+import OwnerCulturesPage from './pages/OwnerCulturesPage.jsx'
 import EmployeeDashboard from './pages/EmployeeDashboard.jsx'
 import EmployeeParcelDetailPage from './pages/EmployeeParcelDetailPage.jsx'
 import EmployeeProductionDetailPage from './pages/EmployeeProductionDetailPage.jsx'
@@ -25,6 +26,7 @@ import EmployeeParcelForecastPage from './pages/EmployeeParcelForecastPage.jsx'
 import EmployeeParcelTeamPage from './pages/EmployeeParcelTeamPage.jsx'
 import EmployeeHarvestLogPage from './pages/EmployeeHarvestLogPage.jsx'
 import EmployeeDailyReportPage from './pages/EmployeeDailyReportPage.jsx'
+import EmployeeCulturesPage from './pages/EmployeeCulturesPage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -153,6 +155,14 @@ export default createBrowserRouter([
         ),
     },
     {
+        path: '/owner/cultures',
+        element: (
+            <ProtectedRoute roles={['owner']}>
+                <OwnerCulturesPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
         path: '/owner/affectation',
         element: (
             <ProtectedRoute roles={['owner']}>
@@ -213,6 +223,14 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute roles={['employee']}>
                 <EmployeeHarvestLogPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/cultures',
+        element: (
+            <ProtectedRoute roles={['employee']}>
+                <EmployeeCulturesPage />
             </ProtectedRoute>
         ),
     },

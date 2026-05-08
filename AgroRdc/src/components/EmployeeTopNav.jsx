@@ -1,5 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+
+const DESKTOP_NAV = [
+    { to: '/employee/dashboard', icon: 'assignment',   label: 'Parcelles'  },
+    { to: '/employee/cultures',  icon: 'eco',          label: 'Cultures'   },
+    { to: '/employee/saisir-recolte', icon: 'add_task', label: 'Récolte'  },
+]
 
 /**
  * Props
@@ -12,6 +18,7 @@ import { useAuth } from '../hooks/useAuth'
 export default function EmployeeTopNav({ backTo, backLabel, title, badge, children }) {
     const { logout } = useAuth()
     const navigate = useNavigate()
+    const { pathname } = useLocation()
 
     function handleLogout() {
         logout()
@@ -19,7 +26,8 @@ export default function EmployeeTopNav({ backTo, backLabel, title, badge, childr
     }
 
     return (
-        <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white/90 px-4 shadow-sm backdrop-blur-md md:px-6">
+        <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/90 shadow-sm backdrop-blur-md">
+        <div className="flex h-16 items-center justify-between px-4 md:px-6">
             {/* ── Left: logo + breadcrumb ───────────────────────────── */}
             <div className="flex min-w-0 items-center gap-2 overflow-hidden">
                 {/* Logo — always a link to the dashboard */}
@@ -68,6 +76,32 @@ export default function EmployeeTopNav({ backTo, backLabel, title, badge, childr
                 )}
             </div>
 
+            {/* ── Center: desktop nav (hidden on mobile) ───────────── */}
+            <nav className="hidden items-center gap-1 md:flex">
+                {DESKTOP_NAV.map(item => {
+                    const active = pathname === item.to || (item.to !== '/employee/dashboard' && pathname.startsWith(item.to))
+                    return (
+                        <Link
+                            key={item.to}
+                            to={item.to}
+                            className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
+                                active
+                                    ? 'bg-blue-50 text-[#003f87]'
+                                    : 'text-slate-500 hover:bg-slate-100 hover:text-[#003f87]'
+                            }`}
+                        >
+                            <span
+                                className="material-symbols-outlined text-[18px]"
+                                style={active ? { fontVariationSettings: "'FILL' 1" } : undefined}
+                            >
+                                {item.icon}
+                            </span>
+                            {item.label}
+                        </Link>
+                    )
+                })}
+            </nav>
+
             {/* ── Right: actions + icons ────────────────────────────── */}
             <div className="flex shrink-0 items-center gap-1 md:gap-2">
                 {children}
@@ -85,6 +119,7 @@ export default function EmployeeTopNav({ backTo, backLabel, title, badge, childr
                     <span className="material-symbols-outlined">logout</span>
                 </button>
             </div>
+        </div>
         </header>
     )
 }

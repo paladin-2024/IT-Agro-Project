@@ -5,6 +5,7 @@ const navItems = [
     { label: 'Tableau de bord', icon: 'space_dashboard', to: '/owner/dashboard' },
     { label: 'Mes Fermes',      icon: 'agriculture',     to: '/owner/fermes' },
     { label: 'Parcelles',       icon: 'grid_view',       to: '/owner/parcelles' },
+    { label: 'Cultures',        icon: 'eco',             to: '/owner/cultures' },
     { label: 'Rendements',      icon: 'show_chart',      to: '/owner/analytics' },
     { label: 'Affectation',     icon: 'group',           to: '/owner/affectation' },
 ]
