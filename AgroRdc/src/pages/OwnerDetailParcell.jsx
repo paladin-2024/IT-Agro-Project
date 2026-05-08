@@ -1,9 +1,49 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar.jsx";
+
+const PARCEL_KEY = (id) => `agrordc_parcel_${id}`
+
+const PARCEL_DEFAULTS = {
+    crop: 'Manioc',
+    area: 12.4,
+    soilQuality: 88,
+    lastHarvest: 'Oct 2023',
+    lastHarvestQty: '2.4 t/ha',
+    status: 'Sain',
+    location: 'Territoire de Kasangulu, Kongo-Central, RDC',
+}
+
+const CROPS = ['Maïs', 'Manioc', 'Café', 'Cacao', 'Soja', 'Riz', 'Palmier à huile']
 
 export default function OwnerDetailParcell() {
     const { id: parcelId = 'B-04' } = useParams();
+    const navigate = useNavigate();
+
+    const [parcelData, setParcelData] = useState(() => {
+        try {
+            const saved = localStorage.getItem(PARCEL_KEY(parcelId))
+            return saved ? { ...PARCEL_DEFAULTS, ...JSON.parse(saved) } : PARCEL_DEFAULTS
+        } catch { return PARCEL_DEFAULTS }
+    });
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [savedMsg, setSavedMsg] = useState('');
+
+    const handleSave = (updated) => {
+        const next = { ...parcelData, ...updated }
+        setParcelData(next)
+        localStorage.setItem(PARCEL_KEY(parcelId), JSON.stringify(next))
+        setShowEditModal(false)
+        setSavedMsg('Modifications enregistrées.')
+        setTimeout(() => setSavedMsg(''), 3000)
+    };
+
+    const handleDelete = () => {
+        if (!window.confirm(`Supprimer la Parcelle ${parcelId} ? Cette action est irréversible.`)) return
+        localStorage.removeItem(PARCEL_KEY(parcelId))
+        navigate('/owner/parcelles')
+    };
+
     const historyRows = [
         ["2022-2023 Q3", "Maïs Jaune", "45.2", "Terminé", "bg-blue-100 text-blue-800"],
         ["2021-2022 Q4", "Soja", "28.8", "Terminé", "bg-blue-100 text-blue-800"],
@@ -34,10 +74,20 @@ export default function OwnerDetailParcell() {
 
             <main className="ml-64 min-h-screen">
                 <div className="mx-auto max-w-[1440px] p-8">
-                    <BreadcrumbHeader parcelId={parcelId} />
+                    {savedMsg && (
+                        <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">
+                            {savedMsg}
+                        </div>
+                    )}
+                    <BreadcrumbHeader
+                        parcelId={parcelId}
+                        parcelData={parcelData}
+                        onEdit={() => setShowEditModal(true)}
+                        onDelete={handleDelete}
+                    />
                     <div className="grid grid-cols-12 gap-6">
                         <div className="col-span-12 space-y-6 lg:col-span-8">
-                            <MetricsRow />
+                            <MetricsRow parcelData={parcelData} />
                             <YieldChart />
                             <CropHistoryTable rows={historyRows} />
                         </div>
@@ -51,12 +101,32 @@ export default function OwnerDetailParcell() {
                 </div>
             </main>
 
-            <SuccessToast />
+            {showEditModal && (
+                <EditParcelModal
+                    parcelId={parcelId}
+                    parcelData={parcelData}
+                    onClose={() => setShowEditModal(false)}
+                    onSave={handleSave}
+                />
+            )}
         </div>
     );
 }
 
-function BreadcrumbHeader({ parcelId }) {
+function BreadcrumbHeader({ parcelId, parcelData, onEdit, onDelete }) {
+    const statusColors = {
+        'Sain':    'bg-green-100 text-green-800',
+        'Alerte':  'bg-amber-100 text-amber-800',
+        'Critique':'bg-red-100 text-red-800',
+    };
+    const dotColors = {
+        'Sain':    'bg-green-600',
+        'Alerte':  'bg-amber-500',
+        'Critique':'bg-red-600',
+    };
+    const statusCls = statusColors[parcelData.status] ?? 'bg-slate-100 text-slate-600';
+    const dotCls = dotColors[parcelData.status] ?? 'bg-slate-400';
+
     return (
         <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div>
@@ -67,38 +137,44 @@ function BreadcrumbHeader({ parcelId }) {
                 </div>
                 <div className="flex items-center gap-4">
                     <h1 className="text-[32px] font-semibold leading-10 text-[#1b1c1c]">Parcelle {parcelId}</h1>
-                    <span className="flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
-            <span className="h-2 w-2 rounded-full bg-green-600" />
-            Sain
-          </span>
+                    <span className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${statusCls}`}>
+                        <span className={`h-2 w-2 rounded-full ${dotCls}`} />
+                        {parcelData.status}
+                    </span>
                 </div>
                 <div className="mt-1 flex items-center gap-1 text-gray-500">
                     <span className="material-symbols-outlined text-base">location_on</span>
-                    <span className="text-sm">Territoire de Kasangulu, Kongo-Central, RDC</span>
+                    <span className="text-sm">{parcelData.location}</span>
                 </div>
             </div>
 
             <div className="flex gap-3">
-                <button className="flex items-center gap-2 rounded border border-[#003f87] px-4 py-2 text-sm font-semibold text-[#003f87] transition-colors hover:bg-blue-50">
+                <button
+                    onClick={onDelete}
+                    className="flex items-center gap-2 rounded border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+                >
+                    <span className="material-symbols-outlined text-lg">delete</span>
+                    Supprimer
+                </button>
+                <button
+                    onClick={onEdit}
+                    className="flex items-center gap-2 rounded border border-[#003f87] px-4 py-2 text-sm font-semibold text-[#003f87] transition-colors hover:bg-blue-50"
+                >
                     <span className="material-symbols-outlined text-lg">edit</span>
                     Modifier
-                </button>
-                <button className="flex items-center gap-2 rounded bg-[#003f87] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90">
-                    <span className="material-symbols-outlined text-lg">agriculture</span>
-                    Enregistrer Récolte
                 </button>
             </div>
         </div>
     );
 }
 
-function MetricsRow() {
+function MetricsRow({ parcelData }) {
     return (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
-            <MetricCard title="Superficie" big="12.4" suffix="ha" />
-            <MetricCard title="Culture Actuelle" icon="eco" value="Manioc" />
-            <MetricCard title="Qualité du sol" big="88" suffix="/100" progress={88} />
-            <MetricCard title="Dernière Récolte" value="Oct 2023" sub="2.4 tonnes / ha" />
+            <MetricCard title="Superficie" big={String(parcelData.area)} suffix="ha" />
+            <MetricCard title="Culture Actuelle" icon="eco" value={parcelData.crop} />
+            <MetricCard title="Qualité du sol" big={String(parcelData.soilQuality)} suffix="/100" progress={parcelData.soilQuality} />
+            <MetricCard title="Dernière Récolte" value={parcelData.lastHarvest} sub={parcelData.lastHarvestQty} />
         </div>
     );
 }
@@ -286,19 +362,132 @@ function WeatherCard() {
     );
 }
 
-function SuccessToast() {
+function EditParcelModal({ parcelId, parcelData, onClose, onSave }) {
+    const [form, setForm] = useState({
+        crop: parcelData.crop,
+        area: parcelData.area,
+        soilQuality: parcelData.soilQuality,
+        lastHarvest: parcelData.lastHarvest,
+        lastHarvestQty: parcelData.lastHarvestQty,
+        status: parcelData.status,
+        location: parcelData.location,
+    });
+    const [saving, setSaving] = useState(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({
+            ...prev,
+            [name]: (name === 'area' || name === 'soilQuality') ? parseFloat(value) || value : value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSaving(true);
+        await new Promise((r) => setTimeout(r, 400));
+        onSave(form);
+    };
+
     return (
-        <div className="fixed bottom-8 right-8 z-50">
-            <div className="flex items-center gap-3 rounded border border-gray-200 bg-white p-4 shadow-lg">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600">
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
-            check_circle
-          </span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+            <div
+                className="w-full max-w-lg rounded-2xl bg-white shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+                    <div>
+                        <p className="text-xs font-semibold text-slate-400">Parcelle {parcelId}</p>
+                        <h2 className="text-lg font-bold text-[#1b1c1c]">Modifier la parcelle</h2>
+                    </div>
+                    <button onClick={onClose} className="rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100">
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
                 </div>
-                <div>
-                    <p className="text-sm font-semibold">Données Synchronisées</p>
-                    <p className="text-xs text-gray-500">Dernière mise à jour : il y a 2 min</p>
-                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4 p-6">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Culture</label>
+                            <select
+                                name="crop"
+                                value={form.crop}
+                                onChange={handleChange}
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                            >
+                                {CROPS.map((c) => <option key={c}>{c}</option>)}
+                            </select>
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Superficie (Ha)</label>
+                            <input
+                                name="area"
+                                type="number"
+                                min="0.1"
+                                step="0.1"
+                                value={form.area}
+                                onChange={handleChange}
+                                required
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Statut</label>
+                            <select
+                                name="status"
+                                value={form.status}
+                                onChange={handleChange}
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                            >
+                                <option>Sain</option>
+                                <option>Alerte</option>
+                                <option>Critique</option>
+                            </select>
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Qualité du sol (/100)</label>
+                            <input
+                                name="soilQuality"
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={form.soilQuality}
+                                onChange={handleChange}
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="block text-sm font-semibold text-[#1b1c1c]">Localisation</label>
+                        <input
+                            name="location"
+                            value={form.location}
+                            onChange={handleChange}
+                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                        />
+                    </div>
+
+                    <div className="flex gap-3 border-t border-slate-100 pt-4">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                        >
+                            Annuler
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={saving}
+                            className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#002d63] disabled:opacity-60"
+                        >
+                            {saving ? 'Enregistrement…' : 'Enregistrer les modifications'}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     );

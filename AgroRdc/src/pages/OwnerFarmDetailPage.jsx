@@ -32,10 +32,28 @@ const farmsData = {
     },
 };
 
+const FARM_KEY = (id) => `agrordc_farm_${id}`
+
 export default function OwnerFarmDetailPage() {
     const { id } = useParams();
     const [showModal, setShowModal] = useState(false);
-    const farm = farmsData[id];
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [farmEdits, setFarmEdits] = useState(() => {
+        try {
+            const saved = localStorage.getItem(FARM_KEY(id))
+            return saved ? JSON.parse(saved) : null
+        } catch { return null }
+    });
+
+    const baseFarm = farmsData[id];
+    const farm = baseFarm ? (farmEdits ? { ...baseFarm, ...farmEdits } : baseFarm) : null;
+
+    const handleSaveFarm = (updated) => {
+        const next = { ...(farmEdits || {}), ...updated }
+        setFarmEdits(next)
+        localStorage.setItem(FARM_KEY(id), JSON.stringify(next))
+        setShowEditModal(false)
+    };
 
     if (!farm) {
         return (
@@ -89,7 +107,10 @@ export default function OwnerFarmDetailPage() {
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
-                        <button className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-[#003f87] transition-all hover:border-[#003f87] hover:bg-blue-50">
+                        <button
+                            onClick={() => setShowEditModal(true)}
+                            className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-[#003f87] transition-all hover:border-[#003f87] hover:bg-blue-50"
+                        >
                             <span className="material-symbols-outlined text-base">edit</span>
                             Modifier
                         </button>
@@ -241,6 +262,13 @@ export default function OwnerFarmDetailPage() {
             </main>
 
             {showModal && <AddParcelModal onClose={() => setShowModal(false)} farmName={farm.name} />}
+            {showEditModal && (
+                <EditFarmModal
+                    farm={farm}
+                    onClose={() => setShowEditModal(false)}
+                    onSave={handleSaveFarm}
+                />
+            )}
         </div>
     );
 }
@@ -359,6 +387,147 @@ function ModalField({ label, type, placeholder }) {
                 placeholder={placeholder}
                 className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#1b1c1c] outline-none placeholder:text-slate-400 focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
             />
+        </div>
+    );
+}
+
+const PROVINCES = ['Kongo Central', 'Haut-Katanga', 'Kinshasa', 'Lualaba', 'Kasaï Oriental', 'Maniema', 'Nord-Kivu', 'Sud-Kivu', 'Sud-Ubangi'];
+
+function EditFarmModal({ farm, onClose, onSave }) {
+    const [form, setForm] = useState({
+        name: farm.name,
+        province: farm.province,
+        territoire: farm.territoire,
+        area: farm.area,
+        status: farm.status,
+        description: farm.description || '',
+    });
+    const [saving, setSaving] = useState(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: name === 'area' ? parseFloat(value) || value : value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSaving(true);
+        await new Promise((r) => setTimeout(r, 400));
+        onSave(form);
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+            <div
+                className="w-full max-w-lg rounded-2xl bg-white shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+                    <div>
+                        <p className="text-xs font-semibold text-slate-400">{farm.id}</p>
+                        <h2 className="text-lg font-bold text-[#1b1c1c]">Modifier la ferme</h2>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100"
+                    >
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4 p-6">
+                    <div className="space-y-1.5">
+                        <label className="block text-sm font-semibold text-[#1b1c1c]">Nom de la ferme</label>
+                        <input
+                            name="name"
+                            value={form.name}
+                            onChange={handleChange}
+                            required
+                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Province</label>
+                            <select
+                                name="province"
+                                value={form.province}
+                                onChange={handleChange}
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                            >
+                                {PROVINCES.map((p) => <option key={p}>{p}</option>)}
+                            </select>
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Territoire</label>
+                            <input
+                                name="territoire"
+                                value={form.territoire}
+                                onChange={handleChange}
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Superficie (Ha)</label>
+                            <input
+                                name="area"
+                                type="number"
+                                min="1"
+                                step="0.1"
+                                value={form.area}
+                                onChange={handleChange}
+                                required
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                            />
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Statut</label>
+                            <select
+                                name="status"
+                                value={form.status}
+                                onChange={handleChange}
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                            >
+                                <option>Actif</option>
+                                <option>Partiel</option>
+                                <option>Inactif</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="block text-sm font-semibold text-[#1b1c1c]">Description</label>
+                        <textarea
+                            name="description"
+                            value={form.description}
+                            onChange={handleChange}
+                            rows={3}
+                            className="w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
+                        />
+                    </div>
+
+                    <div className="flex gap-3 border-t border-slate-100 pt-4">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                        >
+                            Annuler
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={saving}
+                            className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#002d63] disabled:opacity-60"
+                        >
+                            {saving ? 'Enregistrement…' : 'Enregistrer les modifications'}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

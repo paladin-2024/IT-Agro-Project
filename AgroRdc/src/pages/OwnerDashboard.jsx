@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { computeHarvestStats, getMonthlyBars, getStatsByCrop } from "../api/stats.js";
+import { MOCK_PARCELS } from "../api/mocks.js";
 
 const parcels = [
     { id: "PRC-882-KW", region: "Kwilu",        crop: "Manioc",        yield: "842.5", status: "Récolte",    statusClass: "bg-emerald-100 text-emerald-700", dot: "bg-emerald-500", last: "Il y a 2h" },
@@ -12,6 +14,16 @@ const parcels = [
 
 export default function OwnerDashboard() {
     const { user } = useAuth();
+    const [liveStats, setLiveStats] = useState(null);
+
+    useEffect(() => {
+        setLiveStats(computeHarvestStats());
+    }, []);
+
+    const totalTonnes = liveStats ? liveStats.totalTonnes : null;
+    const monthlyBars = getMonthlyBars(liveStats, 6);
+    const cropStats = getStatsByCrop(liveStats, MOCK_PARCELS);
+    const hasLive = !!liveStats;
 
     return (
         <div className="min-h-screen bg-[#f4f6f9] text-[#1b1c1c]">
@@ -54,12 +66,21 @@ export default function OwnerDashboard() {
                                 </div>
                             </div>
                             <div className="mt-4">
-                                <p className="text-4xl font-extrabold">14 280 <span className="text-base font-normal opacity-80">tonnes</span></p>
+                                <p className="text-4xl font-extrabold">
+                                    {hasLive ? totalTonnes.toLocaleString('fr-FR') : '14 280'}
+                                    <span className="text-base font-normal opacity-80"> tonnes</span>
+                                </p>
                                 <div className="mt-2 flex items-center gap-2">
-                                    <span className="inline-flex items-center gap-0.5 rounded-md bg-emerald-500/20 px-2 py-0.5 text-xs font-bold text-emerald-300">
-                                        <span className="material-symbols-outlined text-xs">arrow_upward</span>12.4%
-                                    </span>
-                                    <span className="text-xs opacity-70">vs saison précédente</span>
+                                    {hasLive ? (
+                                        <span className="inline-flex items-center gap-0.5 rounded-md bg-emerald-500/20 px-2 py-0.5 text-xs font-bold text-emerald-300">
+                                            <span className="material-symbols-outlined text-xs">sensors</span>
+                                            Données réelles ({liveStats.count} entrées)
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center gap-0.5 rounded-md bg-white/20 px-2 py-0.5 text-xs font-bold opacity-80">
+                                            Données de démonstration
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -101,54 +122,94 @@ export default function OwnerDashboard() {
 
                     {/* Charts row */}
                     <div className="grid grid-cols-12 gap-6">
-                        {/* Production trend */}
+                        {/* Production par mois */}
                         <section className="col-span-12 rounded-xl bg-white p-6 ring-1 ring-slate-200 shadow-sm lg:col-span-8">
                             <div className="mb-6 flex items-center justify-between">
                                 <div>
-                                    <h3 className="text-sm font-bold text-[#1b1c1c]">Tendances de Production</h3>
-                                    <p className="mt-0.5 text-xs text-slate-500">Production réelle vs prévisions saisonnières</p>
+                                    <h3 className="text-sm font-bold text-[#1b1c1c]">Production par Mois</h3>
+                                    <p className="mt-0.5 text-xs text-slate-500">
+                                        {hasLive ? 'Données issues des saisies de récolte' : 'Données de démonstration'}
+                                    </p>
                                 </div>
-                                <div className="flex gap-4">
-                                    <LegendDot color="bg-[#003f87]" label="Réel" />
-                                    <LegendDot color="bg-slate-300" label="Prévision" />
-                                </div>
+                                {hasLive && (
+                                    <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-700">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                        En direct
+                                    </span>
+                                )}
                             </div>
-                            <div className="relative h-52 w-full">
-                                <svg className="h-full w-full" preserveAspectRatio="none" viewBox="0 0 800 200">
-                                    <line stroke="#f1f5f9" strokeWidth="1" x1="0" x2="800" y1="50"  y2="50" />
-                                    <line stroke="#f1f5f9" strokeWidth="1" x1="0" x2="800" y1="100" y2="100" />
-                                    <line stroke="#f1f5f9" strokeWidth="1" x1="0" x2="800" y1="150" y2="150" />
-                                    <path d="M0,150 Q100,140 200,100 T400,110 T600,60 T800,80" fill="none" stroke="#cbd5e1" strokeDasharray="8,4" strokeWidth="2.5" />
-                                    <path d="M0,160 Q100,150 200,120 T400,130 T600,40 T800,50" fill="none" stroke="#003f87" strokeLinejoin="round" strokeWidth="3" />
-                                    <path d="M0,160 Q100,150 200,120 T400,130 T600,40 T800,50 V200 H0 Z" fill="#003f87" opacity="0.08" />
-                                </svg>
-                                <div className="mt-3 flex justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                    <span>Oct</span><span>Nov</span><span>Déc</span><span>Jan</span><span>Fév</span><span>Mar</span>
+                            {monthlyBars ? (
+                                <div className="flex h-52 items-end gap-3 border-b border-slate-100 px-2">
+                                    {monthlyBars.map((b) => (
+                                        <div key={b.label} className="flex flex-1 flex-col items-center gap-1">
+                                            <span className="text-[10px] font-bold text-[#003f87]">{b.tonnes}t</span>
+                                            <div
+                                                className="w-full rounded-t bg-[#003f87] transition-all hover:opacity-80"
+                                                style={{ height: `${Math.max(b.pct, 4)}%` }}
+                                            />
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{b.label}</span>
+                                        </div>
+                                    ))}
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="relative h-52 w-full">
+                                    <svg className="h-full w-full" preserveAspectRatio="none" viewBox="0 0 800 200">
+                                        <line stroke="#f1f5f9" strokeWidth="1" x1="0" x2="800" y1="50"  y2="50" />
+                                        <line stroke="#f1f5f9" strokeWidth="1" x1="0" x2="800" y1="100" y2="100" />
+                                        <line stroke="#f1f5f9" strokeWidth="1" x1="0" x2="800" y1="150" y2="150" />
+                                        <path d="M0,150 Q100,140 200,100 T400,110 T600,60 T800,80" fill="none" stroke="#cbd5e1" strokeDasharray="8,4" strokeWidth="2.5" />
+                                        <path d="M0,160 Q100,150 200,120 T400,130 T600,40 T800,50" fill="none" stroke="#003f87" strokeLinejoin="round" strokeWidth="3" />
+                                        <path d="M0,160 Q100,150 200,120 T400,130 T600,40 T800,50 V200 H0 Z" fill="#003f87" opacity="0.08" />
+                                    </svg>
+                                    <div className="mt-3 flex justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                        <span>Oct</span><span>Nov</span><span>Déc</span><span>Jan</span><span>Fév</span><span>Mar</span>
+                                    </div>
+                                </div>
+                            )}
                         </section>
 
-                        {/* Donut chart */}
+                        {/* Production par culture */}
                         <section className="col-span-12 flex flex-col rounded-xl bg-white p-6 ring-1 ring-slate-200 shadow-sm lg:col-span-4">
-                            <h3 className="text-sm font-bold text-[#1b1c1c]">Meilleures Cultures</h3>
+                            <h3 className="text-sm font-bold text-[#1b1c1c]">Production par Culture</h3>
                             <p className="mt-0.5 mb-5 text-xs text-slate-500">Contribution par type de culture</p>
-                            <div className="relative flex flex-1 items-center justify-center">
-                                <svg className="h-44 w-44" viewBox="0 0 100 100">
-                                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#f1f5f9" strokeWidth="12" />
-                                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#003f87" strokeDasharray="163 251" strokeDashoffset="0" strokeWidth="12" />
-                                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#93c5fd" strokeDasharray="63 251" strokeDashoffset="-163" strokeWidth="12" />
-                                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#cbd5e1" strokeDasharray="25 251" strokeDashoffset="-226" strokeWidth="12" />
-                                </svg>
-                                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                    <span className="text-2xl font-extrabold">65%</span>
-                                    <span className="text-[10px] font-bold uppercase text-slate-400">Manioc</span>
+                            {cropStats ? (
+                                <div className="space-y-3">
+                                    {cropStats.slice(0, 4).map((c) => (
+                                        <div key={c.crop}>
+                                            <div className="mb-1 flex items-center justify-between text-xs">
+                                                <span className="font-semibold text-[#1b1c1c]">{c.crop}</span>
+                                                <span className="font-bold text-[#003f87]">{c.tonnes}t ({c.pct}%)</span>
+                                            </div>
+                                            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                                                <div
+                                                    className="h-full rounded-full bg-[#003f87] transition-all"
+                                                    style={{ width: `${c.pct}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            </div>
-                            <div className="mt-4 grid grid-cols-1 gap-2">
-                                <LegendDot color="bg-[#003f87]" label="Manioc (65%)" />
-                                <LegendDot color="bg-blue-300" label="Maïs (25%)" />
-                                <LegendDot color="bg-slate-300" label="Huile de Palme (10%)" />
-                            </div>
+                            ) : (
+                                <>
+                                    <div className="relative flex flex-1 items-center justify-center">
+                                        <svg className="h-44 w-44" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#f1f5f9" strokeWidth="12" />
+                                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#003f87" strokeDasharray="163 251" strokeDashoffset="0" strokeWidth="12" />
+                                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#93c5fd" strokeDasharray="63 251" strokeDashoffset="-163" strokeWidth="12" />
+                                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#cbd5e1" strokeDasharray="25 251" strokeDashoffset="-226" strokeWidth="12" />
+                                        </svg>
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                            <span className="text-2xl font-extrabold">65%</span>
+                                            <span className="text-[10px] font-bold uppercase text-slate-400">Manioc</span>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 grid grid-cols-1 gap-2">
+                                        <LegendDot color="bg-[#003f87]" label="Manioc (65%)" />
+                                        <LegendDot color="bg-blue-300" label="Maïs (25%)" />
+                                        <LegendDot color="bg-slate-300" label="Huile de Palme (10%)" />
+                                    </div>
+                                </>
+                            )}
                         </section>
                     </div>
 

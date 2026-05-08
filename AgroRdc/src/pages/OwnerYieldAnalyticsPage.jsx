@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import OwnerSidebar from "../components/OwnerSidebar";
+import { computeHarvestStats, getStatsByCrop, getMonthlyBars } from "../api/stats.js";
+import { MOCK_PARCELS } from "../api/mocks.js";
 
 /* ─── Static data ────────────────────────────────────────────────────── */
 
@@ -27,6 +29,32 @@ const milestones = [
 /* ─── Page component ─────────────────────────────────────────────────── */
 
 export default function OwnerYieldAnalyticsPage() {
+    const [liveStats, setLiveStats] = useState(null);
+
+    useEffect(() => {
+        setLiveStats(computeHarvestStats());
+    }, []);
+
+    const cropStats = getStatsByCrop(liveStats, MOCK_PARCELS);
+    const monthlyBars = getMonthlyBars(liveStats, 6);
+    const hasLive = !!liveStats;
+
+    const liveParcelRows = (hasLive && liveStats?.byParcel)
+        ? MOCK_PARCELS
+            .filter(p => liveStats.byParcel[p.id])
+            .map(p => {
+                const kg = liveStats.byParcel[p.id];
+                const tonnes = Math.round(kg / 100) / 10;
+                const areaNum = parseFloat(p.area) || 1;
+                const eff = Math.round((tonnes / areaNum) * 100) / 100;
+                const statusClass =
+                    p.status === 'Prêt pour récolte' ? 'bg-emerald-100 text-emerald-800' :
+                    p.status === 'En cours' ? 'bg-blue-100 text-blue-800' :
+                    'bg-amber-100 text-amber-800';
+                return { id: p.id, crop: p.crop, area: String(areaNum), yield: String(tonnes), eff: String(eff), status: p.status, statusClass, trend: 'trending_up', trendClass: 'text-emerald-600' };
+            })
+        : null;
+
     return (
         <div className="min-h-screen bg-[#f4f6f9] text-[#1b1c1c]">
             <OwnerSidebar />
@@ -84,12 +112,19 @@ export default function OwnerYieldAnalyticsPage() {
                         {/* Bar chart — col-span-8 */}
                         <div className="col-span-12 overflow-hidden rounded-xl bg-white p-6 ring-1 ring-slate-200 shadow-sm lg:col-span-8">
                             <div className="mb-6 flex items-center justify-between">
-                                <h3 className="text-base font-bold text-[#1b1c1c]">
-                                    Comparaison des Rendements (Tonnes)
-                                </h3>
+                                <div className="flex items-center gap-3">
+                                    <h3 className="text-base font-bold text-[#1b1c1c]">
+                                        {hasLive ? "Production Mensuelle (Récoltes)" : "Comparaison des Rendements (Tonnes)"}
+                                    </h3>
+                                    {hasLive && (
+                                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                                            ● Données réelles
+                                        </span>
+                                    )}
+                                </div>
                                 <div className="flex gap-5">
-                                    <LegendDot color="bg-[#003f87]" label="Réel" />
-                                    <LegendDot color="bg-slate-300"  label="Prévision" />
+                                    <LegendDot color="bg-[#003f87]" label={hasLive ? "Récolte enregistrée" : "Réel"} />
+                                    {!hasLive && <LegendDot color="bg-slate-300" label="Prévision" />}
                                 </div>
                             </div>
 
@@ -103,23 +138,37 @@ export default function OwnerYieldAnalyticsPage() {
 
                                 {/* Bars */}
                                 <div className="relative z-10 flex h-full items-end justify-around px-4">
-                                    {chartData.map((d) => (
-                                        <div key={d.label} className="flex flex-1 flex-col items-center gap-3">
-                                            <div className="flex w-full items-end justify-center gap-2 h-64">
-                                                <div
-                                                    className="w-10 rounded-t-sm bg-[#003f87] transition-all hover:opacity-80"
-                                                    style={{ height: `${d.actualPct}%` }}
-                                                    title={d.actualVal}
-                                                />
-                                                <div
-                                                    className="w-10 rounded-t-sm bg-slate-300 transition-all hover:opacity-80"
-                                                    style={{ height: `${d.projPct}%` }}
-                                                    title={d.projVal}
-                                                />
+                                    {hasLive && monthlyBars
+                                        ? monthlyBars.map((d) => (
+                                            <div key={d.label} className="flex flex-1 flex-col items-center gap-3">
+                                                <div className="flex w-full items-end justify-center gap-2 h-64">
+                                                    <div
+                                                        className="w-10 rounded-t-sm bg-[#003f87] transition-all hover:opacity-80"
+                                                        style={{ height: `${Math.max(d.pct, 4)}%` }}
+                                                        title={`${d.tonnes} t`}
+                                                    />
+                                                </div>
+                                                <span className="text-xs font-semibold text-[#1b1c1c]">{d.label}</span>
                                             </div>
-                                            <span className="text-xs font-semibold text-[#1b1c1c]">{d.label}</span>
-                                        </div>
-                                    ))}
+                                        ))
+                                        : chartData.map((d) => (
+                                            <div key={d.label} className="flex flex-1 flex-col items-center gap-3">
+                                                <div className="flex w-full items-end justify-center gap-2 h-64">
+                                                    <div
+                                                        className="w-10 rounded-t-sm bg-[#003f87] transition-all hover:opacity-80"
+                                                        style={{ height: `${d.actualPct}%` }}
+                                                        title={d.actualVal}
+                                                    />
+                                                    <div
+                                                        className="w-10 rounded-t-sm bg-slate-300 transition-all hover:opacity-80"
+                                                        style={{ height: `${d.projPct}%` }}
+                                                        title={d.projVal}
+                                                    />
+                                                </div>
+                                                <span className="text-xs font-semibold text-[#1b1c1c]">{d.label}</span>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -133,9 +182,14 @@ export default function OwnerYieldAnalyticsPage() {
                                         <span className="material-symbols-outlined text-sm">verified</span>
                                         <span className="text-[10px] font-bold uppercase tracking-wider">Meilleure Culture</span>
                                     </div>
-                                    <h2 className="text-4xl font-extrabold leading-tight">Huile de Palme</h2>
+                                    <h2 className="text-4xl font-extrabold leading-tight">
+                                        {hasLive && cropStats?.length > 0 ? cropStats[0].crop : "Huile de Palme"}
+                                    </h2>
                                     <p className="mt-2 text-sm leading-relaxed text-white/80">
-                                        Densité de rendement exceptionnelle dans le Secteur B-14 — performance de pointe cette saison.
+                                        {hasLive && cropStats?.length > 0
+                                            ? `${cropStats[0].tonnes} t récoltées · ${cropStats[0].pct}% du volume total enregistré.`
+                                            : "Densité de rendement exceptionnelle dans le Secteur B-14 — performance de pointe cette saison."
+                                        }
                                     </p>
                                 </div>
 
@@ -143,15 +197,19 @@ export default function OwnerYieldAnalyticsPage() {
                                     <div className="flex items-end justify-between">
                                         <div>
                                             <p className="text-[10px] font-bold uppercase tracking-wider text-white/60">
-                                                Hausse du rendement
+                                                {hasLive ? "Volume récolté" : "Hausse du rendement"}
                                             </p>
-                                            <p className="text-2xl font-extrabold">+14.2%</p>
+                                            <p className="text-2xl font-extrabold">
+                                                {hasLive && cropStats?.length > 0 ? `${cropStats[0].tonnes} t` : "+14.2%"}
+                                            </p>
                                         </div>
                                         <div className="text-right">
                                             <p className="text-[10px] font-bold uppercase tracking-wider text-white/60">
-                                                Score durabilité
+                                                {hasLive ? "Part du total" : "Score durabilité"}
                                             </p>
-                                            <p className="text-2xl font-extrabold">94/100</p>
+                                            <p className="text-2xl font-extrabold">
+                                                {hasLive && cropStats?.length > 0 ? `${cropStats[0].pct}%` : "94/100"}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -186,9 +244,16 @@ export default function OwnerYieldAnalyticsPage() {
                         {/* Parcel yield table — col-span-12 */}
                         <div className="col-span-12 overflow-hidden rounded-xl bg-white ring-1 ring-slate-200 shadow-sm">
                             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-                                <h3 className="text-base font-bold text-[#1b1c1c]">
-                                    Rendement par Hectare par Parcelle
-                                </h3>
+                                <div className="flex items-center gap-3">
+                                    <h3 className="text-base font-bold text-[#1b1c1c]">
+                                        Rendement par Hectare par Parcelle
+                                    </h3>
+                                    {liveParcelRows && (
+                                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                                            ● Données réelles
+                                        </span>
+                                    )}
+                                </div>
                                 <div className="flex gap-4">
                                     <button className="flex items-center gap-1 text-sm font-semibold text-[#003f87] transition-colors hover:underline">
                                         <span className="material-symbols-outlined text-base">filter_alt</span>
@@ -215,7 +280,7 @@ export default function OwnerYieldAnalyticsPage() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100">
-                                        {parcels.map((p, i) => (
+                                        {(liveParcelRows ?? parcels).map((p, i) => (
                                             <tr
                                                 key={p.id}
                                                 className={`transition-colors hover:bg-slate-50 ${i % 2 === 1 ? "bg-slate-50/50" : "bg-white"}`}
@@ -246,7 +311,12 @@ export default function OwnerYieldAnalyticsPage() {
                             </div>
 
                             <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50 px-6 py-3.5">
-                                <span className="text-xs text-slate-500">Affichage de 5 sur 42 parcelles</span>
+                                <span className="text-xs text-slate-500">
+                                    {liveParcelRows
+                                        ? `${liveParcelRows.length} parcelle(s) avec récoltes enregistrées`
+                                        : "Affichage de 5 sur 42 parcelles"
+                                    }
+                                </span>
                                 <div className="flex gap-1">
                                     <button className="rounded border border-slate-200 p-1 transition-colors hover:bg-white">
                                         <span className="material-symbols-outlined text-base text-slate-500">chevron_left</span>
