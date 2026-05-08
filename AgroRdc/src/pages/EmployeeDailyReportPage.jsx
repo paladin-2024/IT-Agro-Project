@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
+import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
 
 const WEATHER_OPTIONS = [
     { id: 'sunny',  icon: 'wb_sunny', label: 'Soleil'   },
@@ -15,13 +17,6 @@ const ANOMALY_TAGS = [
 ]
 
 const SEASON_GOAL_KG = 1200
-
-const NAV_ITEMS = [
-    { icon: 'assignment', label: 'Missions', active: true },
-    { icon: 'map',        label: 'Carte'                  },
-    { icon: 'history',    label: 'Journaux'               },
-    { icon: 'person',     label: 'Profil'                 },
-]
 
 export default function EmployeeDailyReportPage() {
     const { id: parcelId = 'B-04' } = useParams()
@@ -89,36 +84,11 @@ export default function EmployeeDailyReportPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            {/* Sticky header */}
-            <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white/80 px-6 shadow-sm backdrop-blur-md">
-                <div className="flex items-center gap-3">
-                    <Link to={backPath} className="flex items-center gap-1 text-xs text-slate-500 hover:text-[#003f87] transition-colors">
-                        <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-                        Parcelle {parcelId}
-                    </Link>
-                    <span className="text-slate-300">/</span>
-                    <span className="text-sm font-semibold text-slate-600">
-                        Rapport Quotidien : Parcelle {parcelId}
-                    </span>
-                </div>
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 rounded-full border border-yellow-100 bg-yellow-50 px-3 py-1.5 text-yellow-800">
-                        <span className="material-symbols-outlined text-[18px]">pending_actions</span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider">Brouillon</span>
-                    </div>
-                    <button className="rounded-full p-2 text-slate-500 hover:bg-slate-100 transition-colors">
-                        <span className="material-symbols-outlined">notifications</span>
-                    </button>
-                    <button className="rounded-full p-2 text-slate-500 hover:bg-slate-100 transition-colors">
-                        <span className="material-symbols-outlined">settings</span>
-                    </button>
-                    <img
-                        alt="Profil"
-                        className="h-8 w-8 rounded-full border border-slate-200 object-cover"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtU7dJ1znVFUWP0s20Jiil3WSXfLNQsOjsNq8ac4AX9BKQHVoObRAP0hlCnLW54esLEmmKAdwtDRiPiwO3gz1uTo0fhXsQRtTGCbfO8XhZgj2zQEU6dOR0HPUT4UlvQw0lLK6XOfq7jncDj-j9iV2vElIsiBVyj0vHBIBEp76G9zOHBRgVZCIzNvuc8gDPsAVZo7NsNMyNoitEhNYSUHW5f6amfh0gns-_HNEF3gSIGe0eOKLaZguvHbLaHsRGP5QPWu1BgB39tUE"
-                    />
-                </div>
-            </header>
+            <EmployeeTopNav
+                backTo={backPath}
+                backLabel={`Parcelle ${parcelId}`}
+                title="Rapport Quotidien"
+            />
 
             <form onSubmit={handleSubmit}>
                 <div className="mx-auto max-w-7xl space-y-6 px-6 pb-32 pt-8 md:pb-10">
@@ -418,23 +388,7 @@ export default function EmployeeDailyReportPage() {
                 </div>
             </form>
 
-            {/* Mobile bottom nav */}
-            <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-[#DEE2E6] bg-white/95 px-4 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] backdrop-blur-sm md:hidden">
-                {NAV_ITEMS.map((item) => (
-                    <button
-                        key={item.label}
-                        className={`flex flex-col items-center justify-center rounded-lg px-3 py-1 transition-all ${
-                            item.active ? 'bg-blue-50 text-[#003f87]' : 'text-slate-500'
-                        }`}
-                    >
-                        <span className="material-symbols-outlined"
-                              style={item.active ? { fontVariationSettings: "'FILL' 1" } : undefined}>
-                            {item.icon}
-                        </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{item.label}</span>
-                    </button>
-                ))}
-            </nav>
+            <EmployeeBottomNav parcelId={parcelId} />
         </div>
     )
 }

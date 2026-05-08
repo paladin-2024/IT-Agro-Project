@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import EmployeeTopNav from "../components/EmployeeTopNav.jsx";
+import EmployeeBottomNav from "../components/EmployeeBottomNav.jsx";
 
 /* ─── Static data ────────────────────────────────────────────────────── */
 
@@ -33,45 +35,12 @@ export default function EmployeeParcelDetailPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            {/* Sticky header */}
-            <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white/80 px-8 shadow-sm backdrop-blur-md">
-                <div className="flex items-center gap-3">
-                    <Link
-                        to="/employee/dashboard"
-                        className="flex items-center justify-center rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#003f87]"
-                    >
-                        <span className="material-symbols-outlined">arrow_back</span>
-                    </Link>
-                    <span className="text-base font-bold text-[#171c25]">Parcelle {parcelId}</span>
-                    <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-[#003f87]">
-                        Zone Sud
-                    </span>
-                </div>
-
-                <div className="flex items-center gap-4">
-                    <div className="relative">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">search</span>
-                        <input
-                            className="w-60 rounded-lg border-none bg-slate-100/70 py-1.5 pl-9 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#003f87]/30"
-                            placeholder="Rechercher des opérations…"
-                            type="text"
-                        />
-                    </div>
-                    <button className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100">
-                        <span className="material-symbols-outlined">notifications</span>
-                    </button>
-                    <button className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100">
-                        <span className="material-symbols-outlined">help</span>
-                    </button>
-                    <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white shadow-sm">
-                        <img
-                            alt="Profil"
-                            className="h-full w-full object-cover"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfWKCV2OODf8gcfyhd9MUBlQePc91Wn3r6t-AT6MU62gFeK_iN8ACo7G4kVPwzcuQIiBfoQoHzxOBPfwjX3DnIOAi6D_sMjDELF2tXBICXstSHD-TolE9qxm3Y-bwE5lkdeHjIDrOyb9S2skResxFa8YgX6epJcdJQoqLNpMrzWEYyTrpJQAFRiFlcs8MgKcr-9Vpiz9235EcuwZcN2Rpno__Aqo-XcdQbMrH2cYTYlUyFhibAhwINEgW0n9_PzXKJ6L1Dji60Ga0"
-                        />
-                    </div>
-                </div>
-            </header>
+            <EmployeeTopNav
+                backTo="/employee/dashboard"
+                backLabel="Parcelles"
+                title={`Parcelle ${parcelId}`}
+                badge="Zone Sud"
+            />
 
             <main className="mx-auto max-w-7xl space-y-6 p-8">
                 {/* Hero section */}
@@ -231,7 +200,7 @@ export default function EmployeeParcelDetailPage() {
                                     <h3 className="text-base font-bold text-[#171c25]">Prévisions Saisonnières</h3>
                                 </div>
                                 <Link
-                                    to="{`/employee/parcelles/${parcelId}/previsions`}"
+                                    to={`/employee/parcelles/${parcelId}/previsions`}
                                     className="flex items-center gap-1 text-xs font-bold text-[#003f87] hover:underline"
                                 >
                                     Voir tout
@@ -273,7 +242,7 @@ export default function EmployeeParcelDetailPage() {
                                     />
                                 </ul>
                                 <Link
-                                    to="{`/employee/parcelles/${parcelId}/previsions`}"
+                                    to={`/employee/parcelles/${parcelId}/previsions`}
                                     className="mt-5 block w-full rounded-lg border border-[#003f87] py-2.5 text-center text-sm font-bold text-[#003f87] transition-colors hover:bg-blue-50"
                                 >
                                     Voir les prévisions complètes
@@ -318,30 +287,7 @@ export default function EmployeeParcelDetailPage() {
                 </div>
             </main>
 
-            {/* Mobile bottom nav */}
-            <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-[#DEE2E6] bg-white/95 px-4 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] backdrop-blur-sm md:hidden">
-                {[
-                    { icon: "assignment", label: "Missions", active: false },
-                    { icon: "map",        label: "Carte",    active: true },
-                    { icon: "history",    label: "Journaux", active: false },
-                    { icon: "person",     label: "Profil",   active: false },
-                ].map((item) => (
-                    <button
-                        key={item.label}
-                        className={`flex flex-col items-center justify-center rounded-lg px-3 py-1 transition-all ${
-                            item.active ? "bg-blue-50 text-[#003f87]" : "text-slate-500"
-                        }`}
-                    >
-                        <span
-                            className="material-symbols-outlined"
-                            style={item.active ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                        >
-                            {item.icon}
-                        </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{item.label}</span>
-                    </button>
-                ))}
-            </nav>
+            <EmployeeBottomNav parcelId={parcelId} />
         </div>
     );
 }

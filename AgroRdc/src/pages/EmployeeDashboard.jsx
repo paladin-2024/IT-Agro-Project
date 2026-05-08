@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import EmployeeTopNav from "../components/EmployeeTopNav.jsx";
+import EmployeeBottomNav from "../components/EmployeeBottomNav.jsx";
 
 /* ─── Static data ────────────────────────────────────────────────────── */
 
@@ -54,12 +56,6 @@ const parcels = [
     },
 ];
 
-const navItems = [
-    { icon: "assignment", label: "Missions", active: true },
-    { icon: "map",        label: "Carte",    active: false },
-    { icon: "history",    label: "Journaux", active: false },
-    { icon: "person",     label: "Profil",   active: false },
-];
 
 /* ─── Page component ─────────────────────────────────────────────────── */
 
@@ -68,44 +64,30 @@ export default function EmployeeDashboard() {
 
     return (
         <div className="min-h-screen bg-[#fbf9f8] text-[#1b1c1c]">
-            {/* Top app bar */}
-            <header className="sticky top-0 z-50 flex w-full items-center justify-between border-b border-[#DEE2E6] bg-white px-6 py-3">
-                <div className="flex items-center gap-8">
-                    <span className="text-xl font-bold tracking-tight text-[#003f87]">
-                        AgriPrecise DRC
-                    </span>
-                    <nav className="hidden items-center gap-6 md:flex">
-                        <button
-                            onClick={() => setActiveTab("assignments")}
-                            className={`pb-1 text-sm font-semibold transition-colors ${
-                                activeTab === "assignments"
-                                    ? "border-b-2 border-[#003f87] text-[#003f87]"
-                                    : "text-slate-500 hover:text-[#003f87]"
-                            }`}
-                        >
-                            Mes Missions
-                        </button>
-                        <button
-                            onClick={() => setActiveTab("history")}
-                            className={`pb-1 text-sm font-semibold transition-colors ${
-                                activeTab === "history"
-                                    ? "border-b-2 border-[#003f87] text-[#003f87]"
-                                    : "text-slate-500 hover:text-[#003f87]"
-                            }`}
-                        >
-                            Historique
-                        </button>
-                    </nav>
-                </div>
-                <div className="flex items-center gap-2">
-                    <button className="rounded-full p-2 transition-colors hover:bg-slate-50 active:opacity-70">
-                        <span className="material-symbols-outlined text-slate-500">notifications</span>
+            <EmployeeTopNav title="Mes Parcelles Assignées">
+                <div className="hidden items-center gap-1 md:flex">
+                    <button
+                        onClick={() => setActiveTab("assignments")}
+                        className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors ${
+                            activeTab === "assignments"
+                                ? "bg-blue-50 text-[#003f87]"
+                                : "text-slate-500 hover:text-[#003f87]"
+                        }`}
+                    >
+                        Mes Missions
                     </button>
-                    <button className="rounded-full p-2 transition-colors hover:bg-slate-50 active:opacity-70">
-                        <span className="material-symbols-outlined text-slate-500">account_circle</span>
+                    <button
+                        onClick={() => setActiveTab("history")}
+                        className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors ${
+                            activeTab === "history"
+                                ? "bg-blue-50 text-[#003f87]"
+                                : "text-slate-500 hover:text-[#003f87]"
+                        }`}
+                    >
+                        Historique
                     </button>
                 </div>
-            </header>
+            </EmployeeTopNav>
 
             {/* Main content — extra bottom padding for mobile bottom nav */}
             <main className="mx-auto max-w-7xl px-6 pb-32 pt-10 md:pb-16">
@@ -173,29 +155,7 @@ export default function EmployeeDashboard() {
                 <span className="material-symbols-outlined text-2xl">add_task</span>
             </Link>
 
-            {/* Mobile bottom nav */}
-            <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-[#DEE2E6] bg-white/95 px-4 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] backdrop-blur-sm md:hidden">
-                {navItems.map((item) => (
-                    <button
-                        key={item.label}
-                        className={`flex flex-col items-center justify-center rounded-lg px-3 py-1 transition-all active:opacity-70 ${
-                            item.active
-                                ? "bg-blue-50 text-[#003f87]"
-                                : "text-slate-500 hover:text-[#003f87]"
-                        }`}
-                    >
-                        <span
-                            className="material-symbols-outlined"
-                            style={item.active ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                        >
-                            {item.icon}
-                        </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider">
-                            {item.label}
-                        </span>
-                    </button>
-                ))}
-            </nav>
+            <EmployeeBottomNav />
         </div>
     );
 }

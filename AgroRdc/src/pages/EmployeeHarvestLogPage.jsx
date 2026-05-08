@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
+import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
 
 const PARCELS = [
     { id: 'B-04', label: 'Parcelle B-04 — Vallée Est',   crop: 'Café (Arabica)' },
@@ -12,13 +14,6 @@ const UNITS = ['Sac 50 kg', 'Tonne', 'Kg (Vrac)', 'Caisse']
 const RECENT = [
     { qty: '240 kg Café', parcel: 'B-04', note: 'Moulin à sec', when: 'Hier' },
     { qty: '185 kg Café', parcel: 'B-04', note: 'Moulin à sec', when: 'Il y a 2 jours' },
-]
-
-const NAV_ITEMS = [
-    { icon: 'assignment', label: 'Missions' },
-    { icon: 'edit_note',  label: 'Récoltes', active: true },
-    { icon: 'map',        label: 'Carte'    },
-    { icon: 'person',     label: 'Profil'   },
 ]
 
 export default function EmployeeHarvestLogPage() {
@@ -61,44 +56,11 @@ export default function EmployeeHarvestLogPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            {/* Sticky header */}
-            <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white/80 px-6 shadow-sm backdrop-blur-md">
-                <div className="flex items-center gap-4">
-                    <Link
-                        to={backPath}
-                        className="flex items-center gap-1 text-xs text-slate-500 hover:text-[#003f87] transition-colors"
-                    >
-                        <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-                        Retour
-                    </Link>
-                    <div className="h-4 w-px bg-slate-200" />
-                    <h2 className="text-lg font-black text-[#003f87]">Saisir une Récolte</h2>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="relative hidden md:block">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">search</span>
-                        <input
-                            className="w-64 rounded-full border-none bg-slate-100/70 py-1.5 pl-9 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#003f87]/30"
-                            placeholder="Rechercher parcelles ou journaux…"
-                            type="text"
-                        />
-                    </div>
-                    <button className="rounded-full p-2 text-slate-500 hover:text-[#003f87] transition-colors">
-                        <span className="material-symbols-outlined">notifications</span>
-                    </button>
-                    <div className="flex items-center gap-2 border-l border-slate-200 pl-3">
-                        <div className="text-right hidden md:block">
-                            <p className="text-xs font-bold text-[#003f87] leading-tight">Jean-Pierre Kabila</p>
-                            <p className="text-[11px] text-slate-400">Superviseur Terrain</p>
-                        </div>
-                        <img
-                            alt="Profil"
-                            className="h-9 w-9 rounded-full border border-slate-200 object-cover"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCglFccd--wAVp0csx1wECynd5JC87jKd0beqX4UaWMYczNmZ0cKrXfWLfPvK0Ll9exqpbRy_vzG-mZReijqBJ5UClqOf6AZ8x_Otz3_z8qUpor1hi8wm1xMxj3K-kPS1bi1I0tWqfMWM_MsTqqocFuTp6Am4obOn1QwTZeiLQJaKr_wSZGCdTHtWo5xhf382MbERA-YfeXRAaRv388pp-vDzQWJaiLQBbm8TnvmkIBoYv3P0KP_yLVeYOpiVI3Vgs7tCVGlnHe97E"
-                        />
-                    </div>
-                </div>
-            </header>
+            <EmployeeTopNav
+                backTo={backPath}
+                backLabel="Retour"
+                title="Saisir une Récolte"
+            />
 
             <main className="mx-auto max-w-6xl px-6 pb-32 pt-8 md:pb-10">
                 {/* Page title */}
@@ -388,25 +350,7 @@ export default function EmployeeHarvestLogPage() {
                 )}
             </main>
 
-            {/* Mobile bottom nav */}
-            <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-[#DEE2E6] bg-white/95 px-4 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] backdrop-blur-sm md:hidden">
-                {NAV_ITEMS.map((item) => (
-                    <button
-                        key={item.label}
-                        className={`flex flex-col items-center justify-center rounded-lg px-3 py-1 transition-all ${
-                            item.active ? 'bg-blue-50 text-[#003f87]' : 'text-slate-500'
-                        }`}
-                    >
-                        <span
-                            className="material-symbols-outlined"
-                            style={item.active ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                        >
-                            {item.icon}
-                        </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{item.label}</span>
-                    </button>
-                ))}
-            </nav>
+            <EmployeeBottomNav parcelId={urlParcelId} />
         </div>
     )
 }

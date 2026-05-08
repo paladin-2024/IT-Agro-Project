@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
+import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
 
 const TABS = ['Aperçu', 'Calendrier', 'Intrants', 'Rendement']
 
@@ -55,13 +57,6 @@ const TIMELINE = [
     },
 ]
 
-const NAV_ITEMS = [
-    { icon: 'assignment', label: 'Missions' },
-    { icon: 'map',        label: 'Carte'    },
-    { icon: 'history',    label: 'Journaux', active: true },
-    { icon: 'person',     label: 'Profil'   },
-]
-
 export default function EmployeeProductionDetailPage() {
     const [activeTab, setActiveTab] = useState('Aperçu')
     const { id } = useParams()
@@ -69,46 +64,11 @@ export default function EmployeeProductionDetailPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            {/* Sticky header */}
-            <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white/80 px-6 shadow-sm backdrop-blur-md">
-                <div className="flex items-center gap-4">
-                    <Link
-                        to="/employee/dashboard"
-                        className="flex items-center gap-1 text-xs text-slate-500 hover:text-[#003f87] transition-colors"
-                    >
-                        <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-                        Retour
-                    </Link>
-                    <h2 className="text-lg font-black text-[#003f87]">Détails Production</h2>
-                    <nav className="hidden md:flex items-center gap-1">
-                        {TABS.map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setActiveTab(tab)}
-                                className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-colors ${
-                                    activeTab === tab
-                                        ? 'border-b-2 border-[#003f87] text-[#003f87]'
-                                        : 'text-slate-500 hover:text-[#003f87]'
-                                }`}
-                            >
-                                {tab}
-                            </button>
-                        ))}
-                    </nav>
-                </div>
-                <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white transition-all hover:bg-[#0056b3] active:scale-95">
-                        <span className="material-symbols-outlined text-[18px]">add</span>
-                        Nouvel Enregistrement
-                    </button>
-                    <button className="rounded-full p-2 text-slate-500 hover:text-[#003f87] transition-colors">
-                        <span className="material-symbols-outlined">notifications</span>
-                    </button>
-                    <button className="rounded-full p-2 text-slate-500 hover:text-[#003f87] transition-colors">
-                        <span className="material-symbols-outlined">account_circle</span>
-                    </button>
-                </div>
-            </header>
+            <EmployeeTopNav
+                backTo="/employee/dashboard"
+                backLabel="Parcelles"
+                title={`#${recordId}`}
+            />
 
             <main className="mx-auto max-w-7xl space-y-6 px-6 pb-32 pt-8 md:pb-10">
                 {/* Title row */}
@@ -285,25 +245,7 @@ export default function EmployeeProductionDetailPage() {
                 </div>
             </main>
 
-            {/* Mobile bottom nav */}
-            <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-[#DEE2E6] bg-white/95 px-4 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] backdrop-blur-sm md:hidden">
-                {NAV_ITEMS.map((item) => (
-                    <button
-                        key={item.label}
-                        className={`flex flex-col items-center justify-center rounded-lg px-3 py-1 transition-all ${
-                            item.active ? 'bg-blue-50 text-[#003f87]' : 'text-slate-500'
-                        }`}
-                    >
-                        <span
-                            className="material-symbols-outlined"
-                            style={item.active ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                        >
-                            {item.icon}
-                        </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{item.label}</span>
-                    </button>
-                ))}
-            </nav>
+            <EmployeeBottomNav />
         </div>
     )
 }

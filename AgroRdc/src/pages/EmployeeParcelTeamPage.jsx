@@ -1,4 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
+import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
+import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
 
 const TEAM = [
     {
@@ -30,40 +32,16 @@ const STATUS = {
     inactive:{ dot: 'bg-slate-300',   badge: 'bg-slate-100 text-slate-500',     label: 'Inactif'  },
 }
 
-const NAV_ITEMS = [
-    { icon: 'assignment', label: 'Missions' },
-    { icon: 'group',      label: 'Équipe',   active: true },
-    { icon: 'map',        label: 'Carte'     },
-    { icon: 'person',     label: 'Profil'    },
-]
-
 export default function EmployeeParcelTeamPage() {
     const { id: parcelId = 'B-04' } = useParams()
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            {/* Sticky header */}
-            <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white/80 px-6 shadow-sm backdrop-blur-md">
-                <div className="flex items-center gap-4">
-                    <Link
-                        to={`/employee/parcelles/${parcelId}`}
-                        className="flex items-center gap-1 text-xs text-slate-500 hover:text-[#003f87] transition-colors"
-                    >
-                        <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-                        Parcelle {parcelId}
-                    </Link>
-                    <div className="h-4 w-px bg-slate-200" />
-                    <h2 className="text-lg font-black text-[#003f87]">Personnel Assigné</h2>
-                </div>
-                <div className="flex items-center gap-3">
-                    <button className="rounded-full p-2 text-slate-500 hover:text-[#003f87] transition-colors">
-                        <span className="material-symbols-outlined">notifications</span>
-                    </button>
-                    <button className="rounded-full p-2 text-slate-500 hover:text-[#003f87] transition-colors">
-                        <span className="material-symbols-outlined">help_outline</span>
-                    </button>
-                </div>
-            </header>
+            <EmployeeTopNav
+                backTo={`/employee/parcelles/${parcelId}`}
+                backLabel={`Parcelle ${parcelId}`}
+                title="Personnel Assigné"
+            />
 
             <main className="mx-auto max-w-3xl space-y-6 px-6 pb-32 pt-8 md:pb-10">
                 {/* Page title */}
@@ -145,25 +123,7 @@ export default function EmployeeParcelTeamPage() {
                 </div>
             </main>
 
-            {/* Mobile bottom nav */}
-            <nav className="fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-[#DEE2E6] bg-white/95 px-4 py-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] backdrop-blur-sm md:hidden">
-                {NAV_ITEMS.map((item) => (
-                    <button
-                        key={item.label}
-                        className={`flex flex-col items-center justify-center rounded-lg px-3 py-1 transition-all ${
-                            item.active ? 'bg-blue-50 text-[#003f87]' : 'text-slate-500'
-                        }`}
-                    >
-                        <span
-                            className="material-symbols-outlined"
-                            style={item.active ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                        >
-                            {item.icon}
-                        </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{item.label}</span>
-                    </button>
-                ))}
-            </nav>
+            <EmployeeBottomNav parcelId={parcelId} />
         </div>
     )
 }
