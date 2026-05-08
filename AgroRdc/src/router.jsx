@@ -20,6 +20,8 @@ import OwnerFarmDetailPage from './pages/OwnerFarmDetailPage.jsx'
 import EmployeeDashboard from './pages/EmployeeDashboard.jsx'
 import EmployeeParcelDetailPage from './pages/EmployeeParcelDetailPage.jsx'
 import EmployeeProductionDetailPage from './pages/EmployeeProductionDetailPage.jsx'
+import EmployeeParcelForecastPage from './pages/EmployeeParcelForecastPage.jsx'
+import EmployeeParcelTeamPage from './pages/EmployeeParcelTeamPage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -168,6 +170,22 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <EmployeeProductionDetailPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/parcelles/:id/previsions',
+        element: (
+            <ProtectedRoute>
+                <EmployeeParcelForecastPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/parcelles/:id/equipe',
+        element: (
+            <ProtectedRoute>
+                <EmployeeParcelTeamPage />
             </ProtectedRoute>
         ),
     },

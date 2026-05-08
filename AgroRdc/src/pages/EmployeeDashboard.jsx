@@ -257,12 +257,19 @@ function ParcelCard({ parcel }) {
                     </div>
                 </div>
 
-                {/* CTA button */}
+                {/* CTA buttons */}
                 <Link
                     to={`/employee/parcelles/${id}`}
                     className="mt-auto w-full rounded-lg bg-[#003f87] py-3 text-sm font-bold text-white transition-all hover:bg-[#0056b3] active:scale-[0.98] block text-center"
                 >
                     Voir Détails / Saisir Récolte
+                </Link>
+                <Link
+                    to={`/employee/parcelles/${id}/previsions`}
+                    className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-[#003f87] py-2.5 text-sm font-bold text-[#003f87] transition-colors hover:bg-blue-50"
+                >
+                    <span className="material-symbols-outlined text-[16px]">query_stats</span>
+                    Prévisions de Rendement
                 </Link>
             </div>
         </div>

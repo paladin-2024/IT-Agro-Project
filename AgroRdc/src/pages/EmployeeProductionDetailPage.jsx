@@ -198,12 +198,21 @@ export default function EmployeeProductionDetailPage() {
                                     </div>
                                 ))}
                             </div>
-                            <Link
-                                to="/employee/parcelles/B-04"
-                                className="block w-full rounded-lg border border-[#003f87] px-4 py-3 text-center text-sm font-bold text-[#003f87] transition-colors hover:bg-blue-50"
-                            >
-                                Voir détails de la parcelle
-                            </Link>
+                            <div className="flex flex-col gap-2">
+                                <Link
+                                    to="/employee/parcelles/B-04"
+                                    className="block w-full rounded-lg border border-[#003f87] px-4 py-3 text-center text-sm font-bold text-[#003f87] transition-colors hover:bg-blue-50"
+                                >
+                                    Voir détails de la parcelle
+                                </Link>
+                                <Link
+                                    to="/employee/parcelles/B-04/previsions"
+                                    className="flex w-full items-center justify-center gap-1 rounded-lg bg-[#003f87] px-4 py-3 text-center text-sm font-bold text-white transition-all hover:bg-[#0056b3]"
+                                >
+                                    <span className="material-symbols-outlined text-[16px]">query_stats</span>
+                                    Prévisions de Rendement
+                                </Link>
+                            </div>
                         </div>
 
                         {/* Right: satellite map */}
