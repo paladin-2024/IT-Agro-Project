@@ -1,16 +1,48 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar";
+import { createFarm } from "../api/farms.js";
+import { createParcel } from "../api/parcels.js";
+import { useAuth } from "../hooks/useAuth.js";
+import { MOCK_CROPS } from "../api/mocks.js";
 
 export default function OwnerFarmCreatePage() {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [farmName, setFarmName]     = useState("");
     const [province, setProvince]     = useState("Kongo Central");
+    const [territoire, setTerritoire] = useState("");
     const [area, setArea]             = useState("");
     const [farmDesc, setFarmDesc]     = useState("");
     const [parcelName, setParcelName] = useState("");
-    const [crop, setCrop]             = useState("Maïs");
+    const [crop, setCrop]             = useState(MOCK_CROPS[0].name);
     const [parcelSize, setParcelSize] = useState("");
+    const [error, setError]           = useState("");
+    const [saving, setSaving]         = useState(false);
+
+    function handleSave() {
+        if (!farmName.trim()) { setError("Le nom de la ferme est obligatoire."); return; }
+        setSaving(true);
+        const farm = createFarm({
+            name: farmName.trim(),
+            province,
+            territoire: territoire.trim() || province,
+            area: parseFloat(area) || 0,
+            description: farmDesc.trim(),
+            ownerId: user?.id || 'owner-001',
+        });
+        if (parcelName.trim()) {
+            createParcel({
+                name: parcelName.trim(),
+                farmId: farm.id,
+                farm: farm.name,
+                crop,
+                area: parcelSize ? `${parcelSize} ha` : '0 ha',
+                status: 'En cours',
+            });
+        }
+        navigate(`/owner/fermes/${farm.id}`);
+    }
 
     return (
         <div className="min-h-screen bg-[#f4f6f9] text-[#1b1c1c]">
@@ -31,14 +63,23 @@ export default function OwnerFarmCreatePage() {
                         >
                             Annuler
                         </button>
-                        <button className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95">
+                        <button
+                            onClick={handleSave}
+                            disabled={saving}
+                            className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95 disabled:opacity-60"
+                        >
                             <span className="material-symbols-outlined text-base">save</span>
-                            Enregistrer la Ferme
+                            {saving ? 'Enregistrement…' : 'Enregistrer la Ferme'}
                         </button>
                     </div>
                 </header>
 
                 <div className="p-8">
+                    {error && (
+                        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                            {error}
+                        </div>
+                    )}
                     {/* Page title */}
                     <div className="mb-8">
                         <h1 className="text-lg font-bold text-[#1b1c1c]">Créer une Nouvelle Ferme</h1>
@@ -73,7 +114,7 @@ export default function OwnerFarmCreatePage() {
                                             label="Province"
                                             value={province}
                                             onChange={(e) => setProvince(e.target.value)}
-                                            options={["Kongo Central", "Kinshasa", "Lualaba", "Haut-Katanga"]}
+                                            options={["Kongo Central", "Kinshasa", "Lualaba", "Haut-Katanga", "Kasaï Oriental", "Maniema", "Nord-Kivu", "Sud-Kivu", "Sud-Ubangi"]}
                                         />
                                         <div className="space-y-1.5">
                                             <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -91,6 +132,12 @@ export default function OwnerFarmCreatePage() {
                                             </div>
                                         </div>
                                     </div>
+                                    <Field
+                                        label="Territoire"
+                                        value={territoire}
+                                        onChange={(e) => setTerritoire(e.target.value)}
+                                        placeholder="Ex: Kasangulu"
+                                    />
                                     <div className="space-y-1.5">
                                         <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">Description</label>
                                         <textarea
@@ -160,7 +207,7 @@ export default function OwnerFarmCreatePage() {
                                             label="Culture"
                                             value={crop}
                                             onChange={(e) => setCrop(e.target.value)}
-                                            options={["Maïs", "Manioc", "Café", "Cacao"]}
+                                            options={MOCK_CROPS.map(c => c.name)}
                                         />
                                         <Field
                                             label="Taille (ha)"

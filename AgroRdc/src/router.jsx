@@ -17,6 +17,7 @@ import OwnerOverviewParcelPage from './pages/OwnerOverviewParcelPage.jsx'
 import OwnerDetailParcell from './pages/OwnerDetailParcell.jsx'
 import OwnerAffectation from './pages/OwnerAffectation.jsx'
 import OwnerFarmDetailPage from './pages/OwnerFarmDetailPage.jsx'
+import OwnerParcelCreatePage from './pages/OwnerParcelCreatePage.jsx'
 import EmployeeDashboard from './pages/EmployeeDashboard.jsx'
 import EmployeeParcelDetailPage from './pages/EmployeeParcelDetailPage.jsx'
 import EmployeeProductionDetailPage from './pages/EmployeeProductionDetailPage.jsx'
@@ -124,6 +125,14 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute roles={['owner']}>
                 <OwnerParcelsPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/owner/parcelles/creer',
+        element: (
+            <ProtectedRoute roles={['owner']}>
+                <OwnerParcelCreatePage />
             </ProtectedRoute>
         ),
     },

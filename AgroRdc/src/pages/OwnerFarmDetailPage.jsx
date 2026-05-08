@@ -1,6 +1,31 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar";
+import { getFarmById, deleteFarm } from "../api/farms.js";
+import { getParcelsByFarm, createParcel } from "../api/parcels.js";
+import { MOCK_CROPS } from "../api/mocks.js";
+
+const PARCEL_STATUS_STYLES = {
+    'En cours':          { statusClass: 'bg-emerald-100 text-emerald-800', dot: 'bg-emerald-500' },
+    'Prêt pour récolte': { statusClass: 'bg-amber-100 text-amber-800',    dot: 'bg-amber-500'  },
+    'Alerte Stress':     { statusClass: 'bg-red-100 text-red-800',        dot: 'bg-red-500'    },
+    'Repos':             { statusClass: 'bg-slate-100 text-slate-600',    dot: 'bg-slate-400'  },
+    'Actif':             { statusClass: 'bg-emerald-100 text-emerald-800', dot: 'bg-emerald-500' },
+    'Planté':            { statusClass: 'bg-blue-100 text-blue-800',      dot: 'bg-blue-500'   },
+    'En Croissance':     { statusClass: 'bg-green-100 text-green-800',    dot: 'bg-green-500'  },
+}
+
+function toUiParcel(p) {
+    const styles = PARCEL_STATUS_STYLES[p.status] || { statusClass: 'bg-slate-100 text-slate-600', dot: 'bg-slate-400' }
+    return {
+        id: p.id,
+        crop: p.crop || '—',
+        area: typeof p.area === 'number' ? p.area : parseFloat(p.area) || 0,
+        date: p.plantDate || (p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'),
+        status: p.status || 'Actif',
+        ...styles,
+    }
+}
 
 const farmsData = {
     "KP-001": {
@@ -36,6 +61,7 @@ const FARM_KEY = (id) => `agrordc_farm_${id}`
 
 export default function OwnerFarmDetailPage() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [farmEdits, setFarmEdits] = useState(() => {
@@ -45,14 +71,33 @@ export default function OwnerFarmDetailPage() {
         } catch { return null }
     });
 
-    const baseFarm = farmsData[id];
+    const staticBase = farmsData[id];
+    const apiFarm = !staticBase ? getFarmById(id) : null;
+    const baseFarm = staticBase || apiFarm;
     const farm = baseFarm ? (farmEdits ? { ...baseFarm, ...farmEdits } : baseFarm) : null;
+
+    const staticParcelIds = new Set(staticBase?.parcels?.map(p => p.id) || [])
+    const [apiParcels, setApiParcels] = useState(() =>
+        getParcelsByFarm(id).filter(p => !staticParcelIds.has(p.id)).map(toUiParcel)
+    )
+    const allParcels = farm?.parcels ? [...farm.parcels, ...apiParcels] : apiParcels
 
     const handleSaveFarm = (updated) => {
         const next = { ...(farmEdits || {}), ...updated }
         setFarmEdits(next)
         localStorage.setItem(FARM_KEY(id), JSON.stringify(next))
         setShowEditModal(false)
+    };
+
+    const handleDeleteFarm = () => {
+        if (!window.confirm(`Supprimer la ferme "${farm?.name}" ? Cette action est irréversible.`)) return
+        deleteFarm(id)
+        navigate('/owner/fermes')
+    };
+
+    const handleParcelCreated = (newParcel) => {
+        setApiParcels(prev => [...prev, toUiParcel(newParcel)])
+        setShowModal(false)
     };
 
     if (!farm) {
@@ -76,9 +121,9 @@ export default function OwnerFarmDetailPage() {
         );
     }
 
-    const cultivatedArea = farm.parcels.reduce((s, p) => s + p.area, 0).toFixed(1);
-    const coveragePct = Math.round((parseFloat(cultivatedArea) / farm.area) * 100);
-    const activeParcels = farm.parcels.filter(p => p.status !== "Repos").length;
+    const cultivatedArea = allParcels.reduce((s, p) => s + (typeof p.area === 'number' ? p.area : parseFloat(p.area) || 0), 0).toFixed(1);
+    const coveragePct = Math.round((parseFloat(cultivatedArea) / (farm.area || 1)) * 100);
+    const activeParcels = allParcels.filter(p => p.status !== 'Repos').length;
 
     return (
         <div className="min-h-screen bg-[#f4f6f9] text-[#1b1c1c]">
@@ -108,6 +153,13 @@ export default function OwnerFarmDetailPage() {
                     </div>
                     <div className="flex items-center gap-2">
                         <button
+                            onClick={handleDeleteFarm}
+                            className="flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3.5 py-2 text-sm font-semibold text-red-600 transition-all hover:border-red-400 hover:bg-red-50"
+                        >
+                            <span className="material-symbols-outlined text-base">delete</span>
+                            Supprimer
+                        </button>
+                        <button
                             onClick={() => setShowEditModal(true)}
                             className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-[#003f87] transition-all hover:border-[#003f87] hover:bg-blue-50"
                         >
@@ -128,9 +180,9 @@ export default function OwnerFarmDetailPage() {
                     {/* Hero stat row */}
                     <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
                         <HeroStat icon="straighten"   label="Superficie totale"   value={`${farm.area} Ha`}         iconBg="bg-[#003f87]" />
-                        <HeroStat icon="grid_view"    label="Nb. parcelles"        value={`${farm.parcels.length} parcelles`} iconBg="bg-emerald-600" />
+                        <HeroStat icon="grid_view"    label="Nb. parcelles"        value={`${allParcels.length} parcelles`} iconBg="bg-emerald-600" />
                         <HeroStat icon="crop_square"  label="Surface cultivée"     value={`${cultivatedArea} Ha`}    iconBg="bg-amber-500" sub={`${coveragePct}% de couverture`} />
-                        <HeroStat icon="check_circle" label="Parcelles actives"    value={`${activeParcels} / ${farm.parcels.length}`} iconBg="bg-purple-600" />
+                        <HeroStat icon="check_circle" label="Parcelles actives"    value={`${activeParcels} / ${allParcels.length}`} iconBg="bg-purple-600" />
                     </div>
 
                     {/* Info + map */}
@@ -202,7 +254,7 @@ export default function OwnerFarmDetailPage() {
                                 <span className="material-symbols-outlined text-[#003f87]">grid_view</span>
                                 <div>
                                     <h2 className="text-sm font-bold text-[#1b1c1c]">Parcelles de cette ferme</h2>
-                                    <p className="text-xs text-slate-500">{farm.parcels.length} parcelle(s) enregistrée(s)</p>
+                                    <p className="text-xs text-slate-500">{allParcels.length} parcelle(s) enregistrée(s)</p>
                                 </div>
                             </div>
                             <button
@@ -227,7 +279,7 @@ export default function OwnerFarmDetailPage() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
-                                    {farm.parcels.map((p) => (
+                                    {allParcels.map((p) => (
                                         <tr key={p.id} className="group transition-colors hover:bg-blue-50/30">
                                             <td className="px-6 py-4">
                                                 <span className="font-mono text-xs font-bold text-[#003f87] bg-blue-50 px-2 py-1 rounded">
@@ -261,7 +313,7 @@ export default function OwnerFarmDetailPage() {
                 </div>
             </main>
 
-            {showModal && <AddParcelModal onClose={() => setShowModal(false)} farmName={farm.name} />}
+            {showModal && <AddParcelModal onClose={() => setShowModal(false)} farmName={farm.name} farmId={id} onCreated={handleParcelCreated} />}
             {showEditModal && (
                 <EditFarmModal
                     farm={farm}
@@ -305,86 +357,109 @@ function Th({ children, align = "left" }) {
     );
 }
 
-function AddParcelModal({ onClose, farmName }) {
+function AddParcelModal({ onClose, farmName, farmId, onCreated }) {
+    const [name,      setName]      = useState('');
+    const [crop,      setCrop]      = useState(MOCK_CROPS[0].name);
+    const [area,      setArea]      = useState('');
+    const [plantDate, setPlantDate] = useState('');
+    const [status,    setStatus]    = useState('En cours');
+    const [saving,    setSaving]    = useState(false);
+    const [error,     setError]     = useState('');
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        if (!name.trim()) { setError('Le nom est obligatoire.'); return; }
+        setSaving(true);
+        const parcel = createParcel({
+            name: name.trim(),
+            farmId,
+            farm: farmName,
+            crop,
+            area: area ? `${area} ha` : '0 ha',
+            status,
+            plantDate: plantDate || undefined,
+        });
+        onCreated(parcel);
+    }
+
     return (
         <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
             <div
                 className="flex h-full w-full max-w-md flex-col bg-white shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Modal header */}
                 <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-6 py-5">
                     <div>
                         <h3 className="text-base font-bold text-[#1b1c1c]">Nouvelle Parcelle</h3>
                         <p className="text-xs text-slate-500">{farmName}</p>
                     </div>
-                    <button
-                        onClick={onClose}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-200"
-                    >
+                    <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-200">
                         <span className="material-symbols-outlined text-lg">close</span>
                     </button>
                 </div>
 
-                {/* Form */}
-                <form className="flex-1 space-y-5 overflow-y-auto p-6">
-                    <ModalField label="Nom de la parcelle" type="text" placeholder="Ex : Zone Nord" />
+                <form onSubmit={handleSubmit} className="flex flex-1 flex-col overflow-y-auto">
+                    <div className="flex-1 space-y-5 p-6">
+                        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-xs font-semibold text-red-600">{error}</p>}
 
-                    <div className="space-y-1.5">
-                        <label className="block text-sm font-semibold text-[#1b1c1c]">Culture</label>
-                        <select className="w-full appearance-none rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#1b1c1c] outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20">
-                            <option value="">Sélectionnez une culture</option>
-                            <option value="maize">Maïs</option>
-                            <option value="cassava">Manioc</option>
-                            <option value="coffee">Café</option>
-                            <option value="cocoa">Cacao</option>
-                            <option value="soja">Soja</option>
-                        </select>
-                    </div>
+                        <ModalField label="Nom de la parcelle" type="text" placeholder="Ex : Zone Nord" value={name} onChange={e => setName(e.target.value)} />
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <ModalField label="Superficie (Ha)" type="number" placeholder="0.0" />
-                        <ModalField label="Date de plantation" type="date" />
-                    </div>
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Culture</label>
+                            <select value={crop} onChange={e => setCrop(e.target.value)} className="w-full appearance-none rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20">
+                                {MOCK_CROPS.map(c => <option key={c.id}>{c.name}</option>)}
+                            </select>
+                        </div>
 
-                    <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
-                        <div className="flex gap-3">
-                            <span className="material-symbols-outlined text-sm text-[#003f87]">info</span>
-                            <p className="text-xs leading-relaxed text-[#003f87]">
-                                L'identifiant de la parcelle sera généré automatiquement selon les conventions de la ferme <strong>{farmName}</strong>.
-                            </p>
+                        <div className="grid grid-cols-2 gap-4">
+                            <ModalField label="Superficie (Ha)" type="number" placeholder="0.0" value={area} onChange={e => setArea(e.target.value)} />
+                            <ModalField label="Date plantation" type="date" value={plantDate} onChange={e => setPlantDate(e.target.value)} />
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">Statut</label>
+                            <select value={status} onChange={e => setStatus(e.target.value)} className="w-full appearance-none rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20">
+                                <option>En cours</option>
+                                <option>Planté</option>
+                                <option>En Croissance</option>
+                                <option>Prêt pour récolte</option>
+                                <option>Repos</option>
+                            </select>
+                        </div>
+
+                        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+                            <div className="flex gap-3">
+                                <span className="material-symbols-outlined text-sm text-[#003f87]">info</span>
+                                <p className="text-xs leading-relaxed text-[#003f87]">
+                                    L'identifiant sera généré automatiquement et rattaché à la ferme <strong>{farmName}</strong>.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </form>
 
-                {/* Footer */}
-                <div className="flex gap-3 border-t border-slate-100 px-6 py-4">
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="flex-1 rounded-lg border border-slate-200 bg-white py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50"
-                    >
-                        Annuler
-                    </button>
-                    <button
-                        type="submit"
-                        className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-[0.98]"
-                    >
-                        Créer la parcelle
-                    </button>
-                </div>
+                    <div className="flex gap-3 border-t border-slate-100 px-6 py-4">
+                        <button type="button" onClick={onClose} className="flex-1 rounded-lg border border-slate-200 bg-white py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50">
+                            Annuler
+                        </button>
+                        <button type="submit" disabled={saving} className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-[0.98] disabled:opacity-60">
+                            {saving ? 'Création…' : 'Créer la parcelle'}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     );
 }
 
-function ModalField({ label, type, placeholder }) {
+function ModalField({ label, type, placeholder, value, onChange }) {
     return (
         <div className="space-y-1.5">
             <label className="block text-sm font-semibold text-[#1b1c1c]">{label}</label>
             <input
                 type={type}
                 placeholder={placeholder}
+                value={value ?? ''}
+                onChange={onChange}
                 className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#1b1c1c] outline-none placeholder:text-slate-400 focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
             />
         </div>

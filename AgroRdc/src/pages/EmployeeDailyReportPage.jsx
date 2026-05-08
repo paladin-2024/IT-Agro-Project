@@ -2,6 +2,16 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
 import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import { useAuth } from '../hooks/useAuth.js'
+
+const REPORTS_KEY = 'agrordc_daily_reports'
+
+function saveReport(report) {
+    try {
+        const list = JSON.parse(localStorage.getItem(REPORTS_KEY) || '[]')
+        localStorage.setItem(REPORTS_KEY, JSON.stringify([report, ...list]))
+    } catch {}
+}
 
 const WEATHER_OPTIONS = [
     { id: 'sunny',  icon: 'wb_sunny', label: 'Soleil'   },
@@ -21,6 +31,7 @@ const SEASON_GOAL_KG = 1200
 export default function EmployeeDailyReportPage() {
     const { id: parcelId = 'B-04' } = useParams()
     const navigate = useNavigate()
+    const { user } = useAuth()
 
     const [wateringDone, setWateringDone] = useState(false)
     const [endTime,      setEndTime]      = useState('09:15')
@@ -46,7 +57,27 @@ export default function EmployeeDailyReportPage() {
     const handleSubmit = (e) => {
         e.preventDefault()
         setLoading(true)
-        setTimeout(() => { setLoading(false); setSubmitted(true) }, 900)
+        setTimeout(() => {
+            saveReport({
+                id: `RPT-${Date.now()}`,
+                createdAt: new Date().toISOString(),
+                parcelId,
+                employeeId: user?.id,
+                employeeName: user?.name,
+                date: new Date().toISOString().slice(0, 10),
+                weather,
+                wateringDone,
+                wateringEndTime: endTime,
+                waterVolumeLitres: volume ? parseFloat(volume) : null,
+                harvestQtyKg: harvestQty ? parseFloat(harvestQty) : null,
+                soilHumidityPct: humidity,
+                observations,
+                anomalyTags: activeTags,
+                urgent,
+            })
+            setLoading(false)
+            setSubmitted(true)
+        }, 900)
     }
 
     const backPath = `/employee/parcelles/${parcelId}`
