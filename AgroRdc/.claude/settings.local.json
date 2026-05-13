@@ -6,7 +6,14 @@
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\" -Name | Where-Object { $_ -match \"jsconfig|tsconfig|.env\" })",
       "Bash(npm run *)",
       "Bash(npm install *)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\" -Force)",
+      "Bash(Select-Object Name, PSIsContainer)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\" | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\\\\src\\\\api\" | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\\\\src\\\\components\" | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\\\\src\\\\components\\\\ui\" | ForEach-Object { $_.Name })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\\\\src\\\\pages\" | ForEach-Object { $_.Name })"
     ]
   }
 }
