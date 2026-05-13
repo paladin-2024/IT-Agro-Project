@@ -5,7 +5,8 @@
       "Bash(dir C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\\\\src /s /b)",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\" -Name | Where-Object { $_ -match \"jsconfig|tsconfig|.env\" })",
       "Bash(npm run *)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(node -e ' *)"
     ]
   }
 }

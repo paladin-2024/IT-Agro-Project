@@ -1,10 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import EmployeeTopNav from "../components/EmployeeTopNav.jsx";
 import EmployeeBottomNav from "../components/EmployeeBottomNav.jsx";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { getAssignedParcels } from "../api/assignments.js";
 import Icon from '../components/Icon.jsx'
+
+function loadMyHarvests(userId) {
+    try {
+        const all = JSON.parse(localStorage.getItem('agrordc_harvests') || '[]')
+        return userId ? all.filter(h => h.employeeId === userId) : all
+    } catch { return [] }
+}
+
+const UNIT_TO_KG = { 'Tonne': 1000, 'Sac 50 kg': 50, 'Kg (Vrac)': 1, 'Caisse': 25 }
+function toKg(qty, unit) { return parseFloat(qty || 0) * (UNIT_TO_KG[unit] || 1) }
 
 /* ─── Static data ────────────────────────────────────────────────────── */
 
@@ -66,6 +76,11 @@ export default function EmployeeDashboard() {
     const [activeTab, setActiveTab] = useState("assignments");
     const [displayParcels, setDisplayParcels] = useState(parcels);
     const { user } = useAuth();
+
+    const myHarvests = useMemo(() => loadMyHarvests(user?.id), [user?.id])
+    const totalKg = myHarvests.reduce((s, h) => s + toKg(h.quantity, h.unit), 0)
+    const totalTonnes = Math.round(totalKg / 100) / 10
+    const uniqueCrops = [...new Set(displayParcels.map(p => p.crop).filter(Boolean))]
 
     useEffect(() => {
         if (!user?.id) return;
@@ -136,6 +151,65 @@ export default function EmployeeDashboard() {
                         </div>
                     </div>
                 </div>
+
+                {/* KPI strip — 3 summary cards */}
+                <div className="mb-8 grid grid-cols-3 gap-4">
+                    <DashKpi
+                        icon="assignment"
+                        label="Parcelles assignées"
+                        value={displayParcels.length}
+                        color="bg-[#003f87]"
+                    />
+                    <DashKpi
+                        icon="eco"
+                        label="Cultures en cours"
+                        value={uniqueCrops.length}
+                        color="bg-emerald-600"
+                    />
+                    <DashKpi
+                        icon="inventory_2"
+                        label="Total récolté"
+                        value={totalTonnes > 0 ? `${totalTonnes} t` : '0 t'}
+                        color="bg-amber-500"
+                    />
+                </div>
+
+                {/* Cultures overview strip */}
+                {uniqueCrops.length > 0 && (
+                    <div className="mb-8 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3">
+                            <div className="flex items-center gap-2">
+                                <Icon name="eco" className="h-5 w-5 text-emerald-600" />
+                                <h3 className="text-sm font-bold text-[#1b1c1c]">Cultures sur mes parcelles</h3>
+                            </div>
+                            <Link
+                                to="/employee/cultures"
+                                className="flex items-center gap-1 text-xs font-semibold text-[#003f87] hover:underline"
+                            >
+                                Voir tout
+                                <Icon name="chevron_right" className="h-3.5 w-3.5" />
+                            </Link>
+                        </div>
+                        <div className="flex divide-x divide-slate-100">
+                            {uniqueCrops.map(crop => {
+                                const count = displayParcels.filter(p => p.crop === crop).length
+                                return (
+                                    <Link
+                                        key={crop}
+                                        to={`/employee/cultures/${encodeURIComponent(crop)}`}
+                                        className="flex flex-1 flex-col items-center gap-1 px-4 py-3 text-center transition-colors hover:bg-slate-50"
+                                    >
+                                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100">
+                                            <Icon name="eco" className="h-4 w-4 text-emerald-700" />
+                                        </div>
+                                        <span className="text-xs font-bold text-[#1b1c1c]">{crop}</span>
+                                        <span className="text-[10px] text-slate-400">{count} parcelle{count > 1 ? 's' : ''}</span>
+                                    </Link>
+                                )
+                            })}
+                        </div>
+                    </div>
+                )}
 
                 {/* Weather banner */}
                 <div className="mb-10 flex flex-wrap items-center justify-between gap-6 rounded-xl bg-gradient-to-br from-[#003f87] to-[#0056b3] p-6 text-white shadow-sm">
@@ -260,6 +334,18 @@ function WeatherStat({ label, value }) {
         <div className="text-center">
             <span className="block text-[10px] font-bold uppercase tracking-wider opacity-80">{label}</span>
             <span className="text-lg font-bold">{value}</span>
+        </div>
+    );
+}
+
+function DashKpi({ icon, label, value, color }) {
+    return (
+        <div className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${color}`}>
+                <Icon name={icon} className="h-5 w-5 text-white" />
+            </div>
+            <p className="text-xl font-extrabold text-[#1b1c1c]">{value}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400 leading-tight">{label}</p>
         </div>
     );
 }

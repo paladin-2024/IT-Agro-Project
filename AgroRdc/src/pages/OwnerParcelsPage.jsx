@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar";
 import Icon from '../components/Icon.jsx'
 
-/* â”€â”€â”€ Static data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Static data ────────────────────────────────────────────────────── */
 
 const stats = [
     { icon: "grid_view",  iconBg: "bg-blue-50 text-blue-700",   label: "Total Parcelles",  value: "124" },
     { icon: "eco",        iconBg: "bg-green-50 text-green-700",  label: "Surface Totale",   value: "2 450 Ha" },
     { icon: "warning",    iconBg: "bg-orange-50 text-orange-700",label: "Alertes Actives",  value: "12" },
-    { icon: "groups",     iconBg: "bg-red-50 text-red-700",      label: "Main d'Å“uvre",     value: "458" },
+    { icon: "groups",     iconBg: "bg-red-50 text-red-700",      label: "Main d'œuvre",     value: "458" },
 ];
 
 const tableRows = [
@@ -29,7 +29,7 @@ const tableRows = [
     },
     {
         code: "D1",
-        name: "PÃ©riphÃ©rie Nord",
+        name: "Périphérie Nord",
         site: "Lubumbashi Ouest",
         crop: "Haricots",
         area: "24.0 Ha",
@@ -44,7 +44,7 @@ const tableRows = [
         code: "E8",
         name: "Nouveaux Plateaux",
         site: "Kundelungu",
-        crop: "En jachÃ¨re",
+        crop: "En jachère",
         area: "350.0 Ha",
         status: "Repos",
         statusClass: "bg-slate-100 text-slate-500 border-slate-200",
@@ -52,7 +52,7 @@ const tableRows = [
     },
 ];
 
-/* â”€â”€â”€ Page component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Page component ─────────────────────────────────────────────────── */
 
 export default function OwnerParcelsPage() {
     const [showModal, setShowModal] = useState(false);
@@ -73,7 +73,7 @@ export default function OwnerParcelsPage() {
                         <Icon name="search" className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
                             className="w-64 rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-4 text-sm outline-none focus:border-[#003f87] focus:ring-1 focus:ring-[#003f87]"
-                            placeholder="Rechercher une parcelleâ€¦"
+                            placeholder="Rechercher une parcelle…"
                             type="text"
                         />
                     </div>
@@ -85,7 +85,7 @@ export default function OwnerParcelsPage() {
                         <div>
                             <h1 className="text-2xl font-bold text-[#003f87]">Inventaire des Parcelles</h1>
                             <p className="mt-1 text-sm text-slate-500">
-                                GÃ©rez et suivez l'Ã©tat de vos cultures en temps rÃ©el Ã  travers la province.
+                                Gérez et suivez l'état de vos cultures en temps réel �  travers la province.
                             </p>
                         </div>
 
@@ -98,7 +98,7 @@ export default function OwnerParcelsPage() {
                             </FilterSelect>
                             <FilterSelect label="Type de Culture">
                                 <option>Toutes les cultures</option>
-                                <option>MaÃ¯s Grain</option>
+                                <option>Maïs Grain</option>
                                 <option>Manioc</option>
                                 <option>Haricots</option>
                                 <option>Soja</option>
@@ -123,11 +123,11 @@ export default function OwnerParcelsPage() {
                     {/* Bento grid */}
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
 
-                        {/* Featured parcel card â€” col-span-8 */}
+                        {/* Featured parcel card — col-span-8 */}
                         <div className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:flex-row lg:col-span-8">
                             <div className="relative h-52 w-full shrink-0 md:h-auto md:w-1/3">
                                 <img
-                                    alt="Vue aÃ©rienne du champ de maÃ¯s"
+                                    alt="Vue aérienne du champ de maïs"
                                     className="h-full w-full object-cover"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOnzlpUC49lopMOdgEtbe1rMeFEMZwEl_UjBxBXPb1_lyFxKAKiC7aYfh9FAQRzBv94t8MbdZtkz-pU3_u07zLoaGj1pcKQ2_mB8NPJ_e0DZbhsgc66kjau38OlqQJr0nS7uKeSUuOh9Dmh1YMOfhlaK1vs-geWnPJoeHUlgRZ5tiBEDdiLNbsgxzAvoiRBzFeYcxIVnx_UQLjh4CySNVZwGIdA3N_4UbanDlSJYrMYNlopS1OwhANHhRN0eNsvSeHqwDx-AG3QCI"
                                 />
@@ -142,24 +142,24 @@ export default function OwnerParcelsPage() {
                                 <div>
                                     <div className="mb-2 flex items-start justify-between">
                                         <div>
-                                            <h3 className="text-lg font-bold text-slate-900">Parcelle A-12 : VallÃ©e Sud</h3>
-                                            <p className="text-xs text-slate-500">Site de Lubumbashi Â· Zone Fertile 1</p>
+                                            <h3 className="text-lg font-bold text-slate-900">Parcelle A-12 : Vallée Sud</h3>
+                                            <p className="text-xs text-slate-500">Site de Lubumbashi · Zone Fertile 1</p>
                                         </div>
                                         <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-                                            MaÃ¯s Grain
+                                            Maïs Grain
                                         </span>
                                     </div>
 
                                     <div className="mt-5 grid grid-cols-2 gap-4">
                                         <FieldStat label="Surface"         value="45.2 Hectares" />
-                                        <FieldStat label="DerniÃ¨re rÃ©colte" value="15 Mars 2024" />
+                                        <FieldStat label="Dernière récolte" value="15 Mars 2024" />
                                     </div>
                                 </div>
 
                                 <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
                                     <div>
                                         <span className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                            Ã‰quipe AssignÃ©e
+                                            Équipe Assignée
                                         </span>
                                         <div className="flex -space-x-2">
                                             {[
@@ -179,14 +179,14 @@ export default function OwnerParcelsPage() {
                                         to="/owner/parcelles/A-12"
                                         className="flex items-center gap-1 text-sm font-semibold text-[#003f87] hover:underline"
                                     >
-                                        DÃ©tails complets
+                                        Détails complets
                                         <Icon name="chevron_right" className="h-5 w-5 text-lg" />
                                     </Link>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Irrigation mini-card â€” col-span-4 */}
+                        {/* Irrigation mini-card — col-span-4 */}
                         <div className="flex flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-4">
                             <div className="mb-4 flex items-start justify-between">
                                 <div>
@@ -201,12 +201,12 @@ export default function OwnerParcelsPage() {
                             </div>
 
                             <p className="mb-5 text-sm text-slate-600">
-                                Culture : <span className="font-semibold">Manioc</span> Â· 12 Ha
+                                Culture : <span className="font-semibold">Manioc</span> · 12 Ha
                             </p>
 
                             <div className="mb-6">
                                 <div className="mb-1 flex justify-between text-xs">
-                                    <span className="text-slate-500">HumiditÃ© du sol</span>
+                                    <span className="text-slate-500">Humidité du sol</span>
                                     <span className="font-bold text-orange-600">22%</span>
                                 </div>
                                 <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
@@ -246,7 +246,7 @@ export default function OwnerParcelsPage() {
                                 <table className="w-full border-collapse text-left">
                                     <thead>
                                         <tr className="border-b border-slate-200 bg-slate-50">
-                                            {["ID / Nom", "Culture", "Surface", "Ã‰quipe", "Ã‰tat", ""].map((h) => (
+                                            {["ID / Nom", "Culture", "Surface", "Équipe", "État", ""].map((h) => (
                                                 <th key={h} className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
                                                     {h}
                                                 </th>
@@ -300,7 +300,7 @@ export default function OwnerParcelsPage() {
                                 <p className="text-xs text-slate-500">Affichage de 3 sur 124 parcelles</p>
                                 <div className="flex gap-2">
                                     <button className="cursor-not-allowed rounded border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-400" disabled>
-                                        PrÃ©cÃ©dent
+                                        Précédent
                                     </button>
                                     <button className="rounded border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-[#003f87] transition-colors hover:bg-slate-100">
                                         Suivant
@@ -316,21 +316,21 @@ export default function OwnerParcelsPage() {
                                 <div className="relative z-10 w-2/3">
                                     <h3 className="mb-2 text-xl font-bold">Conditions Locales : Lubumbashi</h3>
                                     <div className="mb-6 flex items-end gap-4">
-                                        <span className="text-6xl font-black">28Â°C</span>
+                                        <span className="text-6xl font-black">28°C</span>
                                         <div className="mb-2 flex flex-col">
                                             <Icon name="sunny" className="h-10 w-10 text-yellow-400" />
-                                            <span className="text-xs opacity-80">EnsoleillÃ©</span>
+                                            <span className="text-xs opacity-80">Ensoleillé</span>
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-3 gap-4 border-t border-white/20 pt-4">
-                                        <WeatherStat label="PrÃ©cipitations" value="2%" />
+                                        <WeatherStat label="Précipitations" value="2%" />
                                         <WeatherStat label="Vent" value="12 km/h" />
                                         <WeatherStat label="UV Index" value="Haut (8)" />
                                     </div>
                                 </div>
                                 <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-20">
                                     <img
-                                        alt="lumiÃ¨re solaire"
+                                        alt="lumière solaire"
                                         className="h-full w-full object-cover"
                                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFIYP_fX2aHLjcSe5l-6ee02oCtWce7EF_4BABZdfiC49sSRNZeWP6_4nJ0vzn_PjE4E5-vHE0o6VtMOOfehxfnPetN1DT53GejVfvUPiWQ3d7jxVAofhkgSh6RzAl-EnsRjdl4zOn-EquyffxjDKqoOVjnNssnG9ljqq4oO85cAp51p-CtRvpX9uD1AddH6u5hQ_UbgSrQioc9EvMHxWWbS02IiKA_QSkAnop9a2tjJXtG1yI1aEr79XKSGrLHo5ICgFjUqJqk5c"
                                     />
@@ -341,7 +341,7 @@ export default function OwnerParcelsPage() {
                             <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white">
                                 <div className="absolute left-3 top-3 z-10">
                                     <span className="rounded bg-white/90 px-2 py-1 text-xs font-black text-slate-900 shadow-sm backdrop-blur-sm">
-                                        GÃ©olocalisation des sites
+                                        Géolocalisation des sites
                                     </span>
                                 </div>
                                 <img
@@ -368,7 +368,7 @@ export default function OwnerParcelsPage() {
     );
 }
 
-/* â”€â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Sub-components ─────────────────────────────────────────────────── */
 
 function StatCard({ icon, iconBg, label, value }) {
     return (
@@ -443,28 +443,28 @@ function CreateParcelModal({ onClose }) {
 
                 <form className="flex-1 space-y-5 overflow-y-auto p-6">
                     <div className="space-y-1.5">
-                        <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">Ferme associÃ©e</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">Ferme associée</label>
                         <select className="w-full cursor-not-allowed rounded-lg border border-slate-200 bg-slate-100 p-3 text-sm text-slate-500 outline-none" disabled>
-                            <option>Kinshasa Nord â€” Site Principal</option>
+                            <option>Kinshasa Nord — Site Principal</option>
                         </select>
                     </div>
                     <Field label="Type de Culture" as="select">
-                        <option value="">SÃ©lectionnez une cultureâ€¦</option>
-                        <option>MaÃ¯s Grain</option>
+                        <option value="">Sélectionnez une culture…</option>
+                        <option>Maïs Grain</option>
                         <option>Manioc</option>
                         <option>Haricots</option>
                         <option>Soja</option>
-                        <option>CafÃ©</option>
+                        <option>Café</option>
                     </Field>
                     <div className="grid grid-cols-2 gap-4">
                         <Field label="Superficie (Ha)" type="number" placeholder="ex. 4.5" />
                         <Field label="Date de Plantation" type="date" />
                     </div>
-                    <Field label="CoordonnÃ©es GPS (optionnel)" placeholder="ex. -4.3317, 15.3822" />
+                    <Field label="Coordonnées GPS (optionnel)" placeholder="ex. -4.3317, 15.3822" />
                     <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
                         <p className="flex items-start gap-2 text-xs leading-relaxed text-blue-700">
                             <Icon name="info" className="h-4 w-4 mt-0.5 shrink-0" />
-                            L'identifiant sera gÃ©nÃ©rÃ© automatiquement selon les conventions de la ferme sÃ©lectionnÃ©e.
+                            L'identifiant sera généré automatiquement selon les conventions de la ferme sélectionnée.
                         </p>
                     </div>
                 </form>
@@ -478,7 +478,7 @@ function CreateParcelModal({ onClose }) {
                         Annuler
                     </button>
                     <button className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95">
-                        Confirmer la crÃ©ation
+                        Confirmer la création
                     </button>
                 </div>
             </div>

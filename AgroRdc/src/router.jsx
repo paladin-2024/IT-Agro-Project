@@ -28,6 +28,7 @@ import EmployeeHarvestLogPage from './pages/EmployeeHarvestLogPage.jsx'
 import EmployeeDailyReportPage from './pages/EmployeeDailyReportPage.jsx'
 import EmployeeCulturesPage from './pages/EmployeeCulturesPage.jsx'
 import EmployeeProductionEditPage from './pages/EmployeeProductionEditPage.jsx'
+import EmployeeCropDetailPage from './pages/EmployeeCropDetailPage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -240,6 +241,14 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute roles={['employee']}>
                 <EmployeeCulturesPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/cultures/:cropName',
+        element: (
+            <ProtectedRoute roles={['employee']}>
+                <EmployeeCropDetailPage />
             </ProtectedRoute>
         ),
     },

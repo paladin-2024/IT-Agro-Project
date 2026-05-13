@@ -124,7 +124,7 @@ export default function EmployeeParcelForecastPage() {
                         </div>
 
                         {/* Yield trend chart */}
-                        <div className="flex h-[400px] flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                             <div className="mb-6 flex items-center justify-between">
                                 <h3 className="text-lg font-bold text-[#003f87]">
                                     Projection de Tendance de Rendement
@@ -142,45 +142,52 @@ export default function EmployeeParcelForecastPage() {
                             </div>
 
                             {/* Chart area */}
-                            <div className="relative ml-10 mt-4 flex-1 border-b border-l border-slate-200">
-                                {/* Gradient fill */}
-                                <div
-                                    className="pointer-events-none absolute inset-0"
-                                    style={{
-                                        background:
-                                            'linear-gradient(180deg, rgba(0,86,179,0.10) 0%, rgba(0,86,179,0) 100%)',
-                                    }}
-                                />
-                                <svg className="absolute inset-0 h-full w-full overflow-visible">
-                                    <path
-                                        d="M 0 300 Q 100 280 200 240 T 400 180 T 600 100 T 800 40"
-                                        fill="none"
-                                        stroke="#003f87"
-                                        strokeWidth="3"
-                                    />
-                                    {[
-                                        [0, 300], [200, 240], [400, 180], [600, 100],
-                                    ].map(([cx, cy]) => (
-                                        <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={4} fill="#003f87" />
-                                    ))}
-                                    <circle cx={800} cy={40} r={6} fill="#003f87" stroke="white" strokeWidth={2} />
-                                </svg>
-
-                                {/* X-axis labels */}
-                                <div className="absolute -bottom-7 flex w-full justify-between px-2 text-[11px] text-slate-400">
-                                    <span>Actuel</span>
-                                    <span>+30 Jours</span>
-                                    <span>+60 Jours</span>
-                                    <span>+90 Jours</span>
-                                </div>
-
+                            <div className="flex gap-3">
                                 {/* Y-axis labels */}
-                                <div className="absolute -left-10 flex h-full flex-col justify-between text-[11px] text-slate-400">
+                                <div className="flex shrink-0 flex-col justify-between pb-7 text-right text-[11px] text-slate-400">
                                     <span>4.0T</span>
                                     <span>3.0T</span>
                                     <span>2.0T</span>
                                     <span>1.0T</span>
                                     <span>0</span>
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    {/* SVG chart */}
+                                    <div className="relative border-b border-l border-slate-200">
+                                        <div
+                                            className="pointer-events-none absolute inset-0"
+                                            style={{
+                                                background:
+                                                    'linear-gradient(180deg, rgba(0,86,179,0.10) 0%, rgba(0,86,179,0) 100%)',
+                                            }}
+                                        />
+                                        <svg
+                                            viewBox="0 0 800 280"
+                                            preserveAspectRatio="none"
+                                            className="block h-56 w-full"
+                                        >
+                                            <path
+                                                d="M 0 260 Q 100 240 200 200 T 400 140 T 600 70 T 800 20"
+                                                fill="none"
+                                                stroke="#003f87"
+                                                strokeWidth="3"
+                                                vectorEffect="non-scaling-stroke"
+                                            />
+                                            {[
+                                                [0, 260], [200, 200], [400, 140], [600, 70],
+                                            ].map(([cx, cy]) => (
+                                                <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={5} fill="#003f87" />
+                                            ))}
+                                            <circle cx={800} cy={20} r={7} fill="#003f87" stroke="white" strokeWidth={2} />
+                                        </svg>
+                                    </div>
+                                    {/* X-axis labels */}
+                                    <div className="mt-2 flex justify-between text-[11px] text-slate-400">
+                                        <span>Actuel</span>
+                                        <span>+30 Jours</span>
+                                        <span>+60 Jours</span>
+                                        <span>+90 Jours</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

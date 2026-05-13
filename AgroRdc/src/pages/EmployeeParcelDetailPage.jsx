@@ -5,10 +5,10 @@ import EmployeeTopNav from "../components/EmployeeTopNav.jsx";
 import EmployeeBottomNav from "../components/EmployeeBottomNav.jsx";
 import Icon from '../components/Icon.jsx'
 
-/* â”€â”€â”€ Static data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Static data ────────────────────────────────────────────────────── */
 
 function fmtDate(d) {
-    if (!d) return '—'
+    if (!d) return '�'
     return new Date(d + 'T00:00:00').toLocaleDateString('fr-CD', {
         day: 'numeric', month: 'short', year: 'numeric',
     })
@@ -22,14 +22,14 @@ const workers = [
     },
     {
         name: "Sarah Kalala",
-        role: "SpÃ©cialiste Irrigation",
+        role: "Spécialiste Irrigation",
         avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCqkVVIMWAxX8splT4CNIP974fyVxRMxNtQoR7vcRXR2OwAJPscjobu7tdiv7yPol8Jhy3vBQUtg8au6uDCUQK9_13AS53F0dgWiIWl8kIsWroFGlieGMzTb9FsocPw38hHe8dg4cFigC7aSznKjWfZpBb8rHwva_FCjOGXu_AlluOsX3bEuV8Wv3zLXQoJ5wcmRl2o7clxqlHq_sCztNAANDHJqy-hYh2p74BhrwZ8IrBcmlI8l4rhHKzQUlGt0BasPlPHI17XBeI",
     },
 ];
 
-const TABS = ["Historique Production", "Personnel AssignÃ©", "PrÃ©visions"];
+const TABS = ["Historique Production", "Personnel Assigné", "Prévisions"];
 
-/* â”€â”€â”€ Page component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Page component ─────────────────────────────────────────────────── */
 
 export default function EmployeeParcelDetailPage() {
     const [activeTab, setActiveTab] = useState(0);
@@ -65,8 +65,8 @@ export default function EmployeeParcelDetailPage() {
                             </p>
                             <div className="mt-6 grid grid-cols-3 gap-8">
                                 <HeroStat label="Superficie"     value="12.4 Ha" />
-                                <HeroStat label="Culture"        value="MaÃ¯s Hybride" />
-                                <HeroStat label="SantÃ© du Sol"   value="84% Optimal" />
+                                <HeroStat label="Culture"        value="Maïs Hybride" />
+                                <HeroStat label="Santé du Sol"   value="84% Optimal" />
                             </div>
                         </div>
                         {/* Background image overlay */}
@@ -88,7 +88,7 @@ export default function EmployeeParcelDetailPage() {
                             </div>
                             <h3 className="text-base font-bold text-[#171c25]">Maintenance Irrigation</h3>
                             <p className="mt-2 text-sm text-slate-500">
-                                Le systÃ¨me de goutte-Ã -goutte du Secteur 2 prÃ©sente des chutes de pression. Une inspection immÃ©diate est prÃ©vue demain.
+                                Le système de goutte-� -goutte du Secteur 2 présente des chutes de pression. Une inspection immédiate est prévue demain.
                             </p>
                         </div>
                         <div className="mt-6 flex flex-col gap-2">
@@ -129,14 +129,14 @@ export default function EmployeeParcelDetailPage() {
                         {/* Historical harvests table */}
                         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                             <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-6 py-4">
-                                <h3 className="text-base font-bold text-[#171c25]">Historique des RÃ©coltes</h3>
+                                <h3 className="text-base font-bold text-[#171c25]">Historique des Récoltes</h3>
                                 <div className="flex items-center gap-3">
                                     <Link
                                         to={`/employee/parcelles/${parcelId}/saisir-recolte`}
                                         className="flex items-center gap-1 rounded-lg bg-[#003f87] px-3 py-1.5 text-xs font-bold text-white transition-all hover:bg-[#0056b3]"
                                     >
                                         <Icon name="add" className="h-4 w-4" />
-                                        Saisir une rÃ©colte
+                                        Saisir une récolte
                                     </Link>
                                     <button className="flex items-center gap-1 text-xs font-semibold text-[#003f87] hover:underline">
                                         <Icon name="download" className="h-4 w-4" />
@@ -147,7 +147,7 @@ export default function EmployeeParcelDetailPage() {
                             <table className="w-full text-left text-sm">
                                 <thead>
                                     <tr className="border-b border-slate-100 bg-slate-50">
-                                        {["Date de Récolte", "Quantité", "Notes", "Statut", ""].map((h) => (
+                                        {["Date de R�colte", "Quantit�", "Notes", "Statut", ""].map((h) => (
                                             <th key={h} className="px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
                                                 {h}
                                             </th>
@@ -164,12 +164,12 @@ export default function EmployeeParcelDetailPage() {
                                     ) : harvests.length === 0 ? (
                                         <tr>
                                             <td colSpan={5} className="px-6 py-10 text-center text-sm text-slate-400">
-                                                Aucune production enregistrée.
+                                                Aucune production enregistr�e.
                                                 <Link
                                                     to={`/employee/parcelles/${parcelId}/saisir-recolte`}
                                                     className="ml-1 font-semibold text-[#003f87] hover:underline"
                                                 >
-                                                    Saisir la première récolte.
+                                                    Saisir la premi�re r�colte.
                                                 </Link>
                                             </td>
                                         </tr>
@@ -182,7 +182,7 @@ export default function EmployeeParcelDetailPage() {
                                                 {row.quantity} {row.unit}
                                             </td>
                                             <td className="max-w-[180px] truncate px-6 py-4 text-slate-500">
-                                                {row.observations || '—'}
+                                                {row.observations || '�'}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className="rounded-full bg-green-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-green-800">
@@ -195,7 +195,7 @@ export default function EmployeeParcelDetailPage() {
                                                     state={{ parcelId }}
                                                     className="flex items-center gap-1 text-xs font-bold text-[#003f87] hover:underline"
                                                 >
-                                                    Détails
+                                                    D�tails
                                                     <Icon name="arrow_forward" className="h-3.5 w-3.5" />
                                                 </Link>
                                             </td>
@@ -208,13 +208,13 @@ export default function EmployeeParcelDetailPage() {
                         {/* Assigned workforce */}
                         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                             <div className="mb-5 flex items-center justify-between">
-                                <h3 className="text-base font-bold text-[#171c25]">Personnel AssignÃ©</h3>
+                                <h3 className="text-base font-bold text-[#171c25]">Personnel Assigné</h3>
                                 <Link
                                     to={`/employee/parcelles/${parcelId}/equipe`}
                                     className="flex items-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-200"
                                 >
                                     <Icon name="group" className="h-4 w-4" />
-                                    Voir l'Ã©quipe complÃ¨te
+                                    Voir l'équipe complète
                                 </Link>
                             </div>
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -232,7 +232,7 @@ export default function EmployeeParcelDetailPage() {
                             <div className="mb-5 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <Icon name="query_stats" className="h-5 w-5 text-[#003f87]" />
-                                    <h3 className="text-base font-bold text-[#171c25]">PrÃ©visions SaisonniÃ¨res</h3>
+                                    <h3 className="text-base font-bold text-[#171c25]">Prévisions Saisonnières</h3>
                                 </div>
                                 <Link
                                     to={`/employee/parcelles/${parcelId}/previsions`}
@@ -258,7 +258,7 @@ export default function EmployeeParcelDetailPage() {
                                     <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
                                         <div className="h-full w-[65%] rounded-full bg-[#003f87]" />
                                     </div>
-                                    <p className="mt-1 text-[11px] text-slate-400">65% du cycle complÃ©tÃ©</p>
+                                    <p className="mt-1 text-[11px] text-slate-400">65% du cycle complété</p>
                                 </div>
 
                                 {/* Insights */}
@@ -267,20 +267,20 @@ export default function EmployeeParcelDetailPage() {
                                         icon="trending_up"
                                         iconColor="text-emerald-600"
                                         title="Correspondance Climatique"
-                                        body="Les niveaux d'humiditÃ© actuels sont alignÃ©s Ã  95% avec les besoins du MaÃ¯s Hybride."
+                                        body="Les niveaux d'humidité actuels sont alignés �  95% avec les besoins du Maïs Hybride."
                                     />
                                     <InsightItem
                                         icon="info"
                                         iconColor="text-amber-500"
-                                        title="FenÃªtre de Fertilisation"
-                                        body="La fenÃªtre d'application secondaire optimale s'ouvre dans 4 jours."
+                                        title="Fenêtre de Fertilisation"
+                                        body="La fenêtre d'application secondaire optimale s'ouvre dans 4 jours."
                                     />
                                 </ul>
                                 <Link
                                     to={`/employee/parcelles/${parcelId}/previsions`}
                                     className="mt-5 block w-full rounded-lg border border-[#003f87] py-2.5 text-center text-sm font-bold text-[#003f87] transition-colors hover:bg-blue-50"
                                 >
-                                    Voir les prÃ©visions complÃ¨tes
+                                    Voir les prévisions complètes
                                 </Link>
                             </div>
                         </div>
@@ -299,7 +299,7 @@ export default function EmployeeParcelDetailPage() {
                             </div>
                             <div className="flex items-center justify-between px-4 py-3">
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                    GÃ©o-RÃ©f : 11.6Â°S, 27.4Â°E
+                                    Géo-Réf : 11.6°S, 27.4°E
                                 </span>
                                 <button className="text-xs font-bold text-[#003f87] hover:underline">
                                     Agrandir la carte
@@ -311,10 +311,10 @@ export default function EmployeeParcelDetailPage() {
                         <div className="rounded-xl border border-red-200 bg-red-50/40 p-5">
                             <p className="mb-1 text-sm font-bold text-[#b6171e]">Alerte Budget</p>
                             <p className="mb-4 text-xs text-slate-500">
-                                Les coÃ»ts opÃ©rationnels de B-04 ont atteint 92% de l'allocation saisonniÃ¨re.
+                                Les coûts opérationnels de B-04 ont atteint 92% de l'allocation saisonnière.
                             </p>
                             <button className="flex items-center gap-1 text-sm font-bold text-[#b6171e] hover:underline">
-                                Revoir les DÃ©penses
+                                Revoir les Dépenses
                                 <Icon name="arrow_forward" className="h-4 w-4" />
                             </button>
                         </div>
@@ -327,7 +327,7 @@ export default function EmployeeParcelDetailPage() {
     );
 }
 
-/* â”€â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Sub-components ─────────────────────────────────────────────────── */
 
 function HeroStat({ label, value }) {
     return (

@@ -102,8 +102,11 @@ export default function EmployeeCulturesPage() {
                 {!loading && cropRows.map(c => (
                     <div key={c.name} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
 
-                        {/* Crop header */}
-                        <div className="flex items-center gap-3 border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-white px-5 py-4">
+                        {/* Crop header — links to crop detail */}
+                        <Link
+                            to={`/employee/cultures/${encodeURIComponent(c.name)}`}
+                            className="flex items-center gap-3 border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-white px-5 py-4 transition-colors hover:from-emerald-100"
+                        >
                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100">
                                 <Icon name="eco" className="h-5 w-5 text-emerald-700" />
                             </div>
@@ -111,13 +114,16 @@ export default function EmployeeCulturesPage() {
                                 <h3 className="text-base font-bold text-[#1b1c1c]">{c.name}</h3>
                                 <p className="text-xs text-slate-500">Variété : {c.variety}</p>
                             </div>
-                            <div className="text-right shrink-0">
-                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
-                                    {c.growthDays > 0 ? `${c.growthDays} jours` : 'Pérenne'}
-                                </p>
-                                <p className="text-[10px] text-slate-400">durée croissance</p>
+                            <div className="flex items-center gap-2 shrink-0">
+                                <div className="text-right">
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                                        {c.growthDays > 0 ? `${c.growthDays} jours` : 'Pérenne'}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400">durée croissance</p>
+                                </div>
+                                <Icon name="chevron_right" className="h-4 w-4 text-slate-400" />
                             </div>
-                        </div>
+                        </Link>
 
                         {/* Crop stats */}
                         <div className="grid grid-cols-3 divide-x divide-slate-100 border-b border-slate-100">

@@ -70,7 +70,7 @@ export default function OwnerFarmCreatePage() {
                             className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95 disabled:opacity-60"
                         >
                             <Icon name="save" className="h-5 w-5 text-base" />
-                            {saving ? 'Enregistrementâ€¦' : 'Enregistrer la Ferme'}
+                            {saving ? 'Enregistrement…' : 'Enregistrer la Ferme'}
                         </button>
                     </div>
                 </header>
@@ -83,7 +83,7 @@ export default function OwnerFarmCreatePage() {
                     )}
                     {/* Page title */}
                     <div className="mb-8">
-                        <h1 className="text-lg font-bold text-[#1b1c1c]">CrÃ©er une Nouvelle Ferme</h1>
+                        <h1 className="text-lg font-bold text-[#1b1c1c]">Créer une Nouvelle Ferme</h1>
                         <p className="mt-0.5 text-xs text-slate-500">
                             Configurez votre exploitation agricole pour commencer le suivi et la gestion des parcelles.
                         </p>
@@ -93,7 +93,7 @@ export default function OwnerFarmCreatePage() {
                     <div className="mb-8 flex items-center gap-0">
                         <StepBar step={1} label="Configuration" active />
                         <StepConnector />
-                        <StepBar step={2} label="DÃ©tails Sols" />
+                        <StepBar step={2} label="Détails Sols" />
                         <StepConnector />
                         <StepBar step={3} label="Finalisation" />
                     </div>
@@ -102,7 +102,7 @@ export default function OwnerFarmCreatePage() {
                         {/* Left column */}
                         <div className="col-span-12 space-y-6 lg:col-span-7">
                             {/* General info */}
-                            <Section icon="info" title="Informations GÃ©nÃ©rales">
+                            <Section icon="info" title="Informations Générales">
                                 <div className="space-y-5">
                                     <Field
                                         label="Nom de la Ferme"
@@ -115,7 +115,7 @@ export default function OwnerFarmCreatePage() {
                                             label="Province"
                                             value={province}
                                             onChange={(e) => setProvince(e.target.value)}
-                                            options={["Kongo Central", "Kinshasa", "Lualaba", "Haut-Katanga", "KasaÃ¯ Oriental", "Maniema", "Nord-Kivu", "Sud-Kivu", "Sud-Ubangi"]}
+                                            options={["Kongo Central", "Kinshasa", "Lualaba", "Haut-Katanga", "Kasaï Oriental", "Maniema", "Nord-Kivu", "Sud-Kivu", "Sud-Ubangi"]}
                                         />
                                         <div className="space-y-1.5">
                                             <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -145,7 +145,7 @@ export default function OwnerFarmCreatePage() {
                                             value={farmDesc}
                                             onChange={(e) => setFarmDesc(e.target.value)}
                                             className="w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none transition-all focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20 placeholder:text-slate-400"
-                                            placeholder="DÃ©taillez les types de cultures prÃ©vus ou l'historique du terrainâ€¦"
+                                            placeholder="Détaillez les types de cultures prévus ou l'historique du terrain…"
                                             rows={4}
                                         />
                                     </div>
@@ -155,7 +155,7 @@ export default function OwnerFarmCreatePage() {
                             {/* Geolocation */}
                             <Section
                                 icon="location_on"
-                                title="Localisation GÃ©ographique"
+                                title="Localisation Géographique"
                                 action={
                                     <button className="flex items-center gap-1 text-xs font-semibold text-[#003f87] hover:underline">
                                         <Icon name="my_location" className="h-4 w-4" />
@@ -176,7 +176,7 @@ export default function OwnerFarmCreatePage() {
                                         </div>
                                     </div>
                                     <div className="absolute bottom-3 right-3 rounded-lg border border-slate-200 bg-white/90 px-3 py-1.5 text-xs font-medium backdrop-blur-sm shadow-sm">
-                                        Lat: -5.8504 Â· Long: 13.4501
+                                        Lat: -5.8504 · Long: 13.4501
                                     </div>
                                 </div>
                             </Section>
@@ -189,10 +189,10 @@ export default function OwnerFarmCreatePage() {
                                 <div className="bg-gradient-to-br from-[#003f87] to-[#0056b3] p-5 text-white">
                                     <div className="mb-2 flex items-center gap-2">
                                         <Icon name="grid_view" className="h-5 w-5 text-base" />
-                                        <h3 className="text-sm font-bold">PremiÃ¨re Parcelle</h3>
+                                        <h3 className="text-sm font-bold">Première Parcelle</h3>
                                     </div>
                                     <p className="text-xs leading-relaxed text-white/70">
-                                        DÃ©finissez votre premiÃ¨re zone de culture pour commencer le suivi de la production.
+                                        Définissez votre première zone de culture pour commencer le suivi de la production.
                                     </p>
                                 </div>
 
@@ -201,7 +201,7 @@ export default function OwnerFarmCreatePage() {
                                         label="Nom de la Parcelle"
                                         value={parcelName}
                                         onChange={(e) => setParcelName(e.target.value)}
-                                        placeholder="Ex: Zone Nord â€” MaÃ¯s"
+                                        placeholder="Ex: Zone Nord — Maïs"
                                     />
                                     <div className="grid grid-cols-2 gap-4">
                                         <SelectField
@@ -226,16 +226,16 @@ export default function OwnerFarmCreatePage() {
                             </div>
 
                             {/* Weather */}
-                            <Section icon="wb_sunny" title="MÃ©tÃ©o Locale">
+                            <Section icon="wb_sunny" title="Météo Locale">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-3xl font-extrabold text-[#003f87]">28Â°C</p>
-                                        <p className="mt-0.5 text-xs font-medium text-slate-500">Ciel dÃ©gagÃ© Â· Matadi</p>
+                                        <p className="text-3xl font-extrabold text-[#003f87]">28°C</p>
+                                        <p className="mt-0.5 text-xs font-medium text-slate-500">Ciel dégagé · Matadi</p>
                                     </div>
                                     <Icon name="wb_sunny" className="h-12 w-12 text-amber-400" />
                                 </div>
                                 <div className="mt-4 grid grid-cols-3 divide-x divide-slate-100 rounded-xl bg-slate-50 text-center">
-                                    <WeatherStat label="HumiditÃ©" value="64%" icon="water_drop" />
+                                    <WeatherStat label="Humidité" value="64%" icon="water_drop" />
                                     <WeatherStat label="Pluie 24h" value="0mm"   icon="rainy" />
                                     <WeatherStat label="Vent"     value="12km/h" icon="air" />
                                 </div>
@@ -246,9 +246,9 @@ export default function OwnerFarmCreatePage() {
                                 <div className="flex items-start gap-3">
                                     <Icon name="lightbulb" className="h-5 w-5 mt-0.5 shrink-0 text-base text-[#003f87]" />
                                     <div>
-                                        <p className="text-xs font-bold text-[#003f87]">Conseil de prÃ©cision</p>
+                                        <p className="text-xs font-bold text-[#003f87]">Conseil de précision</p>
                                         <p className="mt-1 text-xs leading-relaxed text-blue-700">
-                                            La dÃ©finition prÃ©cise de la superficie permet de calculer automatiquement vos besoins en intrants et vos prÃ©visions de rÃ©colte.
+                                            La définition précise de la superficie permet de calculer automatiquement vos besoins en intrants et vos prévisions de récolte.
                                         </p>
                                     </div>
                                 </div>
@@ -261,7 +261,7 @@ export default function OwnerFarmCreatePage() {
     );
 }
 
-/* â”€â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Sub-components ─────────────────────────────────────────────────── */
 
 function Section({ icon, title, action, children }) {
     return (
