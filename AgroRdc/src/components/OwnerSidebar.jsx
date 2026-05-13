@@ -24,10 +24,7 @@ export default function OwnerSidebar() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                     <Icon name="agriculture" className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <div>
-                    <h1 className="text-xl font-black leading-tight text-primary">AgriRDC</h1>
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground">Espace Propriétaire</p>
-                </div>
+                <p className="text-xs uppercase tracking-widest text-muted-foreground">Espace Propriétaire</p>
             </div>
 
             <nav className="flex-1 space-y-1 px-3">
