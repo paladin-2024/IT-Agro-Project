@@ -121,7 +121,7 @@ export default function LoginPage() {
                                 src={logo}
                                 className="w-32 h-24 object-contain"
                             />
-                            <h1 className="text-1xl font-semibold text-primary">AgriRDC</h1>
+                            {/*<h1 className="text-1xl font-semibold text-primary">AgriRDC</h1>*/}
                             <p className="text-sm text-outline">Hub des plantations RDC</p>
                         </div>
 

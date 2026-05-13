@@ -20,7 +20,7 @@ export default function LeftBanner({ imageUrl, icon, title, subtitle, infoIcon, 
                             className="w-full h-full object-cover"
                         />
                     </div>
-                    <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+                    {/*<h1 className="text-2xl font-bold tracking-tight">{title}</h1>*/}
                 </div>
                 <p className="text-lg opacity-90 max-w-sm mt-10">{subtitle}</p>
             </div>

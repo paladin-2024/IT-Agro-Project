@@ -50,8 +50,8 @@ export default function MotPasseOublie() {
     )
 
     return (
-        <div className="min-h-screen bg-surface text-on-surface flex items-center justify-center p-4">
-            <main className="w-full max-w-[1200px] grid grid-cols-1 md:grid-cols-2 bg-white rounded-xl overflow-hidden shadow-xl min-h-[600px] border border-outline-variant">
+        <div className="min-h-screen bg-surface text-on-surface">
+            <main className="w-full  grid grid-cols-1 md:grid-cols-2 bg-white rounded-xl overflow-hidden shadow-xl min-h-screen border border-outline-variant">
                 <LeftBanner
                     imageUrl={BANNER_IMAGE}
                     icon="lock_reset"

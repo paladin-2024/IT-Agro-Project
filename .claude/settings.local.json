@@ -14,7 +14,9 @@
       "Bash(Write-Output \"created\")",
       "PowerShell(New-Item *)",
       "Bash(dir C:\\\\Users\\\\HP\\\\WebstormProjects\\\\AgroRdc\\\\AgroRdc\\\\src\\\\components *)",
-      "Bash(del *)"
+      "Bash(del *)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)"
     ]
   }
 }
