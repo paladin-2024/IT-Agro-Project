@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
 import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import { getHarvestById } from '../api/harvests.js'
+import Icon from '../components/Icon.jsx'
 
+// eslint-disable-next-line no-unused-vars
 const TABS = ['Aperçu', 'Calendrier', 'Intrants', 'Rendement']
 
 const INFO_CARDS = [
@@ -58,11 +61,13 @@ const TIMELINE = [
 ]
 
 export default function EmployeeProductionDetailPage() {
+    // eslint-disable-next-line no-unused-vars
     const [activeTab, setActiveTab] = useState('Aperçu')
     const { id } = useParams()
     const { state } = useLocation()
     const recordId = id || 'PRD-2023-084'
-    const parcelId = state?.parcelId || 'B-04'
+    const harvest  = useMemo(() => getHarvestById(id), [id])
+    const parcelId = state?.parcelId || harvest?.parcelId || 'B-04'
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
@@ -87,13 +92,16 @@ export default function EmployeeProductionDetailPage() {
                     </div>
                     <div className="flex gap-3">
                         <button className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50">
-                            <span className="material-symbols-outlined text-[18px]">download</span>
+                            <Icon name="download" className="h-[18px] w-[18px]" />
                             Télécharger Reçu
                         </button>
-                        <button className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white transition-all hover:bg-[#0056b3]">
-                            <span className="material-symbols-outlined text-[18px]">edit</span>
+                        <Link
+                            to={`/employee/productions/${recordId}/modifier`}
+                            className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white transition-all hover:bg-[#0056b3]"
+                        >
+                            <Icon name="edit" className="h-[18px] w-[18px]" />
                             Modifier
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -102,18 +110,22 @@ export default function EmployeeProductionDetailPage() {
                     {/* Hero metric */}
                     <div className="col-span-12 md:col-span-4 relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                         <div className="pointer-events-none absolute -right-4 -top-4 text-[#003f87] opacity-10">
-                            <span className="material-symbols-outlined" style={{ fontSize: 120 }}>scale</span>
+                            <Icon name="scale" className="h-5 w-5" />
                         </div>
                         <div className="relative z-10">
                             <p className="mb-1 text-xs font-bold uppercase tracking-wider text-slate-500">
                                 Quantité Récoltée
                             </p>
                             <div className="flex items-baseline gap-2">
-                                <span className="text-5xl font-black text-[#003f87]">4.2</span>
-                                <span className="text-2xl font-bold text-[#003f87] opacity-70">Tonnes</span>
+                                <span className="text-5xl font-black text-[#003f87]">
+                                    {harvest?.quantity ?? '4.2'}
+                                </span>
+                                <span className="text-2xl font-bold text-[#003f87] opacity-70">
+                                    {harvest?.unit ?? 'Tonnes'}
+                                </span>
                             </div>
                             <div className="mt-4 flex w-fit items-center gap-2 rounded bg-emerald-50 px-2 py-1 text-emerald-600">
-                                <span className="material-symbols-outlined text-[16px]">trending_up</span>
+                                <Icon name="trending_up" className="h-4 w-4" />
                                 <span className="text-xs font-semibold">+12% vs prévisions</span>
                             </div>
                         </div>
@@ -124,7 +136,7 @@ export default function EmployeeProductionDetailPage() {
                         {INFO_CARDS.map((card) => (
                             <div key={card.label} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-[#003f87]">
-                                    <span className="material-symbols-outlined">{card.icon}</span>
+                                    <Icon name={card.icon} className="h-5 w-5" />
                                 </div>
                                 <p className="mb-1 text-xs text-slate-500">{card.label}</p>
                                 <p className="text-lg font-bold text-[#1b1c1c]">{card.value}</p>
@@ -171,7 +183,7 @@ export default function EmployeeProductionDetailPage() {
                                     to={`/employee/parcelles/${parcelId}/previsions`}
                                     className="flex w-full items-center justify-center gap-1 rounded-lg bg-[#003f87] px-4 py-3 text-center text-sm font-bold text-white transition-all hover:bg-[#0056b3]"
                                 >
-                                    <span className="material-symbols-outlined text-[16px]">query_stats</span>
+                                    <Icon name="query_stats" className="h-4 w-4" />
                                     Prévisions de Rendement
                                 </Link>
                             </div>
@@ -186,7 +198,7 @@ export default function EmployeeProductionDetailPage() {
                             />
                             <div className="pointer-events-none absolute inset-0 bg-[#003f87]/10" />
                             <div className="absolute right-4 top-4 rounded-lg bg-white p-2 shadow-lg">
-                                <span className="material-symbols-outlined text-[#003f87]">layers</span>
+                                <Icon name="layers" className="h-5 w-5 text-[#003f87]" />
                             </div>
                             <div className="absolute bottom-4 left-4 rounded-lg border border-[#003f87]/20 bg-white/90 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[#003f87] backdrop-blur">
                                 COORD: 5.1234° S, 13.5678° E
@@ -204,12 +216,7 @@ export default function EmployeeProductionDetailPage() {
                                     <div
                                         className={`absolute left-0 top-1 z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white ${item.iconBg}`}
                                     >
-                                        <span
-                                            className={`material-symbols-outlined text-[16px] ${item.iconColor}`}
-                                            style={{ fontVariationSettings: "'FILL' 1" }}
-                                        >
-                                            {item.icon}
-                                        </span>
+                                        <Icon name={item.icon} className={`h-4 w-4 ${item.iconColor}`} />
                                     </div>
                                     <div>
                                         <p className="text-sm font-bold text-[#1b1c1c]">{item.title}</p>
@@ -232,7 +239,7 @@ export default function EmployeeProductionDetailPage() {
 
                         <div className="border-t border-slate-100 pt-4">
                             <button className="flex items-center gap-2 text-sm font-semibold text-[#003f87] hover:underline">
-                                <span className="material-symbols-outlined text-[18px]">history</span>
+                                <Icon name="history" className="h-[18px] w-[18px]" />
                                 Voir le log complet
                             </button>
                         </div>

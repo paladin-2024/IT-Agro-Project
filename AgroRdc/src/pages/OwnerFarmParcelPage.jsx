@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar";
+import Icon from '../components/Icon.jsx'
 
 /* ─── Static data ────────────────────────────────────────────────────── */
 
@@ -89,11 +90,11 @@ export default function OwnerFarmParcelPage() {
                             to="/owner/fermes/creer"
                             className="flex items-center gap-2 rounded-lg border border-[#003f87] px-4 py-2 text-sm font-semibold text-[#003f87] transition-colors hover:bg-blue-50"
                         >
-                            <span className="material-symbols-outlined text-base">add_location</span>
+                            <Icon name="add_location" className="h-5 w-5 text-base" />
                             Nouvelle Ferme
                         </Link>
                         <button className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95">
-                            <span className="material-symbols-outlined text-base">grid_view</span>
+                            <Icon name="grid_view" className="h-5 w-5 text-base" />
                             Créer une Parcelle
                         </button>
                     </div>
@@ -148,11 +149,11 @@ export default function OwnerFarmParcelPage() {
                                         </h4>
                                     </div>
                                     <div className="rounded-full bg-blue-100 p-2.5">
-                                        <span className="material-symbols-outlined text-[#003f87]">straighten</span>
+                                        <Icon name="straighten" className="h-5 w-5 text-[#003f87]" />
                                     </div>
                                 </div>
                                 <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
-                                    <span className="material-symbols-outlined text-sm">trending_up</span>
+                                    <Icon name="trending_up" className="h-4 w-4" />
                                     +12% par rapport à la saison précédente
                                 </div>
                             </div>
@@ -167,7 +168,7 @@ export default function OwnerFarmParcelPage() {
                                         <h4 className="text-4xl font-extrabold text-[#1b1c1c]">{totalParcels}</h4>
                                     </div>
                                     <div className="rounded-full bg-orange-100 p-2.5">
-                                        <span className="material-symbols-outlined text-orange-600">category</span>
+                                        <Icon name="category" className="h-5 w-5 text-orange-600" />
                                     </div>
                                 </div>
                                 <div className="mt-4 flex gap-2">
@@ -198,7 +199,7 @@ export default function OwnerFarmParcelPage() {
                                     ))}
                                 </select>
                                 <button className="rounded-lg border border-slate-200 p-2 text-slate-500 transition-colors hover:bg-slate-50">
-                                    <span className="material-symbols-outlined text-base">filter_list</span>
+                                    <Icon name="filter_list" className="h-5 w-5 text-base" />
                                 </button>
                             </div>
                         </div>
@@ -234,16 +235,14 @@ export default function OwnerFarmParcelPage() {
                                                     <td className="px-6 py-4">
                                                         <div className="flex items-center gap-3">
                                                             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
-                                                                <span className="material-symbols-outlined text-sm">tag</span>
+                                                                <Icon name="tag" className="h-4 w-4" />
                                                             </div>
                                                             <span className="font-bold text-[#1b1c1c]">{p.id}</span>
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <div className="flex items-center gap-2">
-                                                            <span className={`material-symbols-outlined text-lg ${p.cropColor}`}>
-                                                                {p.cropIcon}
-                                                            </span>
+                                                            <Icon name={p.cropIcon} className={`h-5 w-5 ${p.cropColor}`} />
                                                             <span className="text-slate-700">{p.crop}</span>
                                                         </div>
                                                     </td>
@@ -256,13 +255,13 @@ export default function OwnerFarmParcelPage() {
                                                     </td>
                                                     <td className="px-6 py-4 text-right">
                                                         <button className="rounded-lg p-1.5 text-slate-400 transition-colors hover:text-[#003f87]">
-                                                            <span className="material-symbols-outlined text-base">edit</span>
+                                                            <Icon name="edit" className="h-5 w-5 text-base" />
                                                         </button>
                                                         <Link
                                                             to={`/owner/fermes/${group.id}`}
                                                             className="inline-block rounded-lg p-1.5 text-slate-400 transition-colors hover:text-[#003f87]"
                                                         >
-                                                            <span className="material-symbols-outlined text-base">analytics</span>
+                                                            <Icon name="analytics" className="h-5 w-5 text-base" />
                                                         </Link>
                                                     </td>
                                                 </tr>
@@ -303,7 +302,7 @@ export default function OwnerFarmParcelPage() {
                         <div className="col-span-12 rounded-xl bg-white p-6 ring-1 ring-slate-200 shadow-sm md:col-span-4">
                             <div className="mb-5 flex items-center justify-between">
                                 <h4 className="text-sm font-bold text-[#1b1c1c]">Météo — Lubumbashi</h4>
-                                <span className="material-symbols-outlined text-amber-500 text-2xl">sunny</span>
+                                <Icon name="sunny" className="h-6 w-6 text-amber-500" />
                             </div>
 
                             <div className="mb-5 flex items-end gap-3">
@@ -328,9 +327,7 @@ export default function OwnerFarmParcelPage() {
                                     Réserver une flotte de transport
                                 </button>
                             </div>
-                            <span className="material-symbols-outlined hidden text-[80px] opacity-20 sm:block">
-                                local_shipping
-                            </span>
+                            <Icon name="local_shipping" className="h-5 w-5 hidden text-[80px] opacity-20 sm:block" />
                         </div>
                     </div>
                 </div>

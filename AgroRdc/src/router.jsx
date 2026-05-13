@@ -27,6 +27,7 @@ import EmployeeParcelTeamPage from './pages/EmployeeParcelTeamPage.jsx'
 import EmployeeHarvestLogPage from './pages/EmployeeHarvestLogPage.jsx'
 import EmployeeDailyReportPage from './pages/EmployeeDailyReportPage.jsx'
 import EmployeeCulturesPage from './pages/EmployeeCulturesPage.jsx'
+import EmployeeProductionEditPage from './pages/EmployeeProductionEditPage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default createBrowserRouter([
@@ -191,6 +192,14 @@ export default createBrowserRouter([
         element: (
             <ProtectedRoute roles={['employee']}>
                 <EmployeeProductionDetailPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/employee/productions/:id/modifier',
+        element: (
+            <ProtectedRoute roles={['employee']}>
+                <EmployeeProductionEditPage />
             </ProtectedRoute>
         ),
     },

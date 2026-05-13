@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import EmployeeTopNav from "../components/EmployeeTopNav.jsx";
 import EmployeeBottomNav from "../components/EmployeeBottomNav.jsx";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { getAssignedParcels } from "../api/assignments.js";
+import Icon from '../components/Icon.jsx'
 
 /* ─── Static data ────────────────────────────────────────────────────── */
 
@@ -126,7 +127,7 @@ export default function EmployeeDashboard() {
                             Rechercher une parcelle
                         </label>
                         <div className="relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <Icon name="search" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 className="w-full rounded-lg border border-[#DEE2E6] bg-white py-2 pl-10 pr-4 text-sm outline-none transition-all focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
                                 placeholder="ID, Culture ou Ferme…"
@@ -139,12 +140,7 @@ export default function EmployeeDashboard() {
                 {/* Weather banner */}
                 <div className="mb-10 flex flex-wrap items-center justify-between gap-6 rounded-xl bg-gradient-to-br from-[#003f87] to-[#0056b3] p-6 text-white shadow-sm">
                     <div className="flex items-center gap-6">
-                        <span
-                            className="material-symbols-outlined text-5xl"
-                            style={{ fontVariationSettings: "'FILL' 1" }}
-                        >
-                            cloudy_snowing
-                        </span>
+                        <Icon name="cloudy_snowing" className="h-12 w-12" />
                         <div>
                             <span className="block text-3xl font-extrabold">28°C</span>
                             <span className="text-[10px] font-bold uppercase tracking-widest opacity-90">
@@ -172,7 +168,7 @@ export default function EmployeeDashboard() {
                 to="/employee/saisir-recolte"
                 className="fixed bottom-20 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#b6171e] text-white shadow-lg transition-transform hover:scale-110 active:scale-95 md:bottom-12 md:right-12"
             >
-                <span className="material-symbols-outlined text-2xl">add_task</span>
+                <Icon name="add_task" className="h-6 w-6" />
             </Link>
 
             <EmployeeBottomNav />
@@ -215,14 +211,14 @@ function ParcelCard({ parcel }) {
 
                 {/* Location */}
                 <div className="mb-4 flex items-center gap-1 text-slate-500">
-                    <span className="material-symbols-outlined text-sm">location_on</span>
+                    <Icon name="location_on" className="h-4 w-4" />
                     <span className="text-xs">{farm}</span>
                 </div>
 
                 {/* Metric row */}
                 <div className="mb-4 flex items-center justify-between rounded-lg bg-[#f0eded] p-3">
                     <div className="flex items-center gap-2">
-                        <span className={`material-symbols-outlined ${cropIconColor}`}>{cropIcon}</span>
+                        <Icon name={cropIcon} className={`h-5 w-5 ${cropIconColor}`} />
                         <div>
                             <span className="block text-[10px] font-bold uppercase tracking-wide text-slate-400">Culture</span>
                             <span className="text-sm font-bold text-[#1b1c1c]">{crop}</span>
@@ -230,7 +226,7 @@ function ParcelCard({ parcel }) {
                     </div>
                     <div className="h-8 w-px bg-[#c2c6d4]" />
                     <div className="flex items-center gap-2">
-                        <span className={`material-symbols-outlined ${metric2Color}`}>{metric2Icon}</span>
+                        <Icon name={metric2Icon} className={`h-5 w-5 ${metric2Color}`} />
                         <div>
                             <span className="block text-[10px] font-bold uppercase tracking-wide text-slate-400">
                                 {metric2Label}
@@ -251,7 +247,7 @@ function ParcelCard({ parcel }) {
                     to={`/employee/parcelles/${id}/previsions`}
                     className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-[#003f87] py-2.5 text-sm font-bold text-[#003f87] transition-colors hover:bg-blue-50"
                 >
-                    <span className="material-symbols-outlined text-[16px]">query_stats</span>
+                    <Icon name="query_stats" className="h-4 w-4" />
                     Prévisions de Rendement
                 </Link>
             </div>

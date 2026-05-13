@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar";
 import { createFarm } from "../api/farms.js";
 import { createParcel } from "../api/parcels.js";
 import { useAuth } from "../hooks/useAuth.js";
 import { MOCK_CROPS } from "../api/mocks.js";
+import Icon from '../components/Icon.jsx'
 
 export default function OwnerFarmCreatePage() {
     const navigate = useNavigate();
@@ -53,7 +54,7 @@ export default function OwnerFarmCreatePage() {
                 <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8 shadow-sm">
                     <div className="flex items-center gap-2 text-sm text-slate-500">
                         <Link to="/owner/fermes" className="hover:text-[#003f87] transition-colors">Mes Fermes</Link>
-                        <span className="material-symbols-outlined text-sm">chevron_right</span>
+                        <Icon name="chevron_right" className="h-4 w-4" />
                         <span className="font-semibold text-[#1b1c1c]">Nouvelle Ferme</span>
                     </div>
                     <div className="flex gap-3">
@@ -68,8 +69,8 @@ export default function OwnerFarmCreatePage() {
                             disabled={saving}
                             className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95 disabled:opacity-60"
                         >
-                            <span className="material-symbols-outlined text-base">save</span>
-                            {saving ? 'Enregistrement…' : 'Enregistrer la Ferme'}
+                            <Icon name="save" className="h-5 w-5 text-base" />
+                            {saving ? 'Enregistrementâ€¦' : 'Enregistrer la Ferme'}
                         </button>
                     </div>
                 </header>
@@ -82,7 +83,7 @@ export default function OwnerFarmCreatePage() {
                     )}
                     {/* Page title */}
                     <div className="mb-8">
-                        <h1 className="text-lg font-bold text-[#1b1c1c]">Créer une Nouvelle Ferme</h1>
+                        <h1 className="text-lg font-bold text-[#1b1c1c]">CrÃ©er une Nouvelle Ferme</h1>
                         <p className="mt-0.5 text-xs text-slate-500">
                             Configurez votre exploitation agricole pour commencer le suivi et la gestion des parcelles.
                         </p>
@@ -92,7 +93,7 @@ export default function OwnerFarmCreatePage() {
                     <div className="mb-8 flex items-center gap-0">
                         <StepBar step={1} label="Configuration" active />
                         <StepConnector />
-                        <StepBar step={2} label="Détails Sols" />
+                        <StepBar step={2} label="DÃ©tails Sols" />
                         <StepConnector />
                         <StepBar step={3} label="Finalisation" />
                     </div>
@@ -101,7 +102,7 @@ export default function OwnerFarmCreatePage() {
                         {/* Left column */}
                         <div className="col-span-12 space-y-6 lg:col-span-7">
                             {/* General info */}
-                            <Section icon="info" title="Informations Générales">
+                            <Section icon="info" title="Informations GÃ©nÃ©rales">
                                 <div className="space-y-5">
                                     <Field
                                         label="Nom de la Ferme"
@@ -114,7 +115,7 @@ export default function OwnerFarmCreatePage() {
                                             label="Province"
                                             value={province}
                                             onChange={(e) => setProvince(e.target.value)}
-                                            options={["Kongo Central", "Kinshasa", "Lualaba", "Haut-Katanga", "Kasaï Oriental", "Maniema", "Nord-Kivu", "Sud-Kivu", "Sud-Ubangi"]}
+                                            options={["Kongo Central", "Kinshasa", "Lualaba", "Haut-Katanga", "KasaÃ¯ Oriental", "Maniema", "Nord-Kivu", "Sud-Kivu", "Sud-Ubangi"]}
                                         />
                                         <div className="space-y-1.5">
                                             <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -144,7 +145,7 @@ export default function OwnerFarmCreatePage() {
                                             value={farmDesc}
                                             onChange={(e) => setFarmDesc(e.target.value)}
                                             className="w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none transition-all focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20 placeholder:text-slate-400"
-                                            placeholder="Détaillez les types de cultures prévus ou l'historique du terrain…"
+                                            placeholder="DÃ©taillez les types de cultures prÃ©vus ou l'historique du terrainâ€¦"
                                             rows={4}
                                         />
                                     </div>
@@ -154,10 +155,10 @@ export default function OwnerFarmCreatePage() {
                             {/* Geolocation */}
                             <Section
                                 icon="location_on"
-                                title="Localisation Géographique"
+                                title="Localisation GÃ©ographique"
                                 action={
                                     <button className="flex items-center gap-1 text-xs font-semibold text-[#003f87] hover:underline">
-                                        <span className="material-symbols-outlined text-sm">my_location</span>
+                                        <Icon name="my_location" className="h-4 w-4" />
                                         Ma position
                                     </button>
                                 }
@@ -171,11 +172,11 @@ export default function OwnerFarmCreatePage() {
                                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#003f87]/20 to-transparent" />
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-[#003f87] shadow-lg">
-                                            <span className="material-symbols-outlined text-white">push_pin</span>
+                                            <Icon name="push_pin" className="h-5 w-5 text-white" />
                                         </div>
                                     </div>
                                     <div className="absolute bottom-3 right-3 rounded-lg border border-slate-200 bg-white/90 px-3 py-1.5 text-xs font-medium backdrop-blur-sm shadow-sm">
-                                        Lat: -5.8504 · Long: 13.4501
+                                        Lat: -5.8504 Â· Long: 13.4501
                                     </div>
                                 </div>
                             </Section>
@@ -187,11 +188,11 @@ export default function OwnerFarmCreatePage() {
                             <div className="overflow-hidden rounded-xl shadow-sm">
                                 <div className="bg-gradient-to-br from-[#003f87] to-[#0056b3] p-5 text-white">
                                     <div className="mb-2 flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-base">grid_view</span>
-                                        <h3 className="text-sm font-bold">Première Parcelle</h3>
+                                        <Icon name="grid_view" className="h-5 w-5 text-base" />
+                                        <h3 className="text-sm font-bold">PremiÃ¨re Parcelle</h3>
                                     </div>
                                     <p className="text-xs leading-relaxed text-white/70">
-                                        Définissez votre première zone de culture pour commencer le suivi de la production.
+                                        DÃ©finissez votre premiÃ¨re zone de culture pour commencer le suivi de la production.
                                     </p>
                                 </div>
 
@@ -200,7 +201,7 @@ export default function OwnerFarmCreatePage() {
                                         label="Nom de la Parcelle"
                                         value={parcelName}
                                         onChange={(e) => setParcelName(e.target.value)}
-                                        placeholder="Ex: Zone Nord — Maïs"
+                                        placeholder="Ex: Zone Nord â€” MaÃ¯s"
                                     />
                                     <div className="grid grid-cols-2 gap-4">
                                         <SelectField
@@ -218,23 +219,23 @@ export default function OwnerFarmCreatePage() {
                                         />
                                     </div>
                                     <button className="w-full rounded-lg border-2 border-dashed border-[#003f87]/30 py-2.5 text-sm font-semibold text-[#003f87] transition-colors hover:border-[#003f87] hover:bg-blue-50">
-                                        <span className="material-symbols-outlined mr-1 align-middle text-sm">add</span>
+                                        <Icon name="add" className="h-4 w-4 mr-1 align-middle" />
                                         Ajouter la parcelle
                                     </button>
                                 </div>
                             </div>
 
                             {/* Weather */}
-                            <Section icon="wb_sunny" title="Météo Locale">
+                            <Section icon="wb_sunny" title="MÃ©tÃ©o Locale">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-3xl font-extrabold text-[#003f87]">28°C</p>
-                                        <p className="mt-0.5 text-xs font-medium text-slate-500">Ciel dégagé · Matadi</p>
+                                        <p className="text-3xl font-extrabold text-[#003f87]">28Â°C</p>
+                                        <p className="mt-0.5 text-xs font-medium text-slate-500">Ciel dÃ©gagÃ© Â· Matadi</p>
                                     </div>
-                                    <span className="material-symbols-outlined text-5xl text-amber-400">wb_sunny</span>
+                                    <Icon name="wb_sunny" className="h-12 w-12 text-amber-400" />
                                 </div>
                                 <div className="mt-4 grid grid-cols-3 divide-x divide-slate-100 rounded-xl bg-slate-50 text-center">
-                                    <WeatherStat label="Humidité" value="64%" icon="water_drop" />
+                                    <WeatherStat label="HumiditÃ©" value="64%" icon="water_drop" />
                                     <WeatherStat label="Pluie 24h" value="0mm"   icon="rainy" />
                                     <WeatherStat label="Vent"     value="12km/h" icon="air" />
                                 </div>
@@ -243,11 +244,11 @@ export default function OwnerFarmCreatePage() {
                             {/* Tip */}
                             <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
                                 <div className="flex items-start gap-3">
-                                    <span className="material-symbols-outlined mt-0.5 shrink-0 text-base text-[#003f87]">lightbulb</span>
+                                    <Icon name="lightbulb" className="h-5 w-5 mt-0.5 shrink-0 text-base text-[#003f87]" />
                                     <div>
-                                        <p className="text-xs font-bold text-[#003f87]">Conseil de précision</p>
+                                        <p className="text-xs font-bold text-[#003f87]">Conseil de prÃ©cision</p>
                                         <p className="mt-1 text-xs leading-relaxed text-blue-700">
-                                            La définition précise de la superficie permet de calculer automatiquement vos besoins en intrants et vos prévisions de récolte.
+                                            La dÃ©finition prÃ©cise de la superficie permet de calculer automatiquement vos besoins en intrants et vos prÃ©visions de rÃ©colte.
                                         </p>
                                     </div>
                                 </div>
@@ -260,14 +261,14 @@ export default function OwnerFarmCreatePage() {
     );
 }
 
-/* ─── Sub-components ─────────────────────────────────────────────────── */
+/* â”€â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 function Section({ icon, title, action, children }) {
     return (
         <div className="rounded-xl bg-white ring-1 ring-slate-200 shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
                 <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-base text-[#003f87]">{icon}</span>
+                    <Icon name={icon} className="h-5 w-5 text-[#003f87]" />
                     <h3 className="text-sm font-bold text-[#1b1c1c]">{title}</h3>
                 </div>
                 {action}
@@ -312,7 +313,7 @@ function SelectField({ label, value, onChange, options }) {
 function WeatherStat({ label, value, icon }) {
     return (
         <div className="flex flex-col items-center gap-0.5 py-3">
-            <span className="material-symbols-outlined text-sm text-slate-400">{icon}</span>
+            <Icon name={icon} className="h-4 w-4 text-slate-400" />
             <span className="text-xs font-extrabold text-[#1b1c1c]">{value}</span>
             <span className="text-[10px] uppercase tracking-wide text-slate-400">{label}</span>
         </div>
@@ -333,3 +334,4 @@ function StepBar({ step, label, active = false }) {
 function StepConnector() {
     return <div className="mx-3 h-px w-10 bg-slate-200" />;
 }
+

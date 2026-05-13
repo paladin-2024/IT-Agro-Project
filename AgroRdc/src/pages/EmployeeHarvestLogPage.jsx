@@ -4,6 +4,7 @@ import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
 import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import { createHarvest } from '../api/harvests.js'
+import Icon from '../components/Icon.jsx'
 
 const PARCELS = [
     { id: 'B-04', label: 'Parcelle B-04 — Vallée Est',   crop: 'Café (Arabica)' },
@@ -84,9 +85,9 @@ export default function EmployeeHarvestLogPage() {
                 <div className="mb-8">
                     <nav className="mb-2 flex items-center gap-1 text-xs text-slate-400">
                         <span>Opérations</span>
-                        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                        <Icon name="chevron_right" className="h-3.5 w-3.5" />
                         <span>Récolte</span>
-                        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                        <Icon name="chevron_right" className="h-3.5 w-3.5" />
                         <span className="font-semibold text-[#003f87]">Nouvelle Entrée</span>
                     </nav>
                     <h1 className="text-3xl font-black tracking-tight text-[#003f87]">
@@ -101,12 +102,7 @@ export default function EmployeeHarvestLogPage() {
                     /* Success state */
                     <div className="flex flex-col items-center justify-center rounded-xl border border-emerald-200 bg-white py-20 text-center shadow-sm">
                         <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
-                            <span
-                                className="material-symbols-outlined text-4xl text-emerald-600"
-                                style={{ fontVariationSettings: "'FILL' 1" }}
-                            >
-                                check_circle
-                            </span>
+                            <Icon name="check_circle" className="h-10 w-10 text-emerald-600" />
                         </div>
                         <h3 className="text-xl font-bold text-[#003f87]">Enregistrement soumis !</h3>
                         <p className="mt-2 text-sm text-slate-500">
@@ -149,9 +145,7 @@ export default function EmployeeHarvestLogPage() {
                                                         <option key={p.id} value={p.id}>{p.label}</option>
                                                     ))}
                                                 </select>
-                                                <span className="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
-                                                    expand_more
-                                                </span>
+                                                <Icon name="expand_more" className="h-5 w-5 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
                                             </div>
                                         </div>
                                         <div className="col-span-2 md:col-span-1">
@@ -200,9 +194,7 @@ export default function EmployeeHarvestLogPage() {
                                                         <option key={u}>{u}</option>
                                                     ))}
                                                 </select>
-                                                <span className="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
-                                                    expand_more
-                                                </span>
+                                                <Icon name="expand_more" className="h-5 w-5 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
                                             </div>
                                         </div>
                                     </div>
@@ -221,9 +213,7 @@ export default function EmployeeHarvestLogPage() {
                                                 required
                                                 className="w-full rounded-lg bg-slate-50 py-3 px-4 text-sm outline-none focus:ring-2 focus:ring-[#003f87]/30"
                                             />
-                                            <span className="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
-                                                calendar_today
-                                            </span>
+                                            <Icon name="calendar_today" className="h-5 w-5 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
                                         </div>
                                     </div>
 
@@ -302,12 +292,7 @@ export default function EmployeeHarvestLogPage() {
                                     </div>
                                 </div>
                                 <div className="pointer-events-none absolute -bottom-8 -right-8 opacity-10">
-                                    <span
-                                        className="material-symbols-outlined"
-                                        style={{ fontSize: 160, fontVariationSettings: "'FILL' 1" }}
-                                    >
-                                        eco
-                                    </span>
+                                    <Icon name="eco" className="h-5 w-5" />
                                 </div>
                             </div>
 
@@ -328,7 +313,7 @@ export default function EmployeeHarvestLogPage() {
                                         <p className="text-xs text-slate-500">2.4 Hectares • Plateau</p>
                                     </div>
                                     <button className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-100 bg-slate-50 text-[#003f87] hover:bg-slate-100">
-                                        <span className="material-symbols-outlined">map</span>
+                                        <Icon name="map" className="h-5 w-5" />
                                     </button>
                                 </div>
                             </div>
@@ -342,12 +327,7 @@ export default function EmployeeHarvestLogPage() {
                                     {RECENT.map((r) => (
                                         <div key={r.when} className="flex items-start gap-3">
                                             <div className="rounded-lg bg-emerald-100 p-2 text-emerald-800">
-                                                <span
-                                                    className="material-symbols-outlined text-[20px]"
-                                                    style={{ fontVariationSettings: "'FILL' 1" }}
-                                                >
-                                                    check_circle
-                                                </span>
+                                                <Icon name="check_circle" className="h-5 w-5" />
                                             </div>
                                             <div className="flex-1">
                                                 <div className="flex items-center justify-between">

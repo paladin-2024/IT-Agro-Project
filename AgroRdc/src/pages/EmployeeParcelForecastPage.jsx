@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
 import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import Icon from '../components/Icon.jsx'
 
 const RISKS = [
     {
@@ -47,11 +48,11 @@ export default function EmployeeParcelForecastPage() {
                     <div>
                         <nav className="mb-2 flex items-center gap-1 text-xs text-slate-400">
                             <Link to="/employee/dashboard" className="hover:text-[#003f87]">Parcelles</Link>
-                            <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                            <Icon name="chevron_right" className="h-3.5 w-3.5" />
                             <Link to={`/employee/parcelles/${parcelId}`} className="hover:text-[#003f87]">
                                 Parcelle {parcelId}
                             </Link>
-                            <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                            <Icon name="chevron_right" className="h-3.5 w-3.5" />
                             <span className="text-[#003f87] font-semibold">Prévisions</span>
                         </nav>
                         <h2 className="text-4xl font-black tracking-tight text-[#003f87]">
@@ -63,11 +64,11 @@ export default function EmployeeParcelForecastPage() {
                     </div>
                     <div className="flex gap-3">
                         <button className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#003f87] shadow-sm transition-colors hover:bg-slate-50">
-                            <span className="material-symbols-outlined text-[18px]">download</span>
+                            <Icon name="download" className="h-[18px] w-[18px]" />
                             Exporter PDF
                         </button>
                         <button className="flex items-center gap-2 rounded-xl bg-[#003f87] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#0056b3] active:scale-95">
-                            <span className="material-symbols-outlined text-[18px]">refresh</span>
+                            <Icon name="refresh" className="h-[18px] w-[18px]" />
                             Recalculer
                         </button>
                     </div>
@@ -191,7 +192,7 @@ export default function EmployeeParcelForecastPage() {
                         <div className="relative overflow-hidden rounded-xl bg-[#003f87] p-6 text-white shadow-lg">
                             <div className="relative z-10">
                                 <div className="mb-4 flex items-center gap-2">
-                                    <span className="material-symbols-outlined">event_available</span>
+                                    <Icon name="event_available" className="h-5 w-5" />
                                     <span className="text-xs font-bold uppercase tracking-wider opacity-80">
                                         Calendrier de Récolte
                                     </span>
@@ -224,7 +225,7 @@ export default function EmployeeParcelForecastPage() {
                         {/* Risk assessment */}
                         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                             <h3 className="mb-6 flex items-center gap-2 text-lg font-bold text-[#003f87]">
-                                <span className="material-symbols-outlined text-[#b6171e]">warning</span>
+                                <Icon name="warning" className="h-5 w-5 text-[#b6171e]" />
                                 Évaluation des Risques
                             </h3>
                             <div className="space-y-6">
@@ -277,12 +278,7 @@ export default function EmployeeParcelForecastPage() {
 
             {/* FAB */}
             <button className="fixed bottom-20 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#b6171e] text-white shadow-lg transition-transform hover:scale-110 active:scale-95 md:bottom-10 md:right-10">
-                <span
-                    className="material-symbols-outlined text-2xl"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                    add_chart
-                </span>
+                <Icon name="add_chart" className="h-6 w-6" />
             </button>
 
             <EmployeeBottomNav parcelId={parcelId} />

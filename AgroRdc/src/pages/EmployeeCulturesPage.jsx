@@ -5,6 +5,7 @@ import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
 import { useAuth } from '../hooks/useAuth.js'
 import { getAssignedParcels } from '../api/assignments.js'
 import { MOCK_CROPS } from '../api/mocks.js'
+import Icon from '../components/Icon.jsx'
 
 function loadMyHarvests(employeeId) {
     try {
@@ -30,7 +31,7 @@ export default function EmployeeCulturesPage() {
     const [loading,  setLoading]  = useState(true)
 
     useEffect(() => {
-        if (!user?.id) { setLoading(false); return }
+        if (!user?.id) return
         getAssignedParcels(user.id)
             .then(p => { setParcels(p); setLoading(false) })
             .catch(() => setLoading(false))
@@ -84,14 +85,14 @@ export default function EmployeeCulturesPage() {
                 {/* Loading */}
                 {loading && (
                     <div className="flex justify-center py-12">
-                        <span className="material-symbols-outlined animate-spin text-3xl text-slate-300">progress_activity</span>
+                        <Icon name="progress_activity" className="h-8 w-8 animate-spin text-slate-300" />
                     </div>
                 )}
 
                 {/* Empty state */}
                 {!loading && parcels.length === 0 && (
                     <div className="rounded-xl border border-slate-200 bg-white p-10 text-center">
-                        <span className="material-symbols-outlined text-4xl text-slate-300">eco</span>
+                        <Icon name="eco" className="h-10 w-10 text-slate-300" />
                         <p className="mt-3 text-sm font-semibold text-slate-500">Aucune parcelle assignée</p>
                         <p className="mt-1 text-xs text-slate-400">Contactez votre superviseur pour être affecté à une parcelle.</p>
                     </div>
@@ -104,8 +105,7 @@ export default function EmployeeCulturesPage() {
                         {/* Crop header */}
                         <div className="flex items-center gap-3 border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-white px-5 py-4">
                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                                <span className="material-symbols-outlined text-emerald-700"
-                                      style={{ fontVariationSettings: "'FILL' 1" }}>eco</span>
+                                <Icon name="eco" className="h-5 w-5 text-emerald-700" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <h3 className="text-base font-bold text-[#1b1c1c]">{c.name}</h3>
@@ -144,7 +144,7 @@ export default function EmployeeCulturesPage() {
                                         <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${STATUS_STYLE[p.status] || 'bg-slate-100 text-slate-600'}`}>
                                             {p.status || 'Actif'}
                                         </span>
-                                        <span className="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
+                                        <Icon name="chevron_right" className="h-4 w-4 text-slate-400" />
                                     </div>
                                 </Link>
                             ))}
@@ -154,7 +154,7 @@ export default function EmployeeCulturesPage() {
                         {c.tonnes > 0 && (
                             <div className="border-t border-slate-100 bg-blue-50 px-5 py-3">
                                 <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-sm text-[#003f87]">inventory_2</span>
+                                    <Icon name="inventory_2" className="h-4 w-4 text-[#003f87]" />
                                     <p className="text-xs font-semibold text-[#003f87]">
                                         Vous avez enregistré <strong>{c.tonnes} t</strong> de {c.name} au total.
                                     </p>
@@ -168,7 +168,7 @@ export default function EmployeeCulturesPage() {
                 {!loading && (
                     <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                         <div className="flex items-center gap-2 border-b border-slate-100 px-5 py-4">
-                            <span className="material-symbols-outlined text-base text-[#003f87]">menu_book</span>
+                            <Icon name="menu_book" className="h-5 w-5 text-base text-[#003f87]" />
                             <h3 className="text-sm font-bold text-[#1b1c1c]">Catalogue des Cultures</h3>
                         </div>
                         <div className="divide-y divide-slate-50">
@@ -177,8 +177,7 @@ export default function EmployeeCulturesPage() {
                                 return (
                                     <div key={c.id} className={`flex items-center justify-between px-5 py-3.5 ${active ? '' : 'opacity-50'}`}>
                                         <div className="flex items-center gap-3">
-                                            <span className={`material-symbols-outlined text-base ${active ? 'text-emerald-600' : 'text-slate-300'}`}
-                                                  style={{ fontVariationSettings: "'FILL' 1" }}>eco</span>
+                                            <Icon name="eco" className={`h-5 w-5 ${active ? 'text-emerald-600' : 'text-slate-300'}`} />
                                             <div>
                                                 <p className="text-sm font-semibold text-[#1b1c1c]">{c.name}</p>
                                                 <p className="text-xs text-slate-500">Var. {c.variety}</p>
@@ -210,7 +209,7 @@ function KpiCard({ icon, label, value, color }) {
     return (
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className={`mb-2 flex h-8 w-8 items-center justify-center rounded-lg ${color}`}>
-                <span className="material-symbols-outlined text-base text-white">{icon}</span>
+                <Icon name={icon} className="h-5 w-5 text-white" />
             </div>
             <p className="text-lg font-extrabold text-[#1b1c1c]">{value}</p>
             <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>

@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar";
 import { getFarmById, deleteFarm } from "../api/farms.js";
 import { getParcelsByFarm, createParcel } from "../api/parcels.js";
 import { MOCK_CROPS } from "../api/mocks.js";
+import Icon from '../components/Icon.jsx'
 
 const PARCEL_STATUS_STYLES = {
     'En cours':          { statusClass: 'bg-emerald-100 text-emerald-800', dot: 'bg-emerald-500' },
-    'Prêt pour récolte': { statusClass: 'bg-amber-100 text-amber-800',    dot: 'bg-amber-500'  },
+    'PrÃªt pour rÃ©colte': { statusClass: 'bg-amber-100 text-amber-800',    dot: 'bg-amber-500'  },
     'Alerte Stress':     { statusClass: 'bg-red-100 text-red-800',        dot: 'bg-red-500'    },
     'Repos':             { statusClass: 'bg-slate-100 text-slate-600',    dot: 'bg-slate-400'  },
     'Actif':             { statusClass: 'bg-emerald-100 text-emerald-800', dot: 'bg-emerald-500' },
-    'Planté':            { statusClass: 'bg-blue-100 text-blue-800',      dot: 'bg-blue-500'   },
+    'PlantÃ©':            { statusClass: 'bg-blue-100 text-blue-800',      dot: 'bg-blue-500'   },
     'En Croissance':     { statusClass: 'bg-green-100 text-green-800',    dot: 'bg-green-500'  },
 }
 
@@ -19,9 +20,9 @@ function toUiParcel(p) {
     const styles = PARCEL_STATUS_STYLES[p.status] || { statusClass: 'bg-slate-100 text-slate-600', dot: 'bg-slate-400' }
     return {
         id: p.id,
-        crop: p.crop || '—',
+        crop: p.crop || 'â€”',
         area: typeof p.area === 'number' ? p.area : parseFloat(p.area) || 0,
-        date: p.plantDate || (p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'),
+        date: p.plantDate || (p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : 'â€”'),
         status: p.status || 'Actif',
         ...styles,
     }
@@ -30,28 +31,28 @@ function toUiParcel(p) {
 const farmsData = {
     "KP-001": {
         id: "KP-001", name: "Kipushi Main", province: "Haut-Katanga", territoire: "Kipushi", area: 450, status: "Actif",
-        description: "Exploitation principale dédiée à la culture du maïs hybride et du soja en rotation saisonnière.",
+        description: "Exploitation principale dÃ©diÃ©e Ã  la culture du maÃ¯s hybride et du soja en rotation saisonniÃ¨re.",
         parcels: [
-            { id: "KP-A01", crop: "Maïs Hybride (H614)", area: 24.5, date: "12 Nov 2023", status: "En cours",        statusClass: "bg-emerald-100 text-emerald-800", dot: "bg-emerald-500" },
-            { id: "KP-B12", crop: "Soja (S-02)",          area: 18.2, date: "05 Déc 2023", status: "Irrigation",     statusClass: "bg-blue-100 text-blue-800",     dot: "bg-blue-500" },
-            { id: "KP-C05", crop: "Maïs Jaune",            area: 32.0, date: "28 Oct 2023", status: "Récolte prête", statusClass: "bg-amber-100 text-amber-800",   dot: "bg-amber-500" },
-            { id: "KP-D08", crop: "Jachère",               area: 15.0, date: "—",           status: "Repos",         statusClass: "bg-slate-100 text-slate-600",   dot: "bg-slate-400" },
+            { id: "KP-A01", crop: "MaÃ¯s Hybride (H614)", area: 24.5, date: "12 Nov 2023", status: "En cours",        statusClass: "bg-emerald-100 text-emerald-800", dot: "bg-emerald-500" },
+            { id: "KP-B12", crop: "Soja (S-02)",          area: 18.2, date: "05 DÃ©c 2023", status: "Irrigation",     statusClass: "bg-blue-100 text-blue-800",     dot: "bg-blue-500" },
+            { id: "KP-C05", crop: "MaÃ¯s Jaune",            area: 32.0, date: "28 Oct 2023", status: "RÃ©colte prÃªte", statusClass: "bg-amber-100 text-amber-800",   dot: "bg-amber-500" },
+            { id: "KP-D08", crop: "JachÃ¨re",               area: 15.0, date: "â€”",           status: "Repos",         statusClass: "bg-slate-100 text-slate-600",   dot: "bg-slate-400" },
         ],
     },
     "LK-002": {
         id: "LK-002", name: "Likasi North", province: "Haut-Katanga", territoire: "Likasi", area: 120, status: "Actif",
-        description: "Ferme spécialisée dans la culture du maïs jaune destiné aux marchés locaux de Likasi.",
+        description: "Ferme spÃ©cialisÃ©e dans la culture du maÃ¯s jaune destinÃ© aux marchÃ©s locaux de Likasi.",
         parcels: [
-            { id: "LK-N05", crop: "Maïs Jaune", area: 45.0, date: "28 Oct 2023", status: "Récolte prête", statusClass: "bg-amber-100 text-amber-800", dot: "bg-amber-500" },
-            { id: "LK-N08", crop: "Jachère",    area: 12.0, date: "—",           status: "Repos",         statusClass: "bg-slate-100 text-slate-600", dot: "bg-slate-400" },
+            { id: "LK-N05", crop: "MaÃ¯s Jaune", area: 45.0, date: "28 Oct 2023", status: "RÃ©colte prÃªte", statusClass: "bg-amber-100 text-amber-800", dot: "bg-amber-500" },
+            { id: "LK-N08", crop: "JachÃ¨re",    area: 12.0, date: "â€”",           status: "Repos",         statusClass: "bg-slate-100 text-slate-600", dot: "bg-slate-400" },
         ],
     },
     "KN-003": {
         id: "KN-003", name: "Kinshasa Nord", province: "Kinshasa", territoire: "Kinshasa", area: 85, status: "Partiel",
-        description: "Site de culture mixte combinant manioc et café robusta pour une diversification des revenus.",
+        description: "Site de culture mixte combinant manioc et cafÃ© robusta pour une diversification des revenus.",
         parcels: [
-            { id: "PAR-2023-001", crop: "Maïs Hybride", area: 4.5,  date: "12 Oct 2023", status: "En Croissance", statusClass: "bg-emerald-100 text-emerald-800", dot: "bg-emerald-500" },
-            { id: "PAR-2023-002", crop: "Café Robusta", area: 12.0, date: "05 Sep 2023", status: "Planté",        statusClass: "bg-blue-100 text-blue-800",      dot: "bg-blue-500" },
+            { id: "PAR-2023-001", crop: "MaÃ¯s Hybride", area: 4.5,  date: "12 Oct 2023", status: "En Croissance", statusClass: "bg-emerald-100 text-emerald-800", dot: "bg-emerald-500" },
+            { id: "PAR-2023-002", crop: "CafÃ© Robusta", area: 12.0, date: "05 Sep 2023", status: "PlantÃ©",        statusClass: "bg-blue-100 text-blue-800",      dot: "bg-blue-500" },
             { id: "PAR-2023-003", crop: "Manioc",       area: 2.8,  date: "20 Nov 2023", status: "En attente",   statusClass: "bg-orange-100 text-orange-800",  dot: "bg-orange-400" },
         ],
     },
@@ -90,7 +91,7 @@ export default function OwnerFarmDetailPage() {
     };
 
     const handleDeleteFarm = () => {
-        if (!window.confirm(`Supprimer la ferme "${farm?.name}" ? Cette action est irréversible.`)) return
+        if (!window.confirm(`Supprimer la ferme "${farm?.name}" ? Cette action est irrÃ©versible.`)) return
         deleteFarm(id)
         navigate('/owner/fermes')
     };
@@ -107,13 +108,13 @@ export default function OwnerFarmDetailPage() {
                 <main className="ml-64 flex min-h-screen items-center justify-center">
                     <div className="text-center">
                         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
-                            <span className="material-symbols-outlined text-3xl text-slate-400">error_outline</span>
+                            <Icon name="error_outline" className="h-8 w-8 text-slate-400" />
                         </div>
                         <p className="text-lg font-bold text-[#1b1c1c]">Ferme introuvable</p>
-                        <p className="mt-1 text-sm text-slate-500">L'identifiant « {id} » ne correspond à aucune ferme.</p>
+                        <p className="mt-1 text-sm text-slate-500">L'identifiant Â« {id} Â» ne correspond Ã  aucune ferme.</p>
                         <Link to="/owner/fermes" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#003f87] hover:underline">
-                            <span className="material-symbols-outlined text-sm">arrow_back</span>
-                            Retour à Mes Fermes
+                            <Icon name="arrow_back" className="h-4 w-4" />
+                            Retour Ã  Mes Fermes
                         </Link>
                     </div>
                 </main>
@@ -137,7 +138,7 @@ export default function OwnerFarmDetailPage() {
                             to="/owner/fermes"
                             className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-all hover:border-[#003f87] hover:text-[#003f87]"
                         >
-                            <span className="material-symbols-outlined text-lg">arrow_back</span>
+                            <Icon name="arrow_back" className="h-5 w-5 text-lg" />
                         </Link>
                         <div className="h-5 w-px bg-slate-200" />
                         <div>
@@ -148,7 +149,7 @@ export default function OwnerFarmDetailPage() {
                                     {farm.status}
                                 </span>
                             </div>
-                            <p className="text-xs text-slate-500">{farm.province} · {farm.area} Ha</p>
+                            <p className="text-xs text-slate-500">{farm.province} Â· {farm.area} Ha</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -156,21 +157,21 @@ export default function OwnerFarmDetailPage() {
                             onClick={handleDeleteFarm}
                             className="flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3.5 py-2 text-sm font-semibold text-red-600 transition-all hover:border-red-400 hover:bg-red-50"
                         >
-                            <span className="material-symbols-outlined text-base">delete</span>
+                            <Icon name="delete" className="h-5 w-5 text-base" />
                             Supprimer
                         </button>
                         <button
                             onClick={() => setShowEditModal(true)}
                             className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-[#003f87] transition-all hover:border-[#003f87] hover:bg-blue-50"
                         >
-                            <span className="material-symbols-outlined text-base">edit</span>
+                            <Icon name="edit" className="h-5 w-5 text-base" />
                             Modifier
                         </button>
                         <button
                             onClick={() => setShowModal(true)}
                             className="flex items-center gap-1.5 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95"
                         >
-                            <span className="material-symbols-outlined text-base">add</span>
+                            <Icon name="add" className="h-5 w-5 text-base" />
                             Ajouter une parcelle
                         </button>
                     </div>
@@ -181,7 +182,7 @@ export default function OwnerFarmDetailPage() {
                     <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
                         <HeroStat icon="straighten"   label="Superficie totale"   value={`${farm.area} Ha`}         iconBg="bg-[#003f87]" />
                         <HeroStat icon="grid_view"    label="Nb. parcelles"        value={`${allParcels.length} parcelles`} iconBg="bg-emerald-600" />
-                        <HeroStat icon="crop_square"  label="Surface cultivée"     value={`${cultivatedArea} Ha`}    iconBg="bg-amber-500" sub={`${coveragePct}% de couverture`} />
+                        <HeroStat icon="crop_square"  label="Surface cultivÃ©e"     value={`${cultivatedArea} Ha`}    iconBg="bg-amber-500" sub={`${coveragePct}% de couverture`} />
                         <HeroStat icon="check_circle" label="Parcelles actives"    value={`${activeParcels} / ${allParcels.length}`} iconBg="bg-purple-600" />
                     </div>
 
@@ -189,8 +190,8 @@ export default function OwnerFarmDetailPage() {
                     <div className="grid grid-cols-12 gap-6">
                         <section className="col-span-12 rounded-xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-8">
                             <div className="flex items-center gap-2 border-b border-slate-100 px-6 py-4">
-                                <span className="material-symbols-outlined text-[#003f87]">info</span>
-                                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">Informations générales</h2>
+                                <Icon name="info" className="h-5 w-5 text-[#003f87]" />
+                                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">Informations gÃ©nÃ©rales</h2>
                             </div>
                             <div className="p-6">
                                 <p className="mb-6 text-sm leading-relaxed text-slate-600">{farm.description}</p>
@@ -212,19 +213,19 @@ export default function OwnerFarmDetailPage() {
                                             style={{ width: `${coveragePct}%` }}
                                         />
                                     </div>
-                                    <p className="mt-1.5 text-[11px] text-slate-400">{cultivatedArea} Ha cultivés sur {farm.area} Ha total</p>
+                                    <p className="mt-1.5 text-[11px] text-slate-400">{cultivatedArea} Ha cultivÃ©s sur {farm.area} Ha total</p>
                                 </div>
                             </div>
                         </section>
 
                         <section className="col-span-12 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 lg:col-span-4">
                             <div className="flex items-center gap-2 border-b border-slate-100 px-5 py-4">
-                                <span className="material-symbols-outlined text-[#003f87]">location_on</span>
+                                <Icon name="location_on" className="h-5 w-5 text-[#003f87]" />
                                 <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">Localisation</h2>
                             </div>
                             <div className="relative h-44">
                                 <img
-                                    alt="Carte géospatiale"
+                                    alt="Carte gÃ©ospatiale"
                                     className="h-full w-full object-cover"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuALBK0bS3Ng_3nkskuXwuhQfOWZef4Aw5KJd-OKWnUnAHf9QH_HwEuPJ83HuXBUYK59U902Bv-NWkuVo2aLgijsPPJrbYqaJXzj9dMzMt1Yedj5hw_j3lIX7G3LVJVtg8WNcE-eV5lxW9n3IQEG5ksFm-1DobJrbRzarFeB4Vih7-BjkilGq_5xnsWDxxkFHA_4C4zOtnVrhg7E7b2LR5yrc3GIZ0z1wMkjn5vHKrsKbjsc84r_dP1nf2oUMb06uH3qeMWkMA8Sn2g"
                                 />
@@ -251,17 +252,17 @@ export default function OwnerFarmDetailPage() {
                     <section className="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
                         <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/60 px-6 py-4">
                             <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined text-[#003f87]">grid_view</span>
+                                <Icon name="grid_view" className="h-5 w-5 text-[#003f87]" />
                                 <div>
                                     <h2 className="text-sm font-bold text-[#1b1c1c]">Parcelles de cette ferme</h2>
-                                    <p className="text-xs text-slate-500">{allParcels.length} parcelle(s) enregistrée(s)</p>
+                                    <p className="text-xs text-slate-500">{allParcels.length} parcelle(s) enregistrÃ©e(s)</p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setShowModal(true)}
                                 className="flex items-center gap-1.5 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95"
                             >
-                                <span className="material-symbols-outlined text-base">add</span>
+                                <Icon name="add" className="h-5 w-5 text-base" />
                                 Nouvelle parcelle
                             </button>
                         </div>
@@ -301,7 +302,7 @@ export default function OwnerFarmDetailPage() {
                                                     className="inline-flex items-center gap-1 rounded-lg border border-transparent px-2.5 py-1 text-xs font-semibold text-[#003f87] transition-all group-hover:border-[#003f87] group-hover:bg-blue-50"
                                                 >
                                                     Voir
-                                                    <span className="material-symbols-outlined text-sm">chevron_right</span>
+                                                    <Icon name="chevron_right" className="h-4 w-4" />
                                                 </Link>
                                             </td>
                                         </tr>
@@ -329,7 +330,7 @@ function HeroStat({ icon, label, value, iconBg, sub }) {
     return (
         <div className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
             <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg ${iconBg}`}>
-                <span className="material-symbols-outlined text-xl text-white">{icon}</span>
+                <Icon name={icon} className="h-6 w-6 text-white" />
             </div>
             <div>
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">{label}</p>
@@ -394,7 +395,7 @@ function AddParcelModal({ onClose, farmName, farmId, onCreated }) {
                         <p className="text-xs text-slate-500">{farmName}</p>
                     </div>
                     <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-200">
-                        <span className="material-symbols-outlined text-lg">close</span>
+                        <Icon name="close" className="h-5 w-5 text-lg" />
                     </button>
                 </div>
 
@@ -420,18 +421,18 @@ function AddParcelModal({ onClose, farmName, farmId, onCreated }) {
                             <label className="block text-sm font-semibold text-[#1b1c1c]">Statut</label>
                             <select value={status} onChange={e => setStatus(e.target.value)} className="w-full appearance-none rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20">
                                 <option>En cours</option>
-                                <option>Planté</option>
+                                <option>PlantÃ©</option>
                                 <option>En Croissance</option>
-                                <option>Prêt pour récolte</option>
+                                <option>PrÃªt pour rÃ©colte</option>
                                 <option>Repos</option>
                             </select>
                         </div>
 
                         <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
                             <div className="flex gap-3">
-                                <span className="material-symbols-outlined text-sm text-[#003f87]">info</span>
+                                <Icon name="info" className="h-4 w-4 text-[#003f87]" />
                                 <p className="text-xs leading-relaxed text-[#003f87]">
-                                    L'identifiant sera généré automatiquement et rattaché à la ferme <strong>{farmName}</strong>.
+                                    L'identifiant sera gÃ©nÃ©rÃ© automatiquement et rattachÃ© Ã  la ferme <strong>{farmName}</strong>.
                                 </p>
                             </div>
                         </div>
@@ -442,7 +443,7 @@ function AddParcelModal({ onClose, farmName, farmId, onCreated }) {
                             Annuler
                         </button>
                         <button type="submit" disabled={saving} className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-[0.98] disabled:opacity-60">
-                            {saving ? 'Création…' : 'Créer la parcelle'}
+                            {saving ? 'CrÃ©ationâ€¦' : 'CrÃ©er la parcelle'}
                         </button>
                     </div>
                 </form>
@@ -466,7 +467,7 @@ function ModalField({ label, type, placeholder, value, onChange }) {
     );
 }
 
-const PROVINCES = ['Kongo Central', 'Haut-Katanga', 'Kinshasa', 'Lualaba', 'Kasaï Oriental', 'Maniema', 'Nord-Kivu', 'Sud-Kivu', 'Sud-Ubangi'];
+const PROVINCES = ['Kongo Central', 'Haut-Katanga', 'Kinshasa', 'Lualaba', 'KasaÃ¯ Oriental', 'Maniema', 'Nord-Kivu', 'Sud-Kivu', 'Sud-Ubangi'];
 
 function EditFarmModal({ farm, onClose, onSave }) {
     const [form, setForm] = useState({
@@ -506,7 +507,7 @@ function EditFarmModal({ farm, onClose, onSave }) {
                         onClick={onClose}
                         className="rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100"
                     >
-                        <span className="material-symbols-outlined">close</span>
+                        <Icon name="close" className="h-5 w-5" />
                     </button>
                 </div>
 
@@ -598,7 +599,7 @@ function EditFarmModal({ farm, onClose, onSave }) {
                             disabled={saving}
                             className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#002d63] disabled:opacity-60"
                         >
-                            {saving ? 'Enregistrement…' : 'Enregistrer les modifications'}
+                            {saving ? 'Enregistrementâ€¦' : 'Enregistrer les modifications'}
                         </button>
                     </div>
                 </form>
@@ -606,3 +607,4 @@ function EditFarmModal({ farm, onClose, onSave }) {
         </div>
     );
 }
+

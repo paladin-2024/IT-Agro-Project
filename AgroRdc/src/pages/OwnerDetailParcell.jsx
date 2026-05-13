@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import OwnerSidebar from "../components/OwnerSidebar.jsx";
+import Icon from '../components/Icon.jsx'
 
 const PARCEL_KEY = (id) => `agrordc_parcel_${id}`
 
@@ -14,7 +15,7 @@ const PARCEL_DEFAULTS = {
     location: 'Territoire de Kasangulu, Kongo-Central, RDC',
 }
 
-const CROPS = ['Maïs', 'Manioc', 'Café', 'Cacao', 'Soja', 'Riz', 'Palmier à huile']
+const CROPS = ['MaÃ¯s', 'Manioc', 'CafÃ©', 'Cacao', 'Soja', 'Riz', 'Palmier Ã  huile']
 
 export default function OwnerDetailParcell() {
     const { id: parcelId = 'B-04' } = useParams();
@@ -34,26 +35,26 @@ export default function OwnerDetailParcell() {
         setParcelData(next)
         localStorage.setItem(PARCEL_KEY(parcelId), JSON.stringify(next))
         setShowEditModal(false)
-        setSavedMsg('Modifications enregistrées.')
+        setSavedMsg('Modifications enregistrÃ©es.')
         setTimeout(() => setSavedMsg(''), 3000)
     };
 
     const handleDelete = () => {
-        if (!window.confirm(`Supprimer la Parcelle ${parcelId} ? Cette action est irréversible.`)) return
+        if (!window.confirm(`Supprimer la Parcelle ${parcelId} ? Cette action est irrÃ©versible.`)) return
         localStorage.removeItem(PARCEL_KEY(parcelId))
         navigate('/owner/parcelles')
     };
 
     const historyRows = [
-        ["2022-2023 Q3", "Maïs Jaune", "45.2", "Terminé", "bg-blue-100 text-blue-800"],
-        ["2021-2022 Q4", "Soja", "28.8", "Terminé", "bg-blue-100 text-blue-800"],
+        ["2022-2023 Q3", "MaÃ¯s Jaune", "45.2", "TerminÃ©", "bg-blue-100 text-blue-800"],
+        ["2021-2022 Q4", "Soja", "28.8", "TerminÃ©", "bg-blue-100 text-blue-800"],
         ["2020-2021 Q4", "Manioc", "31.5", "Partiel", "bg-[#ffdad6] text-[#ba1a1a]"],
     ];
 
     const staff = [
         {
             name: "Jean-Pierre Mukendi",
-            role: "Chef d'équipe",
+            role: "Chef d'Ã©quipe",
             src: "https://lh3.googleusercontent.com/aida-public/AB6AXuAnwY1oVUdVt0ZBLmet9TjM0ExPsw3a4OOWVczAqzyoqPg9I-2MqwcxuEvzJrGpPj4xfSxWMclTQMTrXzO9e1bndXj6FJZhL8Bg80T3HRQ6yNP8FTYlo6GX2eFR1vamoR0LOX2zS1haMkPJi0pLriKLTS9_hWtr9FHX5s5BlrvN6yAkgL8FwJwUlgVkCsfQ5-qZ8hxBJoAQMvJQ15K9c4BgALel1Kcyijj-WD-Aq9UYUqkdZNMyvN79ibgsojy3jvdMqLxpFaYOIqY",
         },
         {
@@ -132,8 +133,8 @@ function BreadcrumbHeader({ parcelId, parcelData, onEdit, onDelete }) {
             <div>
                 <div className="mb-2 flex items-center gap-2 text-gray-500">
                     <span className="text-xs">Parcelles</span>
-                    <span className="material-symbols-outlined text-xs">chevron_right</span>
-                    <span className="text-xs text-[#003f87]">Détail de la Parcelle</span>
+                    <Icon name="chevron_right" className="h-5 w-5 text-xs" />
+                    <span className="text-xs text-[#003f87]">DÃ©tail de la Parcelle</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <h1 className="text-[32px] font-semibold leading-10 text-[#1b1c1c]">Parcelle {parcelId}</h1>
@@ -143,7 +144,7 @@ function BreadcrumbHeader({ parcelId, parcelData, onEdit, onDelete }) {
                     </span>
                 </div>
                 <div className="mt-1 flex items-center gap-1 text-gray-500">
-                    <span className="material-symbols-outlined text-base">location_on</span>
+                    <Icon name="location_on" className="h-5 w-5 text-base" />
                     <span className="text-sm">{parcelData.location}</span>
                 </div>
             </div>
@@ -153,14 +154,14 @@ function BreadcrumbHeader({ parcelId, parcelData, onEdit, onDelete }) {
                     onClick={onDelete}
                     className="flex items-center gap-2 rounded border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
                 >
-                    <span className="material-symbols-outlined text-lg">delete</span>
+                    <Icon name="delete" className="h-5 w-5 text-lg" />
                     Supprimer
                 </button>
                 <button
                     onClick={onEdit}
                     className="flex items-center gap-2 rounded border border-[#003f87] px-4 py-2 text-sm font-semibold text-[#003f87] transition-colors hover:bg-blue-50"
                 >
-                    <span className="material-symbols-outlined text-lg">edit</span>
+                    <Icon name="edit" className="h-5 w-5 text-lg" />
                     Modifier
                 </button>
             </div>
@@ -173,8 +174,8 @@ function MetricsRow({ parcelData }) {
         <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
             <MetricCard title="Superficie" big={String(parcelData.area)} suffix="ha" />
             <MetricCard title="Culture Actuelle" icon="eco" value={parcelData.crop} />
-            <MetricCard title="Qualité du sol" big={String(parcelData.soilQuality)} suffix="/100" progress={parcelData.soilQuality} />
-            <MetricCard title="Dernière Récolte" value={parcelData.lastHarvest} sub={parcelData.lastHarvestQty} />
+            <MetricCard title="QualitÃ© du sol" big={String(parcelData.soilQuality)} suffix="/100" progress={parcelData.soilQuality} />
+            <MetricCard title="DerniÃ¨re RÃ©colte" value={parcelData.lastHarvest} sub={parcelData.lastHarvestQty} />
         </div>
     );
 }
@@ -195,7 +196,7 @@ function MetricCard({ title, value, big, suffix, sub, icon, progress }) {
                 </div>
             ) : icon ? (
                 <div className="mt-4 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-2xl text-[#b6171e]">{icon}</span>
+                    <Icon name={icon} className="h-6 w-6 text-[#b6171e]" />
                     <span className="text-2xl font-semibold">{value}</span>
                 </div>
             ) : (
@@ -223,8 +224,8 @@ function YieldChart() {
             <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-2xl font-semibold">Tendances de Rendement</h3>
                 <div className="flex gap-2">
-                    <LegendDot color="bg-[#003f87]" label="Réel" />
-                    <LegendDot color="bg-[#003f87]/30" label="Prévision" />
+                    <LegendDot color="bg-[#003f87]" label="RÃ©el" />
+                    <LegendDot color="bg-[#003f87]/30" label="PrÃ©vision" />
                 </div>
             </div>
 
@@ -246,7 +247,7 @@ function CropHistoryTable({ rows }) {
             <div className="flex items-center justify-between border-b border-gray-200 p-4">
                 <h3 className="text-2xl font-semibold">Historique des Cultures</h3>
                 <button className="flex items-center gap-1 text-sm font-semibold text-[#003f87]">
-                    Voir Tout <span className="material-symbols-outlined text-sm">open_in_new</span>
+                    Voir Tout <Icon name="open_in_new" className="h-4 w-4" />
                 </button>
             </div>
 
@@ -271,7 +272,7 @@ function CropHistoryTable({ rows }) {
                                 <span className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase ${tone}`}>{status}</span>
                             </td>
                             <td className="px-4 py-4 text-[#003f87]">
-                                <button className="material-symbols-outlined">visibility</button>
+                                <button><Icon name="visibility" className="h-5 w-5" /></button>
                             </td>
                         </tr>
                     ))}
@@ -286,7 +287,7 @@ function GeoMap() {
     return (
         <div className="card-flat overflow-hidden">
             <div className="border-b border-gray-200 p-4">
-                <h3 className="text-2xl font-semibold">Localisation Géospatiale</h3>
+                <h3 className="text-2xl font-semibold">Localisation GÃ©ospatiale</h3>
             </div>
             <div className="relative h-64 w-full">
                 <img
@@ -301,8 +302,8 @@ function GeoMap() {
                 </div>
             </div>
             <div className="bg-gray-50 p-4">
-                <Row label="Coordonnées" value="4.5833° S, 15.1667° E" />
-                <Row label="Périmètre" value="1,420 m" />
+                <Row label="CoordonnÃ©es" value="4.5833Â° S, 15.1667Â° E" />
+                <Row label="PÃ©rimÃ¨tre" value="1,420 m" />
             </div>
         </div>
     );
@@ -312,9 +313,9 @@ function AssignedStaff({ staff }) {
     return (
         <div className="card-flat">
             <div className="flex items-center justify-between border-b border-gray-200 p-4">
-                <h3 className="text-2xl font-semibold">Personnel Assigné</h3>
+                <h3 className="text-2xl font-semibold">Personnel AssignÃ©</h3>
                 <button className="rounded p-1 text-[#003f87] transition-colors hover:bg-blue-50">
-                    <span className="material-symbols-outlined">person_add</span>
+                    <Icon name="person_add" className="h-5 w-5" />
                 </button>
             </div>
             <div className="space-y-4 p-4">
@@ -327,11 +328,11 @@ function AssignedStaff({ staff }) {
                                 <p className="text-xs text-gray-500">{s.role}</p>
                             </div>
                         </div>
-                        <span className="material-symbols-outlined text-sm text-gray-400">more_vert</span>
+                        <Icon name="more_vert" className="h-4 w-4 text-gray-400" />
                     </div>
                 ))}
                 <button className="w-full rounded border border-dashed border-gray-300 py-2 text-xs font-semibold text-gray-500 transition-colors hover:border-[#003f87] hover:text-[#003f87]">
-                    + Assigner un nouvel employé
+                    + Assigner un nouvel employÃ©
                 </button>
             </div>
         </div>
@@ -343,19 +344,17 @@ function WeatherCard() {
         <div className="card-flat border-none bg-gradient-to-br from-[#003f87] to-[#0056b3] p-4 text-white">
             <div className="mb-4 flex items-start justify-between">
                 <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-blue-200">Météo Locale</p>
+                    <p className="text-xs font-bold uppercase tracking-wider text-blue-200">MÃ©tÃ©o Locale</p>
                     <h4 className="text-2xl font-semibold">Kasangulu</h4>
                 </div>
-                <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-          wb_sunny
-        </span>
+                <Icon name="wb_sunny" className="h-10 w-10" />
             </div>
             <div className="mb-6 flex items-end gap-2">
-                <span className="text-[40px] font-bold leading-[48px]">31°C</span>
-                <span className="pb-2 text-sm text-blue-200">Ensoleillé</span>
+                <span className="text-[40px] font-bold leading-[48px]">31Â°C</span>
+                <span className="pb-2 text-sm text-blue-200">EnsoleillÃ©</span>
             </div>
             <div className="grid grid-cols-2 gap-4 border-t border-white/20 pt-4">
-                <Row label="Humidité" value="65%" white />
+                <Row label="HumiditÃ©" value="65%" white />
                 <Row label="Pluie (24h)" value="0.0 mm" white />
             </div>
         </div>
@@ -401,7 +400,7 @@ function EditParcelModal({ parcelId, parcelData, onClose, onSave }) {
                         <h2 className="text-lg font-bold text-[#1b1c1c]">Modifier la parcelle</h2>
                     </div>
                     <button onClick={onClose} className="rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100">
-                        <span className="material-symbols-outlined">close</span>
+                        <Icon name="close" className="h-5 w-5" />
                     </button>
                 </div>
 
@@ -448,7 +447,7 @@ function EditParcelModal({ parcelId, parcelData, onClose, onSave }) {
                             </select>
                         </div>
                         <div className="space-y-1.5">
-                            <label className="block text-sm font-semibold text-[#1b1c1c]">Qualité du sol (/100)</label>
+                            <label className="block text-sm font-semibold text-[#1b1c1c]">QualitÃ© du sol (/100)</label>
                             <input
                                 name="soilQuality"
                                 type="number"
@@ -484,7 +483,7 @@ function EditParcelModal({ parcelId, parcelData, onClose, onSave }) {
                             disabled={saving}
                             className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#002d63] disabled:opacity-60"
                         >
-                            {saving ? 'Enregistrement…' : 'Enregistrer les modifications'}
+                            {saving ? 'Enregistrementâ€¦' : 'Enregistrer les modifications'}
                         </button>
                     </div>
                 </form>
@@ -505,7 +504,7 @@ function LegendDot({ color, label }) {
 function MapBtn({ icon }) {
     return (
         <button className="flex h-8 w-8 items-center justify-center rounded border border-gray-200 hover:bg-gray-50">
-            <span className="material-symbols-outlined">{icon}</span>
+            <Icon name={icon} className="h-5 w-5" />
         </button>
     );
 }

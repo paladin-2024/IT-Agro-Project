@@ -1,6 +1,7 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
 import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import Icon from '../components/Icon.jsx'
 
 const TEAM = [
     {
@@ -116,7 +117,7 @@ export default function EmployeeParcelTeamPage() {
                 {/* Footer meta */}
                 <div className="flex items-center justify-between text-xs text-slate-400">
                     <div className="flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[16px]">info</span>
+                        <Icon name="info" className="h-4 w-4" />
                         <span>Affectation mise à jour il y a 2 jours</span>
                     </div>
                     <span>{TEAM.length} Affectations au Total</span>

@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import OwnerSidebar from '../components/OwnerSidebar'
 import { createParcel } from '../api/parcels.js'
 import { getFarms } from '../api/farms.js'
 import { MOCK_CROPS } from '../api/mocks.js'
 import { useAuth } from '../hooks/useAuth.js'
+import Icon from '../components/Icon.jsx'
 
-const STATUSES = ['En cours', 'Planté', 'En Croissance', 'Prêt pour récolte', 'Repos']
+const STATUSES = ['En cours', 'PlantÃ©', 'En Croissance', 'PrÃªt pour rÃ©colte', 'Repos']
 
 export default function OwnerParcelCreatePage() {
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ export default function OwnerParcelCreatePage() {
 
     function handleSave() {
         if (!name.trim())  { setError('Le nom de la parcelle est obligatoire.'); return }
-        if (!farmId)       { setError('Sélectionnez une ferme.'); return }
+        if (!farmId)       { setError('SÃ©lectionnez une ferme.'); return }
         setSaving(true)
         const farm = farms.find(f => f.id === farmId)
         const parcel = createParcel({
@@ -51,7 +52,7 @@ export default function OwnerParcelCreatePage() {
                 <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8 shadow-sm">
                     <div className="flex items-center gap-2 text-sm text-slate-500">
                         <Link to="/owner/parcelles" className="hover:text-[#003f87] transition-colors">Mes Parcelles</Link>
-                        <span className="material-symbols-outlined text-sm">chevron_right</span>
+                        <Icon name="chevron_right" className="h-4 w-4" />
                         <span className="font-semibold text-[#1b1c1c]">Nouvelle Parcelle</span>
                     </div>
                     <div className="flex gap-3">
@@ -66,17 +67,17 @@ export default function OwnerParcelCreatePage() {
                             disabled={saving}
                             className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95 disabled:opacity-60"
                         >
-                            <span className="material-symbols-outlined text-base">save</span>
-                            {saving ? 'Enregistrement…' : 'Créer la Parcelle'}
+                            <Icon name="save" className="h-5 w-5 text-base" />
+                            {saving ? 'Enregistrementâ€¦' : 'CrÃ©er la Parcelle'}
                         </button>
                     </div>
                 </header>
 
                 <div className="mx-auto max-w-3xl p-8 space-y-6">
                     <div>
-                        <h1 className="text-lg font-bold text-[#1b1c1c]">Créer une Nouvelle Parcelle</h1>
+                        <h1 className="text-lg font-bold text-[#1b1c1c]">CrÃ©er une Nouvelle Parcelle</h1>
                         <p className="mt-0.5 text-xs text-slate-500">
-                            Ajoutez une parcelle à l'une de vos fermes et commencez le suivi de la culture.
+                            Ajoutez une parcelle Ã  l'une de vos fermes et commencez le suivi de la culture.
                         </p>
                     </div>
 
@@ -88,11 +89,11 @@ export default function OwnerParcelCreatePage() {
 
                     <div className="rounded-xl bg-white ring-1 ring-slate-200 shadow-sm">
                         <div className="flex items-center gap-2 border-b border-slate-100 px-5 py-4">
-                            <span className="material-symbols-outlined text-base text-[#003f87]">grid_view</span>
+                            <Icon name="grid_view" className="h-5 w-5 text-base text-[#003f87]" />
                             <h3 className="text-sm font-bold text-[#1b1c1c]">Informations de la Parcelle</h3>
                         </div>
                         <div className="space-y-5 p-5">
-                            <Field label="Nom de la Parcelle" value={name} onChange={e => setName(e.target.value)} placeholder="Ex: Zone Nord — Café" />
+                            <Field label="Nom de la Parcelle" value={name} onChange={e => setName(e.target.value)} placeholder="Ex: Zone Nord â€” CafÃ©" />
 
                             <div className="space-y-1.5">
                                 <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500">Ferme</label>
@@ -101,7 +102,7 @@ export default function OwnerParcelCreatePage() {
                                     onChange={e => setFarmId(e.target.value)}
                                     className="w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20"
                                 >
-                                    {farms.map(f => <option key={f.id} value={f.id}>{f.name} — {f.province}</option>)}
+                                    {farms.map(f => <option key={f.id} value={f.id}>{f.name} â€” {f.province}</option>)}
                                 </select>
                             </div>
 
@@ -154,12 +155,12 @@ export default function OwnerParcelCreatePage() {
                     {crop && (
                         <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
                             <div className="flex items-start gap-3">
-                                <span className="material-symbols-outlined mt-0.5 shrink-0 text-base text-[#003f87]">eco</span>
+                                <Icon name="eco" className="h-5 w-5 mt-0.5 shrink-0 text-base text-[#003f87]" />
                                 <div>
-                                    <p className="text-xs font-bold text-[#003f87]">Culture sélectionnée : {crop}</p>
+                                    <p className="text-xs font-bold text-[#003f87]">Culture sÃ©lectionnÃ©e : {crop}</p>
                                     {MOCK_CROPS.find(c => c.name === crop)?.growthDays > 0 && (
                                         <p className="mt-1 text-xs leading-relaxed text-blue-700">
-                                            Durée de croissance estimée : <strong>{MOCK_CROPS.find(c => c.name === crop)?.growthDays} jours</strong> — variété {MOCK_CROPS.find(c => c.name === crop)?.variety}.
+                                            DurÃ©e de croissance estimÃ©e : <strong>{MOCK_CROPS.find(c => c.name === crop)?.growthDays} jours</strong> â€” variÃ©tÃ© {MOCK_CROPS.find(c => c.name === crop)?.variety}.
                                         </p>
                                     )}
                                 </div>
@@ -186,3 +187,4 @@ function Field({ label, value, onChange, placeholder, type = 'text' }) {
         </div>
     )
 }
+

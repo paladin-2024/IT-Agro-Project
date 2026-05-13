@@ -1,6 +1,7 @@
 import logo from "../assets/logo.jpeg";
+import Icon from './Icon.jsx'
 
-export default function LeftBanner({ imageUrl, icon, title, subtitle, infoIcon, infoTitle, infoText, footer }) {
+export default function LeftBanner({ imageUrl, subtitle, infoIcon, infoTitle, infoText, footer }) {
     const backgroundImage = imageUrl
         ? `linear-gradient(rgba(0,63,135,0.85),rgba(0,63,135,0.95)),url('${imageUrl}')`
         : `linear-gradient(rgba(0,63,135,0.85),rgba(0,63,135,0.95))`
@@ -12,7 +13,7 @@ export default function LeftBanner({ imageUrl, icon, title, subtitle, infoIcon, 
         >
             <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                    {/*<span className="material-symbols-outlined text-[40px]">{icon}</span>*/}
+                    {/*<Icon name={icon} className="h-5 w-5 text-[40px]" />*/}
                     <div className="w-48 h-16 rounded-lg overflow-hidden">
                         <img
                             alt="Logo AgriRDC"
@@ -28,7 +29,7 @@ export default function LeftBanner({ imageUrl, icon, title, subtitle, infoIcon, 
             <div className="space-y-4">
                 <div className="bg-white/10 backdrop-blur-md p-4 rounded-lg border border-white/20">
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="material-symbols-outlined text-banner-accent">{infoIcon}</span>
+                        <Icon name={infoIcon} className="h-5 w-5 text-banner-accent" />
                         <span className="text-sm font-semibold uppercase tracking-wider text-banner-accent">
                             {infoTitle}
                         </span>

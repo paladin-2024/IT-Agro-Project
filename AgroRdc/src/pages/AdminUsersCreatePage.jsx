@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminSidebar from '../components/AdminSidebar.jsx'
+import Icon from '../components/Icon.jsx'
 
 const INITIAL_FORM = {
     fullname: '',
@@ -59,7 +60,7 @@ export default function AdminUsersCreatePage() {
                             onClick={() => navigate('/utilisateurs')}
                             className="flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#003f87] transition-colors"
                         >
-                            <span className="material-symbols-outlined text-lg">arrow_back</span>
+                            <Icon name="arrow_back" className="h-5 w-5 text-lg" />
                             Utilisateurs
                         </button>
                         <span className="text-slate-300">/</span>
@@ -68,7 +69,7 @@ export default function AdminUsersCreatePage() {
 
                     <div className="flex items-center gap-4">
                         <div className="relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <Icon name="search" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 type="text"
                                 placeholder="Rechercher..."
@@ -76,11 +77,11 @@ export default function AdminUsersCreatePage() {
                             />
                         </div>
                         <button className="relative rounded-full p-2 text-slate-500 hover:bg-slate-50">
-                            <span className="material-symbols-outlined">notifications</span>
+                            <Icon name="notifications" className="h-5 w-5" />
                             <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full border-2 border-white bg-[#b6171e]" />
                         </button>
                         <button className="rounded-full p-2 text-slate-500 hover:bg-slate-50">
-                            <span className="material-symbols-outlined">help_outline</span>
+                            <Icon name="help_outline" className="h-5 w-5" />
                         </button>
                         <img
                             alt="Profil administrateur"
@@ -103,7 +104,7 @@ export default function AdminUsersCreatePage() {
                         {/* Success banner */}
                         {success && (
                             <div className="mb-6 flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 px-5 py-4">
-                                <span className="material-symbols-outlined text-green-600">check_circle</span>
+                                <Icon name="check_circle" className="h-5 w-5 text-green-600" />
                                 <p className="text-sm font-medium text-green-800">
                                     Utilisateur créé avec succès. Redirection en cours…
                                 </p>
@@ -145,7 +146,7 @@ export default function AdminUsersCreatePage() {
                                         Mot de passe temporaire
                                     </label>
                                     <div className="relative">
-                                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">lock</span>
+                                        <Icon name="lock" className="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                                         <input
                                             id="password"
                                             name="password"
@@ -160,9 +161,7 @@ export default function AdminUsersCreatePage() {
                                             onClick={() => setShowPassword(v => !v)}
                                             className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#002a5d]"
                                         >
-                                            <span className="material-symbols-outlined">
-                                                {showPassword ? 'visibility_off' : 'visibility'}
-                                            </span>
+                                            <Icon name={showPassword ? 'visibility_off' : 'visibility'} className="h-5 w-5" />
                                         </button>
                                     </div>
                                     {errors.password && <p className="text-xs font-medium text-red-600">{errors.password}</p>}
@@ -214,12 +213,12 @@ export default function AdminUsersCreatePage() {
                                     >
                                         {loading ? (
                                             <>
-                                                <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
+                                                <Icon name="progress_activity" className="h-5 w-5 animate-spin text-lg" />
                                                 Création en cours…
                                             </>
                                         ) : (
                                             <>
-                                                <span className="material-symbols-outlined text-lg">person_add</span>
+                                                <Icon name="person_add" className="h-5 w-5 text-lg" />
                                                 Ajouter l&apos;utilisateur
                                             </>
                                         )}
@@ -236,7 +235,7 @@ export default function AdminUsersCreatePage() {
 
                             {/* Info banner */}
                             <div className="flex items-start gap-3 border-t border-slate-100 bg-blue-50/60 px-8 py-4">
-                                <span className="material-symbols-outlined mt-0.5 text-[#003f87]">info</span>
+                                <Icon name="info" className="h-5 w-5 mt-0.5 text-[#003f87]" />
                                 <p className="text-xs leading-relaxed text-[#434751]">
                                     Le nouvel utilisateur recevra un email d&apos;activation contenant ses identifiants temporaires.
                                     Il sera invité à modifier son mot de passe lors de sa première connexion.
@@ -259,7 +258,7 @@ function Field({ label, id, name, icon, placeholder, type, value, onChange, erro
                 {label}
             </label>
             <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">{icon}</span>
+                <Icon name={icon} className="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                     id={id}
                     name={name}
@@ -282,7 +281,7 @@ function SelectField({ label, id, name, icon, options, value, onChange, error })
                 {label}
             </label>
             <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">{icon}</span>
+                <Icon name={icon} className="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <select
                     id={id}
                     name={name}
@@ -294,7 +293,7 @@ function SelectField({ label, id, name, icon, options, value, onChange, error })
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
                     ))}
                 </select>
-                <span className="material-symbols-outlined pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">expand_more</span>
+                <Icon name="expand_more" className="h-5 w-5 pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" />
             </div>
             {error && <p className="text-xs font-medium text-red-600">{error}</p>}
         </div>

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import OwnerSidebar from "../components/OwnerSidebar";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { computeHarvestStats, getMonthlyBars, getStatsByCrop } from "../api/stats.js";
 import { MOCK_PARCELS } from "../api/mocks.js";
+import Icon from '../components/Icon.jsx'
 
 const parcels = [
     { id: "PRC-882-KW", region: "Kwilu",        crop: "Manioc",        yield: "842.5", status: "Récolte",    statusClass: "bg-emerald-100 text-emerald-700", dot: "bg-emerald-500", last: "Il y a 2h" },
@@ -14,33 +16,29 @@ const parcels = [
 
 export default function OwnerDashboard() {
     const { user } = useAuth();
-    const [liveStats, setLiveStats] = useState(null);
-
-    useEffect(() => {
-        setLiveStats(computeHarvestStats());
-    }, []);
+    const [liveStats] = useState(() => computeHarvestStats());
 
     const totalTonnes = liveStats ? liveStats.totalTonnes : null;
-    const monthlyBars = getMonthlyBars(liveStats, 6);
-    const cropStats = getStatsByCrop(liveStats, MOCK_PARCELS);
+    const monthlyBars = useMemo(() => getMonthlyBars(liveStats, 6), [liveStats]);
+    const cropStats   = useMemo(() => getStatsByCrop(liveStats, MOCK_PARCELS), [liveStats]);
     const hasLive = !!liveStats;
 
     return (
-        <div className="min-h-screen bg-[#f4f6f9] text-[#1b1c1c]">
+        <div className="min-h-screen bg-background text-foreground">
             <OwnerSidebar />
 
             <main className="ml-64 min-h-screen">
                 {/* Sticky header */}
                 <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8 shadow-sm">
                     <div>
-                        <h1 className="text-lg font-bold text-[#1b1c1c]">
+                        <h1 className="text-lg font-bold text-foreground">
                             Bonjour, {user?.name || user?.email || "Propriétaire"} 👋
                         </h1>
                         <p className="text-xs text-slate-500">Vue d'ensemble de votre exploitation agricole</p>
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">search</span>
+                            <Icon name="search" className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 className="w-56 rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-4 text-sm outline-none focus:border-[#003f87] focus:ring-1 focus:ring-[#003f87]"
                                 placeholder="Parcelles, cultures…"
@@ -48,7 +46,7 @@ export default function OwnerDashboard() {
                             />
                         </div>
                         <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600">
-                            <span className="material-symbols-outlined text-sm text-[#003f87]">calendar_today</span>
+                            <Icon name="calendar_today" className="h-4 w-4 text-[#003f87]" />
                             Oct 2023 — Mar 2024
                         </div>
                     </div>
@@ -62,7 +60,7 @@ export default function OwnerDashboard() {
                             <div className="flex items-start justify-between">
                                 <p className="text-xs font-semibold uppercase tracking-wider opacity-80">Production Totale</p>
                                 <div className="rounded-xl bg-white/20 p-2">
-                                    <span className="material-symbols-outlined text-xl">show_chart</span>
+                                    <Icon name="show_chart" className="h-5 w-5 text-xl" />
                                 </div>
                             </div>
                             <div className="mt-4">
@@ -73,7 +71,7 @@ export default function OwnerDashboard() {
                                 <div className="mt-2 flex items-center gap-2">
                                     {hasLive ? (
                                         <span className="inline-flex items-center gap-0.5 rounded-md bg-emerald-500/20 px-2 py-0.5 text-xs font-bold text-emerald-300">
-                                            <span className="material-symbols-outlined text-xs">sensors</span>
+                                            <Icon name="sensors" className="h-5 w-5 text-xs" />
                                             Données réelles ({liveStats.count} entrées)
                                         </span>
                                     ) : (
@@ -90,11 +88,11 @@ export default function OwnerDashboard() {
                             <div className="flex items-center justify-between">
                                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Rendement par Ha</p>
                                 <div className="rounded-lg bg-blue-50 p-2 text-[#003f87]">
-                                    <span className="material-symbols-outlined">grid_view</span>
+                                    <Icon name="grid_view" className="h-5 w-5" />
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <p className="text-3xl font-extrabold text-[#1b1c1c]">4.2 <span className="text-sm font-medium text-slate-400">t/ha</span></p>
+                                <p className="text-3xl font-extrabold text-foreground">4.2 <span className="text-sm font-medium text-slate-400">t/ha</span></p>
                                 <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
                                     <div className="h-full w-[84%] rounded-full bg-[#003f87]" />
                                 </div>
@@ -107,11 +105,11 @@ export default function OwnerDashboard() {
                             <div className="flex items-center justify-between">
                                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Parcelles Actives</p>
                                 <div className="rounded-lg bg-emerald-50 p-2 text-emerald-600">
-                                    <span className="material-symbols-outlined">location_on</span>
+                                    <Icon name="location_on" className="h-5 w-5" />
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <p className="text-3xl font-extrabold text-[#1b1c1c]">128 <span className="text-sm font-medium text-slate-400">total</span></p>
+                                <p className="text-3xl font-extrabold text-foreground">128 <span className="text-sm font-medium text-slate-400">total</span></p>
                                 <div className="mt-3 grid grid-cols-2 gap-2">
                                     <div className="rounded-lg bg-emerald-50 py-2 text-center text-xs font-bold text-emerald-700">112 En bonne santé</div>
                                     <div className="rounded-lg bg-red-50 py-2 text-center text-xs font-bold text-red-600">16 À risque</div>
@@ -126,7 +124,7 @@ export default function OwnerDashboard() {
                         <section className="col-span-12 rounded-xl bg-white p-6 ring-1 ring-slate-200 shadow-sm lg:col-span-8">
                             <div className="mb-6 flex items-center justify-between">
                                 <div>
-                                    <h3 className="text-sm font-bold text-[#1b1c1c]">Production par Mois</h3>
+                                    <h3 className="text-sm font-bold text-foreground">Production par Mois</h3>
                                     <p className="mt-0.5 text-xs text-slate-500">
                                         {hasLive ? 'Données issues des saisies de récolte' : 'Données de démonstration'}
                                     </p>
@@ -140,14 +138,16 @@ export default function OwnerDashboard() {
                             </div>
                             {monthlyBars ? (
                                 <div className="flex h-52 items-end gap-3 border-b border-slate-100 px-2">
-                                    {monthlyBars.map((b) => (
+                                    {monthlyBars.map((b, i) => (
                                         <div key={b.label} className="flex flex-1 flex-col items-center gap-1">
-                                            <span className="text-[10px] font-bold text-[#003f87]">{b.tonnes}t</span>
-                                            <div
-                                                className="w-full rounded-t bg-[#003f87] transition-all hover:opacity-80"
-                                                style={{ height: `${Math.max(b.pct, 4)}%` }}
+                                            <span className="text-xs font-bold text-primary">{b.tonnes}t</span>
+                                            <motion.div
+                                                className="w-full rounded-t bg-primary hover:opacity-80"
+                                                initial={{ height: 0 }}
+                                                animate={{ height: `${Math.max(b.pct, 4)}%` }}
+                                                transition={{ duration: 0.5, delay: i * 0.07, ease: 'easeOut' }}
                                             />
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{b.label}</span>
+                                            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{b.label}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -170,14 +170,14 @@ export default function OwnerDashboard() {
 
                         {/* Production par culture */}
                         <section className="col-span-12 flex flex-col rounded-xl bg-white p-6 ring-1 ring-slate-200 shadow-sm lg:col-span-4">
-                            <h3 className="text-sm font-bold text-[#1b1c1c]">Production par Culture</h3>
+                            <h3 className="text-sm font-bold text-foreground">Production par Culture</h3>
                             <p className="mt-0.5 mb-5 text-xs text-slate-500">Contribution par type de culture</p>
                             {cropStats ? (
                                 <div className="space-y-3">
                                     {cropStats.slice(0, 4).map((c) => (
                                         <div key={c.crop}>
                                             <div className="mb-1 flex items-center justify-between text-xs">
-                                                <span className="font-semibold text-[#1b1c1c]">{c.crop}</span>
+                                                <span className="font-semibold text-foreground">{c.crop}</span>
                                                 <span className="font-bold text-[#003f87]">{c.tonnes}t ({c.pct}%)</span>
                                             </div>
                                             <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
@@ -217,7 +217,7 @@ export default function OwnerDashboard() {
                     <section className="overflow-hidden rounded-xl bg-white ring-1 ring-slate-200 shadow-sm">
                         <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
                             <div>
-                                <h3 className="text-sm font-bold text-[#1b1c1c]">Meilleures Parcelles</h3>
+                                <h3 className="text-sm font-bold text-foreground">Meilleures Parcelles</h3>
                                 <p className="mt-0.5 text-xs text-slate-500">Classées par efficacité et score de qualité</p>
                             </div>
                             <Link to="/owner/parcelles" className="text-xs font-semibold text-[#003f87] hover:underline">
@@ -240,8 +240,8 @@ export default function OwnerDashboard() {
                                                 <span className="rounded-md bg-blue-50 px-2 py-1 font-mono text-xs font-bold text-[#003f87]">{p.id}</span>
                                             </td>
                                             <td className="px-6 py-4 text-slate-600">{p.region}</td>
-                                            <td className="px-6 py-4 font-medium text-[#1b1c1c]">{p.crop}</td>
-                                            <td className="px-6 py-4 font-bold text-[#1b1c1c]">{p.yield}</td>
+                                            <td className="px-6 py-4 font-medium text-foreground">{p.crop}</td>
+                                            <td className="px-6 py-4 font-bold text-foreground">{p.yield}</td>
                                             <td className="px-6 py-4">
                                                 <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold ${p.statusClass}`}>
                                                     <span className={`h-1.5 w-1.5 rounded-full ${p.dot}`} />
@@ -281,10 +281,10 @@ function InfoCard({ icon, title, sub, iconBg }) {
     return (
         <div className="flex items-center gap-4 rounded-xl bg-white p-5 ring-1 ring-slate-200 shadow-sm">
             <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${iconBg}`}>
-                <span className="material-symbols-outlined text-xl">{icon}</span>
+                <Icon name={icon} className="h-6 w-6" />
             </div>
             <div>
-                <h4 className="text-sm font-semibold text-[#1b1c1c]">{title}</h4>
+                <h4 className="text-sm font-semibold text-foreground">{title}</h4>
                 <p className="text-xs text-slate-500">{sub}</p>
             </div>
         </div>

@@ -1,40 +1,69 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #003f87;
-  --color-primary-hover: #0056b3;
-  --color-surface: #fbf9f8;
+  /* ── Brand ───────────────────────────────────────────── */
+  --color-primary:            #003f87;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover:      #0056b3;
+
+  /* ── Backgrounds ─────────────────────────────────────── */
+  --color-background:   #fbf9f8;
+  --color-surface:      #fbf9f8;
   --color-surface-tint: #d7e2ff;
-  --color-outline: #727784;
-  --color-outline-variant: #c2c6d4;
-  --color-on-surface: #1b1c1c;
-  --color-on-surface-variant: #424752;
+  --color-card:         #ffffff;
+  --color-card-foreground: #1b1c1c;
+  --color-popover:      #ffffff;
+  --color-popover-foreground: #1b1c1c;
+
+  /* ── Foregrounds ─────────────────────────────────────── */
+  --color-foreground:          #1b1c1c;
+  --color-on-surface:          #1b1c1c;
+  --color-on-surface-variant:  #424752;
+  --color-muted-foreground:    #64748b;
+
+  /* ── Secondary / Muted / Accent ──────────────────────── */
+  --color-secondary:           #f1f5f9;
+  --color-secondary-foreground: #1b1c1c;
+  --color-muted:               #f1f5f9;
+  --color-accent:              #eff6ff;
+  --color-accent-foreground:   #003f87;
+
+  /* ── Outline / Border / Ring ─────────────────────────── */
+  --color-outline:          #727784;
+  --color-outline-variant:  #c2c6d4;
+  --color-border:           #e2e8f0;
+  --color-input:            #e2e8f0;
+  --color-ring:             #003f87;
+
+  /* ── Destructive ─────────────────────────────────────── */
+  --color-destructive:          #b6171e;
+  --color-destructive-foreground: #ffffff;
+
+  /* ── Banner ──────────────────────────────────────────── */
   --color-banner-accent: #ffdad6;
-  --color-banner-text: #d7e2ff;
+  --color-banner-text:   #d7e2ff;
+
+  /* ── Typography ──────────────────────────────────────── */
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* ── Radius ──────────────────────────────────────────── */
+  --radius: 0.5rem;
 }
 
 body {
   margin: 0;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #fbf9f8;
+  color: #1b1c1c;
 }
 
 #root {
   min-height: 100vh;
 }
 
-.field-input {
-  width: 100%;
-  border-radius: 0.5rem;
-  border: 1px solid #DEE2E6;
-  background-color: #F8FAFC;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  outline: none;
-  transition: box-shadow 0.15s, border-color 0.15s;
-}
-
-.field-input:focus {
-  border-color: #003f87;
-  box-shadow: 0 0 0 2px rgba(0, 63, 135, 0.12);
+/* Smooth scroll */
+* {
+  scroll-behavior: smooth;
 }

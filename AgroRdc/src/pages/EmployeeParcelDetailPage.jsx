@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { getHarvestsByParcel } from "../api/harvests.js";
 import EmployeeTopNav from "../components/EmployeeTopNav.jsx";
 import EmployeeBottomNav from "../components/EmployeeBottomNav.jsx";
+import Icon from '../components/Icon.jsx'
 
-/* ─── Static data ────────────────────────────────────────────────────── */
+/* â”€â”€â”€ Static data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
-const harvests = [
-    { id: "PRD-2023-084", date: "14 Nov 2023", variety: "Maïs Jaune Z-10",   qty: "4.2 Tonnes" },
-    { id: "PRD-2023-047", date: "22 Jul 2023", variety: "Sorgho Rugale",      qty: "2.8 Tonnes" },
-    { id: "PRD-2023-012", date: "05 Mar 2023", variety: "Soja Prima",         qty: "3.5 Tonnes" },
-    { id: "PRD-2022-098", date: "12 Oct 2022", variety: "Maïs Jaune Z-10",   qty: "3.9 Tonnes" },
-];
+function fmtDate(d) {
+    if (!d) return '—'
+    return new Date(d + 'T00:00:00').toLocaleDateString('fr-CD', {
+        day: 'numeric', month: 'short', year: 'numeric',
+    })
+}
 
 const workers = [
     {
@@ -20,18 +22,26 @@ const workers = [
     },
     {
         name: "Sarah Kalala",
-        role: "Spécialiste Irrigation",
+        role: "SpÃ©cialiste Irrigation",
         avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCqkVVIMWAxX8splT4CNIP974fyVxRMxNtQoR7vcRXR2OwAJPscjobu7tdiv7yPol8Jhy3vBQUtg8au6uDCUQK9_13AS53F0dgWiIWl8kIsWroFGlieGMzTb9FsocPw38hHe8dg4cFigC7aSznKjWfZpBb8rHwva_FCjOGXu_AlluOsX3bEuV8Wv3zLXQoJ5wcmRl2o7clxqlHq_sCztNAANDHJqy-hYh2p74BhrwZ8IrBcmlI8l4rhHKzQUlGt0BasPlPHI17XBeI",
     },
 ];
 
-const TABS = ["Historique Production", "Personnel Assigné", "Prévisions"];
+const TABS = ["Historique Production", "Personnel AssignÃ©", "PrÃ©visions"];
 
-/* ─── Page component ─────────────────────────────────────────────────── */
+/* â”€â”€â”€ Page component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 export default function EmployeeParcelDetailPage() {
     const [activeTab, setActiveTab] = useState(0);
+    const [harvests, setHarvests]             = useState([])
+    const [loadingHarvests, setLoadingHarvests] = useState(true)
     const { id: parcelId = "B-04" } = useParams();
+
+    useEffect(() => {
+        getHarvestsByParcel(parcelId)
+            .then((data) => { setHarvests(data); setLoadingHarvests(false) })
+            .catch(() => setLoadingHarvests(false))
+    }, [parcelId])
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
@@ -50,13 +60,13 @@ export default function EmployeeParcelDetailPage() {
                         <div className="relative z-10">
                             <h2 className="text-2xl font-bold">Parcelle B-04 (Haute Plaine)</h2>
                             <p className="mt-1 flex items-center gap-1 text-sm opacity-90">
-                                <span className="material-symbols-outlined text-sm">location_on</span>
+                                <Icon name="location_on" className="h-4 w-4" />
                                 District du Katanga, Secteur 4-B
                             </p>
                             <div className="mt-6 grid grid-cols-3 gap-8">
                                 <HeroStat label="Superficie"     value="12.4 Ha" />
-                                <HeroStat label="Culture"        value="Maïs Hybride" />
-                                <HeroStat label="Santé du Sol"   value="84% Optimal" />
+                                <HeroStat label="Culture"        value="MaÃ¯s Hybride" />
+                                <HeroStat label="SantÃ© du Sol"   value="84% Optimal" />
                             </div>
                         </div>
                         {/* Background image overlay */}
@@ -73,12 +83,12 @@ export default function EmployeeParcelDetailPage() {
                     <div className="col-span-12 flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-4">
                         <div>
                             <div className="mb-2 flex items-center gap-2 text-[#b6171e]">
-                                <span className="material-symbols-outlined">warning</span>
+                                <Icon name="warning" className="h-5 w-5" />
                                 <span className="text-xs font-bold uppercase tracking-wider">Action Requise</span>
                             </div>
                             <h3 className="text-base font-bold text-[#171c25]">Maintenance Irrigation</h3>
                             <p className="mt-2 text-sm text-slate-500">
-                                Le système de goutte-à-goutte du Secteur 2 présente des chutes de pression. Une inspection immédiate est prévue demain.
+                                Le systÃ¨me de goutte-Ã -goutte du Secteur 2 prÃ©sente des chutes de pression. Une inspection immÃ©diate est prÃ©vue demain.
                             </p>
                         </div>
                         <div className="mt-6 flex flex-col gap-2">
@@ -119,17 +129,17 @@ export default function EmployeeParcelDetailPage() {
                         {/* Historical harvests table */}
                         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                             <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-6 py-4">
-                                <h3 className="text-base font-bold text-[#171c25]">Historique des Récoltes</h3>
+                                <h3 className="text-base font-bold text-[#171c25]">Historique des RÃ©coltes</h3>
                                 <div className="flex items-center gap-3">
                                     <Link
                                         to={`/employee/parcelles/${parcelId}/saisir-recolte`}
                                         className="flex items-center gap-1 rounded-lg bg-[#003f87] px-3 py-1.5 text-xs font-bold text-white transition-all hover:bg-[#0056b3]"
                                     >
-                                        <span className="material-symbols-outlined text-sm">add</span>
-                                        Saisir une récolte
+                                        <Icon name="add" className="h-4 w-4" />
+                                        Saisir une rÃ©colte
                                     </Link>
                                     <button className="flex items-center gap-1 text-xs font-semibold text-[#003f87] hover:underline">
-                                        <span className="material-symbols-outlined text-sm">download</span>
+                                        <Icon name="download" className="h-4 w-4" />
                                         Exporter CSV
                                     </button>
                                 </div>
@@ -137,7 +147,7 @@ export default function EmployeeParcelDetailPage() {
                             <table className="w-full text-left text-sm">
                                 <thead>
                                     <tr className="border-b border-slate-100 bg-slate-50">
-                                        {["Date de Récolte", "Variété", "Quantité", "Statut", ""].map((h) => (
+                                        {["Date de Récolte", "Quantité", "Notes", "Statut", ""].map((h) => (
                                             <th key={h} className="px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
                                                 {h}
                                             </th>
@@ -145,14 +155,38 @@ export default function EmployeeParcelDetailPage() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
-                                    {harvests.map((row, i) => (
+                                    {loadingHarvests ? (
+                                        <tr>
+                                            <td colSpan={5} className="px-6 py-10 text-center">
+                                                <Icon name="progress_activity" className="h-6 w-6 animate-spin text-slate-300" />
+                                            </td>
+                                        </tr>
+                                    ) : harvests.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={5} className="px-6 py-10 text-center text-sm text-slate-400">
+                                                Aucune production enregistrée.
+                                                <Link
+                                                    to={`/employee/parcelles/${parcelId}/saisir-recolte`}
+                                                    className="ml-1 font-semibold text-[#003f87] hover:underline"
+                                                >
+                                                    Saisir la première récolte.
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    ) : harvests.map((row, i) => (
                                         <tr key={row.id} className={`cursor-pointer transition-colors hover:bg-blue-50/40 ${i % 2 === 1 ? "bg-slate-50/30" : ""}`}>
-                                            <td className="px-6 py-4 font-semibold text-[#171c25]">{row.date}</td>
-                                            <td className="px-6 py-4 text-slate-500">{row.variety}</td>
-                                            <td className="px-6 py-4 font-semibold text-[#171c25]">{row.qty}</td>
+                                            <td className="px-6 py-4 font-semibold text-[#171c25]">
+                                                {fmtDate(row.date)}
+                                            </td>
+                                            <td className="px-6 py-4 font-semibold text-[#171c25]">
+                                                {row.quantity} {row.unit}
+                                            </td>
+                                            <td className="max-w-[180px] truncate px-6 py-4 text-slate-500">
+                                                {row.observations || '—'}
+                                            </td>
                                             <td className="px-6 py-4">
                                                 <span className="rounded-full bg-green-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-green-800">
-                                                    Terminé
+                                                    Soumis
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
@@ -162,7 +196,7 @@ export default function EmployeeParcelDetailPage() {
                                                     className="flex items-center gap-1 text-xs font-bold text-[#003f87] hover:underline"
                                                 >
                                                     Détails
-                                                    <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                                    <Icon name="arrow_forward" className="h-3.5 w-3.5" />
                                                 </Link>
                                             </td>
                                         </tr>
@@ -174,13 +208,13 @@ export default function EmployeeParcelDetailPage() {
                         {/* Assigned workforce */}
                         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                             <div className="mb-5 flex items-center justify-between">
-                                <h3 className="text-base font-bold text-[#171c25]">Personnel Assigné</h3>
+                                <h3 className="text-base font-bold text-[#171c25]">Personnel AssignÃ©</h3>
                                 <Link
                                     to={`/employee/parcelles/${parcelId}/equipe`}
                                     className="flex items-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-200"
                                 >
-                                    <span className="material-symbols-outlined text-sm">group</span>
-                                    Voir l'équipe complète
+                                    <Icon name="group" className="h-4 w-4" />
+                                    Voir l'Ã©quipe complÃ¨te
                                 </Link>
                             </div>
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -197,15 +231,15 @@ export default function EmployeeParcelDetailPage() {
                         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                             <div className="mb-5 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-[#003f87]">query_stats</span>
-                                    <h3 className="text-base font-bold text-[#171c25]">Prévisions Saisonnières</h3>
+                                    <Icon name="query_stats" className="h-5 w-5 text-[#003f87]" />
+                                    <h3 className="text-base font-bold text-[#171c25]">PrÃ©visions SaisonniÃ¨res</h3>
                                 </div>
                                 <Link
                                     to={`/employee/parcelles/${parcelId}/previsions`}
                                     className="flex items-center gap-1 text-xs font-bold text-[#003f87] hover:underline"
                                 >
                                     Voir tout
-                                    <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                    <Icon name="arrow_forward" className="h-3.5 w-3.5" />
                                 </Link>
                             </div>
 
@@ -224,7 +258,7 @@ export default function EmployeeParcelDetailPage() {
                                     <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
                                         <div className="h-full w-[65%] rounded-full bg-[#003f87]" />
                                     </div>
-                                    <p className="mt-1 text-[11px] text-slate-400">65% du cycle complété</p>
+                                    <p className="mt-1 text-[11px] text-slate-400">65% du cycle complÃ©tÃ©</p>
                                 </div>
 
                                 {/* Insights */}
@@ -233,20 +267,20 @@ export default function EmployeeParcelDetailPage() {
                                         icon="trending_up"
                                         iconColor="text-emerald-600"
                                         title="Correspondance Climatique"
-                                        body="Les niveaux d'humidité actuels sont alignés à 95% avec les besoins du Maïs Hybride."
+                                        body="Les niveaux d'humiditÃ© actuels sont alignÃ©s Ã  95% avec les besoins du MaÃ¯s Hybride."
                                     />
                                     <InsightItem
                                         icon="info"
                                         iconColor="text-amber-500"
-                                        title="Fenêtre de Fertilisation"
-                                        body="La fenêtre d'application secondaire optimale s'ouvre dans 4 jours."
+                                        title="FenÃªtre de Fertilisation"
+                                        body="La fenÃªtre d'application secondaire optimale s'ouvre dans 4 jours."
                                     />
                                 </ul>
                                 <Link
                                     to={`/employee/parcelles/${parcelId}/previsions`}
                                     className="mt-5 block w-full rounded-lg border border-[#003f87] py-2.5 text-center text-sm font-bold text-[#003f87] transition-colors hover:bg-blue-50"
                                 >
-                                    Voir les prévisions complètes
+                                    Voir les prÃ©visions complÃ¨tes
                                 </Link>
                             </div>
                         </div>
@@ -265,7 +299,7 @@ export default function EmployeeParcelDetailPage() {
                             </div>
                             <div className="flex items-center justify-between px-4 py-3">
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                    Géo-Réf : 11.6°S, 27.4°E
+                                    GÃ©o-RÃ©f : 11.6Â°S, 27.4Â°E
                                 </span>
                                 <button className="text-xs font-bold text-[#003f87] hover:underline">
                                     Agrandir la carte
@@ -277,11 +311,11 @@ export default function EmployeeParcelDetailPage() {
                         <div className="rounded-xl border border-red-200 bg-red-50/40 p-5">
                             <p className="mb-1 text-sm font-bold text-[#b6171e]">Alerte Budget</p>
                             <p className="mb-4 text-xs text-slate-500">
-                                Les coûts opérationnels de B-04 ont atteint 92% de l'allocation saisonnière.
+                                Les coÃ»ts opÃ©rationnels de B-04 ont atteint 92% de l'allocation saisonniÃ¨re.
                             </p>
                             <button className="flex items-center gap-1 text-sm font-bold text-[#b6171e] hover:underline">
-                                Revoir les Dépenses
-                                <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                Revoir les DÃ©penses
+                                <Icon name="arrow_forward" className="h-4 w-4" />
                             </button>
                         </div>
                     </div>
@@ -293,7 +327,7 @@ export default function EmployeeParcelDetailPage() {
     );
 }
 
-/* ─── Sub-components ─────────────────────────────────────────────────── */
+/* â”€â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 function HeroStat({ label, value }) {
     return (
@@ -316,7 +350,7 @@ function WorkerCard({ worker }) {
                 <p className="text-sm font-bold text-[#171c25]">{worker.name}</p>
                 <p className="text-xs text-slate-500">{worker.role}</p>
             </div>
-            <span className="material-symbols-outlined ml-auto text-slate-400">verified</span>
+            <Icon name="verified" className="h-5 w-5 ml-auto text-slate-400" />
         </div>
     );
 }
@@ -324,7 +358,7 @@ function WorkerCard({ worker }) {
 function InsightItem({ icon, iconColor, title, body }) {
     return (
         <li className="flex items-start gap-3">
-            <span className={`material-symbols-outlined mt-0.5 shrink-0 text-base ${iconColor}`}>{icon}</span>
+            <Icon name={icon} className={`mt-0.5 h-5 w-5 shrink-0 ${iconColor}`} />
             <div>
                 <p className="text-sm font-semibold text-[#171c25]">{title}</p>
                 <p className="mt-0.5 text-xs text-slate-500">{body}</p>
@@ -332,3 +366,4 @@ function InsightItem({ icon, iconColor, title, body }) {
         </li>
     );
 }
+

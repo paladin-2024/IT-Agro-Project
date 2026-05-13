@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import AdminSidebar from '../components/AdminSidebar.jsx'
+import Icon from '../components/Icon.jsx'
 
 const STATUT_CFG = {
     active: { label: 'Active', bg: 'bg-emerald-100', text: 'text-emerald-700' },
@@ -159,7 +160,7 @@ function CultureBadge({ culture }) {
 function InfoRow({ icon, children }) {
     return (
         <div className="flex items-start gap-2 text-sm text-slate-600">
-            <span className="material-symbols-outlined mt-0.5 text-base text-slate-400">{icon}</span>
+            <Icon name={icon} className="h-5 w-5 mt-0.5 text-slate-400" />
             <span>{children}</span>
         </div>
     )
@@ -194,7 +195,7 @@ function FermeModal({ ferme, onClose, onValidate }) {
                         onClick={onClose}
                         className="rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100"
                     >
-                        <span className="material-symbols-outlined">close</span>
+                        <Icon name="close" className="h-5 w-5" />
                     </button>
                 </div>
                 <div className="grid grid-cols-2 gap-4 p-6">
@@ -231,12 +232,12 @@ function FermeModal({ ferme, onClose, onValidate }) {
                             onClick={() => onValidate(ferme.id)}
                             className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
                         >
-                            <span className="material-symbols-outlined text-base">check_circle</span>
+                            <Icon name="check_circle" className="h-5 w-5 text-base" />
                             Valider la ferme
                         </button>
                     )}
                     <button className="flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
-                        <span className="material-symbols-outlined text-base">edit</span>
+                        <Icon name="edit" className="h-5 w-5 text-base" />
                         Modifier
                     </button>
                     <button
@@ -306,7 +307,7 @@ export default function AdminFermesGestion() {
                         to="/owner/fermes/creer"
                         className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
                     >
-                        <span className="material-symbols-outlined text-base">add</span>
+                        <Icon name="add" className="h-5 w-5 text-base" />
                         Nouvelle ferme
                     </Link>
                 </header>
@@ -335,7 +336,7 @@ export default function AdminFermesGestion() {
                             <div key={k.label} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                                 <div className="flex items-center justify-between">
                                     <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{k.label}</p>
-                                    <span className={`material-symbols-outlined ${k.color} text-xl`}>{k.icon}</span>
+                                    <Icon name={k.icon} className={`h-6 w-6 ${k.color}`} />
                                 </div>
                                 <p className={`mt-3 text-2xl font-bold ${k.color}`}>{k.value}</p>
                             </div>
@@ -345,9 +346,7 @@ export default function AdminFermesGestion() {
                     {/* Filters */}
                     <div className="flex flex-wrap items-center gap-3">
                         <div className="relative min-w-[220px] flex-1">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-lg text-slate-400">
-                                search
-                            </span>
+                            <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                             <input
                                 type="text"
                                 placeholder="Rechercher par nom, propriétaire ou ID…"
@@ -385,7 +384,7 @@ export default function AdminFermesGestion() {
                                 }}
                                 className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-500 transition hover:bg-slate-100"
                             >
-                                <span className="material-symbols-outlined text-base">close</span>
+                                <Icon name="close" className="h-5 w-5 text-base" />
                                 Réinitialiser
                             </button>
                         )}
@@ -395,14 +394,14 @@ export default function AdminFermesGestion() {
                                 className={`rounded-md p-1.5 transition ${view === 'table' ? 'bg-slate-100 text-slate-800' : 'text-slate-400 hover:text-slate-600'}`}
                                 title="Vue tableau"
                             >
-                                <span className="material-symbols-outlined text-xl">table_rows</span>
+                                <Icon name="table_rows" className="h-5 w-5 text-xl" />
                             </button>
                             <button
                                 onClick={() => setView('grid')}
                                 className={`rounded-md p-1.5 transition ${view === 'grid' ? 'bg-slate-100 text-slate-800' : 'text-slate-400 hover:text-slate-600'}`}
                                 title="Vue grille"
                             >
-                                <span className="material-symbols-outlined text-xl">grid_view</span>
+                                <Icon name="grid_view" className="h-5 w-5 text-xl" />
                             </button>
                         </div>
                     </div>
@@ -431,7 +430,7 @@ export default function AdminFermesGestion() {
                                     {filtered.length === 0 && (
                                         <tr>
                                             <td colSpan={8} className="py-12 text-center text-slate-400">
-                                                <span className="material-symbols-outlined mb-2 block text-4xl">search_off</span>
+                                                <Icon name="search_off" className="h-10 w-10 mb-2 block" />
                                                 Aucune ferme ne correspond aux filtres.
                                             </td>
                                         </tr>
@@ -441,7 +440,7 @@ export default function AdminFermesGestion() {
                                             <td className="px-6 py-3">
                                                 <div className="flex items-center gap-3">
                                                     <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50">
-                                                        <span className="material-symbols-outlined text-base text-blue-600">agriculture</span>
+                                                        <Icon name="agriculture" className="h-5 w-5 text-base text-blue-600" />
                                                     </div>
                                                     <div>
                                                         <p className="font-semibold text-slate-800">{f.nom}</p>
@@ -452,7 +451,7 @@ export default function AdminFermesGestion() {
                                             <td className="px-4 py-3 text-slate-600">{f.proprietaire}</td>
                                             <td className="px-4 py-3">
                                                 <div className="flex items-center gap-1 text-slate-600">
-                                                    <span className="material-symbols-outlined text-sm text-slate-400">location_on</span>
+                                                    <Icon name="location_on" className="h-4 w-4 text-slate-400" />
                                                     {f.province}
                                                 </div>
                                             </td>
@@ -475,13 +474,13 @@ export default function AdminFermesGestion() {
                                                         className="rounded-md p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
                                                         title="Voir les détails"
                                                     >
-                                                        <span className="material-symbols-outlined text-base">visibility</span>
+                                                        <Icon name="visibility" className="h-5 w-5 text-base" />
                                                     </button>
                                                     <button
                                                         className="rounded-md p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
                                                         title="Modifier"
                                                     >
-                                                        <span className="material-symbols-outlined text-base">edit</span>
+                                                        <Icon name="edit" className="h-5 w-5 text-base" />
                                                     </button>
                                                     {f.statut === 'en_validation' && (
                                                         <button
@@ -489,7 +488,7 @@ export default function AdminFermesGestion() {
                                                             className="rounded-md p-1.5 text-amber-500 transition hover:bg-amber-50 hover:text-amber-700"
                                                             title="Valider"
                                                         >
-                                                            <span className="material-symbols-outlined text-base">check_circle</span>
+                                                            <Icon name="check_circle" className="h-5 w-5 text-base" />
                                                         </button>
                                                     )}
                                                     <button
@@ -497,7 +496,7 @@ export default function AdminFermesGestion() {
                                                         className="rounded-md p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
                                                         title="Supprimer"
                                                     >
-                                                        <span className="material-symbols-outlined text-base">delete</span>
+                                                        <Icon name="delete" className="h-5 w-5 text-base" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -513,7 +512,7 @@ export default function AdminFermesGestion() {
                         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
                             {filtered.length === 0 && (
                                 <div className="col-span-full py-16 text-center text-slate-400">
-                                    <span className="material-symbols-outlined mb-2 block text-5xl">search_off</span>
+                                    <Icon name="search_off" className="h-12 w-12 mb-2 block" />
                                     Aucune ferme ne correspond aux filtres.
                                 </div>
                             )}
@@ -525,7 +524,7 @@ export default function AdminFermesGestion() {
                                     <div className="flex items-start justify-between p-5">
                                         <div className="flex items-center gap-3">
                                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
-                                                <span className="material-symbols-outlined text-blue-600">agriculture</span>
+                                                <Icon name="agriculture" className="h-5 w-5 text-blue-600" />
                                             </div>
                                             <div>
                                                 <p className="font-semibold text-slate-800">{f.nom}</p>
@@ -558,7 +557,7 @@ export default function AdminFermesGestion() {
                                                 className="rounded-md p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
                                                 title="Voir les détails"
                                             >
-                                                <span className="material-symbols-outlined text-base">visibility</span>
+                                                <Icon name="visibility" className="h-5 w-5 text-base" />
                                             </button>
                                             {f.statut === 'en_validation' && (
                                                 <button
@@ -566,7 +565,7 @@ export default function AdminFermesGestion() {
                                                     className="rounded-md p-1 text-amber-500 transition hover:bg-amber-50"
                                                     title="Valider"
                                                 >
-                                                    <span className="material-symbols-outlined text-base">check_circle</span>
+                                                    <Icon name="check_circle" className="h-5 w-5 text-base" />
                                                 </button>
                                             )}
                                             <button
@@ -574,7 +573,7 @@ export default function AdminFermesGestion() {
                                                 className="rounded-md p-1 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
                                                 title="Supprimer"
                                             >
-                                                <span className="material-symbols-outlined text-base">delete</span>
+                                                <Icon name="delete" className="h-5 w-5 text-base" />
                                             </button>
                                         </div>
                                     </div>

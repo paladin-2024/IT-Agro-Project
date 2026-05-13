@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import OwnerSidebar from '../components/OwnerSidebar'
 import { MOCK_CROPS } from '../api/mocks.js'
 import { getAllParcels } from '../api/parcels.js'
 import { computeHarvestStats } from '../api/stats.js'
+import Icon from '../components/Icon.jsx'
 
 export default function OwnerCulturesPage() {
     const parcels = useMemo(() => getAllParcels(), [])
@@ -36,8 +37,8 @@ export default function OwnerCulturesPage() {
                         <p className="text-xs text-slate-500">Catalogue des cultures et suivi par parcelle</p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <span className="material-symbols-outlined cursor-pointer text-slate-500 hover:text-[#003f87]">notifications</span>
-                        <span className="material-symbols-outlined cursor-pointer text-slate-500 hover:text-[#003f87]">account_circle</span>
+                        <Icon name="notifications" className="h-5 w-5 cursor-pointer text-slate-500 hover:text-[#003f87]" />
+                        <Icon name="account_circle" className="h-5 w-5 cursor-pointer text-slate-500 hover:text-[#003f87]" />
                     </div>
                 </header>
 
@@ -48,14 +49,14 @@ export default function OwnerCulturesPage() {
                         <div>
                             <h2 className="text-2xl font-bold text-[#003f87]">Gestion des Cultures</h2>
                             <p className="mt-1 text-sm text-slate-500">
-                                Catalogue de toutes les cultures disponibles et leur répartition sur les parcelles.
+                                Catalogue de toutes les cultures disponibles et leur rÃ©partition sur les parcelles.
                             </p>
                         </div>
                         <Link
                             to="/owner/parcelles/creer"
                             className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#002d63] transition-colors"
                         >
-                            <span className="material-symbols-outlined text-base">add</span>
+                            <Icon name="add" className="h-5 w-5 text-base" />
                             Nouvelle Parcelle
                         </Link>
                     </div>
@@ -68,7 +69,7 @@ export default function OwnerCulturesPage() {
                             icon="military_tech"
                             iconBg="bg-amber-500"
                             label="Culture dominante"
-                            value={topCrop?.parcelCount > 0 ? topCrop.name : '—'}
+                            value={topCrop?.parcelCount > 0 ? topCrop.name : 'â€”'}
                             sub={topCrop?.parcelCount > 0 ? `${topCrop.parcelCount} parcelle(s)` : undefined}
                         />
                     </div>
@@ -83,7 +84,7 @@ export default function OwnerCulturesPage() {
                     {/* Parcel-by-crop table */}
                     <section className="overflow-hidden rounded-xl bg-white ring-1 ring-slate-200 shadow-sm">
                         <div className="flex items-center gap-2 border-b border-slate-100 px-6 py-4">
-                            <span className="material-symbols-outlined text-[#003f87]">table_rows</span>
+                            <Icon name="table_rows" className="h-5 w-5 text-[#003f87]" />
                             <h3 className="text-sm font-bold text-[#1b1c1c]">Toutes les Parcelles par Culture</h3>
                         </div>
                         <div className="overflow-x-auto">
@@ -92,7 +93,7 @@ export default function OwnerCulturesPage() {
                                     <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
                                         <th className="px-6 py-3.5">Parcelle</th>
                                         <th className="px-6 py-3.5">Culture</th>
-                                        <th className="px-6 py-3.5">Variété</th>
+                                        <th className="px-6 py-3.5">VariÃ©tÃ©</th>
                                         <th className="px-6 py-3.5 text-right">Superficie</th>
                                         <th className="px-6 py-3.5">Statut</th>
                                         <th className="px-6 py-3.5 text-right">Actions</th>
@@ -102,17 +103,17 @@ export default function OwnerCulturesPage() {
                                     {parcels.length === 0 && (
                                         <tr>
                                             <td colSpan={6} className="px-6 py-10 text-center text-sm text-slate-400">
-                                                Aucune parcelle enregistrée
+                                                Aucune parcelle enregistrÃ©e
                                             </td>
                                         </tr>
                                     )}
                                     {parcels.map((p, i) => {
                                         const cropMeta = MOCK_CROPS.find(c => c.name === p.crop)
                                         const statusClass =
-                                            p.status === 'Prêt pour récolte' ? 'bg-amber-100 text-amber-800' :
+                                            p.status === 'PrÃªt pour rÃ©colte' ? 'bg-amber-100 text-amber-800' :
                                             p.status === 'En cours'          ? 'bg-emerald-100 text-emerald-800' :
                                             p.status === 'Alerte Stress'     ? 'bg-red-100 text-red-800' :
-                                            p.status === 'Planté'            ? 'bg-blue-100 text-blue-800' :
+                                            p.status === 'PlantÃ©'            ? 'bg-blue-100 text-blue-800' :
                                             'bg-slate-100 text-slate-600'
                                         return (
                                             <tr key={p.id} className={`transition-colors hover:bg-slate-50 ${i % 2 === 1 ? 'bg-slate-50/40' : ''}`}>
@@ -121,9 +122,9 @@ export default function OwnerCulturesPage() {
                                                         {p.id}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-4 font-semibold text-[#1b1c1c]">{p.crop || '—'}</td>
-                                                <td className="px-6 py-4 text-slate-500">{cropMeta?.variety || '—'}</td>
-                                                <td className="px-6 py-4 text-right text-slate-600">{p.area || '—'}</td>
+                                                <td className="px-6 py-4 font-semibold text-[#1b1c1c]">{p.crop || 'â€”'}</td>
+                                                <td className="px-6 py-4 text-slate-500">{cropMeta?.variety || 'â€”'}</td>
+                                                <td className="px-6 py-4 text-right text-slate-600">{p.area || 'â€”'}</td>
                                                 <td className="px-6 py-4">
                                                     <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-bold ${statusClass}`}>
                                                         {p.status || 'Actif'}
@@ -134,7 +135,7 @@ export default function OwnerCulturesPage() {
                                                         to={`/owner/parcelles/${p.id}`}
                                                         className="text-xs font-semibold text-[#003f87] hover:underline"
                                                     >
-                                                        Voir →
+                                                        Voir â†’
                                                     </Link>
                                                 </td>
                                             </tr>
@@ -154,7 +155,7 @@ function KpiCard({ icon, iconBg, label, value, sub }) {
     return (
         <div className="flex items-center gap-4 rounded-xl bg-white p-5 ring-1 ring-slate-200 shadow-sm">
             <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg ${iconBg}`}>
-                <span className="material-symbols-outlined text-xl text-white">{icon}</span>
+                <Icon name={icon} className="h-6 w-6 text-white" />
             </div>
             <div>
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">{label}</p>
@@ -173,10 +174,7 @@ function CropCard({ crop }) {
             <div className="flex items-start justify-between p-5">
                 <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50">
-                        <span className="material-symbols-outlined text-emerald-600"
-                              style={{ fontVariationSettings: "'FILL' 1" }}>
-                            eco
-                        </span>
+                        <Icon name="eco" className="h-5 w-5 text-emerald-600" />
                     </div>
                     <div>
                         <h4 className="text-sm font-bold text-[#1b1c1c]">{crop.name}</h4>
@@ -184,16 +182,16 @@ function CropCard({ crop }) {
                     </div>
                 </div>
                 <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${hasData ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-400'}`}>
-                    {hasData ? `${crop.parcelCount} parcelle(s)` : 'Non planté'}
+                    {hasData ? `${crop.parcelCount} parcelle(s)` : 'Non plantÃ©'}
                 </span>
             </div>
 
             <div className="grid grid-cols-3 divide-x divide-slate-100 border-t border-slate-100">
-                <Stat label="Superficie" value={crop.totalAreaHa > 0 ? `${crop.totalAreaHa} ha` : '—'} />
-                <Stat label="Croissance" value={crop.growthDays > 0 ? `${crop.growthDays}j` : 'Pérenne'} />
+                <Stat label="Superficie" value={crop.totalAreaHa > 0 ? `${crop.totalAreaHa} ha` : 'â€”'} />
+                <Stat label="Croissance" value={crop.growthDays > 0 ? `${crop.growthDays}j` : 'PÃ©renne'} />
                 <Stat
                     label="Production"
-                    value={crop.totalTonnes !== null && crop.totalTonnes > 0 ? `${crop.totalTonnes} t` : '—'}
+                    value={crop.totalTonnes !== null && crop.totalTonnes > 0 ? `${crop.totalTonnes} t` : 'â€”'}
                     highlight={crop.totalTonnes > 0}
                 />
             </div>
@@ -209,3 +207,4 @@ function Stat({ label, value, highlight }) {
         </div>
     )
 }
+

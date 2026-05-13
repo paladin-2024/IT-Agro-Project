@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
 import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
 import { useAuth } from '../hooks/useAuth.js'
+import Icon from '../components/Icon.jsx'
 
 const REPORTS_KEY = 'agrordc_daily_reports'
 
@@ -10,7 +11,9 @@ function saveReport(report) {
     try {
         const list = JSON.parse(localStorage.getItem(REPORTS_KEY) || '[]')
         localStorage.setItem(REPORTS_KEY, JSON.stringify([report, ...list]))
-    } catch {}
+    } catch (e) {
+        console.warn('Could not save report to localStorage', e)
+    }
 }
 
 const WEATHER_OPTIONS = [
@@ -87,8 +90,7 @@ export default function EmployeeDailyReportPage() {
             <div className="flex min-h-screen items-center justify-center bg-[#f9f9ff] px-6">
                 <div className="w-full max-w-md rounded-xl border border-emerald-200 bg-white py-16 text-center shadow-sm">
                     <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
-                        <span className="material-symbols-outlined text-4xl text-emerald-600"
-                              style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                        <Icon name="check_circle" className="h-10 w-10 text-emerald-600" />
                     </div>
                     <h3 className="text-xl font-bold text-[#003f87]">Rapport soumis !</h3>
                     <p className="mt-2 text-sm text-slate-500">
@@ -134,7 +136,7 @@ export default function EmployeeDailyReportPage() {
                                     Parcelle {parcelId}
                                 </span>
                                 <span className="flex items-center gap-1 text-sm text-slate-500">
-                                    <span className="material-symbols-outlined text-sm">location_on</span>
+                                    <Icon name="location_on" className="h-4 w-4" />
                                     Zone Sud-Est • Maïs Premium
                                 </span>
                             </div>
@@ -156,7 +158,7 @@ export default function EmployeeDailyReportPage() {
                         <div className="col-span-12 rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-colors hover:border-[#003f87]/40 lg:col-span-4">
                             <div className="mb-6 flex items-center justify-between">
                                 <h3 className="flex items-center gap-2 text-lg font-bold text-[#1b1c1c]">
-                                    <span className="material-symbols-outlined text-[#003f87]">water_drop</span>
+                                    <Icon name="water_drop" className="h-5 w-5 text-[#003f87]" />
                                     Arrosage
                                 </h3>
                                 <span className="rounded bg-slate-100 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
@@ -204,7 +206,7 @@ export default function EmployeeDailyReportPage() {
                         <div className="col-span-12 rounded-xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-8">
                             <div className="mb-6 flex items-center justify-between">
                                 <h3 className="flex items-center gap-2 text-lg font-bold text-[#1b1c1c]">
-                                    <span className="material-symbols-outlined text-[#003f87]">inventory_2</span>
+                                    <Icon name="inventory_2" className="h-5 w-5 text-[#003f87]" />
                                     Production &amp; Récolte
                                 </h3>
                                 <div className="text-right">
@@ -256,10 +258,10 @@ export default function EmployeeDailyReportPage() {
                             <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                                 {/* Background icon */}
                                 <div className="pointer-events-none absolute right-4 top-4 text-slate-100">
-                                    <span className="material-symbols-outlined text-[72px]">thermostat</span>
+                                    <Icon name="thermostat" className="h-5 w-5 text-[72px]" />
                                 </div>
                                 <h3 className="relative mb-6 flex items-center gap-2 text-lg font-bold text-[#1b1c1c]">
-                                    <span className="material-symbols-outlined text-[#003f87]">cloud_sync</span>
+                                    <Icon name="cloud_sync" className="h-5 w-5 text-[#003f87]" />
                                     État Environnemental
                                 </h3>
                                 <div className="relative z-10 space-y-5">
@@ -298,9 +300,7 @@ export default function EmployeeDailyReportPage() {
                                                             : 'border-slate-200 hover:border-[#003f87]/40 hover:bg-blue-50/50'
                                                     }`}
                                                 >
-                                                    <span className={`material-symbols-outlined ${weather === w.id ? 'text-[#003f87]' : 'text-slate-400'}`}>
-                                                        {w.icon}
-                                                    </span>
+                                                    <Icon name={w.icon} className={`h-6 w-6 ${weather === w.id ? 'text-[#003f87]' : 'text-slate-400'}`} />
                                                     <span className={`text-[10px] font-bold ${weather === w.id ? 'text-[#003f87]' : 'text-slate-500'}`}>
                                                         {w.label}
                                                     </span>
@@ -329,7 +329,7 @@ export default function EmployeeDailyReportPage() {
                         <div className="col-span-12 rounded-xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-7">
                             <div className="mb-4 flex items-center justify-between">
                                 <h3 className="flex items-center gap-2 text-lg font-bold text-[#1b1c1c]">
-                                    <span className="material-symbols-outlined text-[#003f87]">visibility</span>
+                                    <Icon name="visibility" className="h-5 w-5 text-[#003f87]" />
                                     Observations &amp; Anomalies
                                 </h3>
                                 <button
@@ -339,18 +339,14 @@ export default function EmployeeDailyReportPage() {
                                         urgent ? 'text-[#b6171e]' : 'text-slate-400 hover:text-[#b6171e]'
                                     }`}
                                 >
-                                    <span className="material-symbols-outlined text-base"
-                                          style={urgent ? { fontVariationSettings: "'FILL' 1" } : undefined}>
-                                        warning
-                                    </span>
+                                    <Icon name="warning" className="h-5 w-5" />
                                     Signaler Urgent
                                 </button>
                             </div>
 
                             {urgent && (
                                 <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-[#b6171e]">
-                                    <span className="material-symbols-outlined text-[18px]"
-                                          style={{ fontVariationSettings: "'FILL' 1" }}>warning</span>
+                                    <Icon name="warning" className="h-[18px] w-[18px]" />
                                     Ce rapport sera marqué comme urgent et transmis au superviseur.
                                 </div>
                             )}
@@ -380,7 +376,7 @@ export default function EmployeeDailyReportPage() {
                                                 : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                                         }`}
                                     >
-                                        <span className="material-symbols-outlined text-[16px]">{tag.icon}</span>
+                                        <Icon name={tag.icon} className="h-4 w-4" />
                                         {tag.label}
                                     </button>
                                 ))}

@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import Icon from './Icon.jsx'
 
 const DESKTOP_NAV = [
     { to: '/employee/dashboard', icon: 'assignment',   label: 'Parcelles'  },
@@ -36,12 +37,7 @@ export default function EmployeeTopNav({ backTo, backLabel, title, badge, childr
                     className="flex shrink-0 items-center gap-2 rounded-lg px-1 py-1 transition-colors hover:bg-slate-100"
                 >
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#003f87]">
-                        <span
-                            className="material-symbols-outlined text-[18px] text-white"
-                            style={{ fontVariationSettings: "'FILL' 1" }}
-                        >
-                            agriculture
-                        </span>
+                        <Icon name="agriculture" className="h-[18px] w-[18px] text-white" />
                     </div>
                     <span className="hidden text-base font-black text-[#003f87] sm:block">AgriRDC</span>
                 </Link>
@@ -54,7 +50,7 @@ export default function EmployeeTopNav({ backTo, backLabel, title, badge, childr
                             to={backTo}
                             className="flex shrink-0 items-center gap-0.5 text-xs font-semibold text-slate-500 transition-colors hover:text-[#003f87]"
                         >
-                            <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+                            <Icon name="arrow_back" className="h-4 w-4" />
                             <span className="hidden sm:block">{backLabel || 'Retour'}</span>
                         </Link>
                     </>
@@ -90,12 +86,7 @@ export default function EmployeeTopNav({ backTo, backLabel, title, badge, childr
                                     : 'text-slate-500 hover:bg-slate-100 hover:text-[#003f87]'
                             }`}
                         >
-                            <span
-                                className="material-symbols-outlined text-[18px]"
-                                style={active ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                            >
-                                {item.icon}
-                            </span>
+                            <Icon name={item.icon} className="h-[18px] w-[18px]" />
                             {item.label}
                         </Link>
                     )
@@ -106,17 +97,17 @@ export default function EmployeeTopNav({ backTo, backLabel, title, badge, childr
             <div className="flex shrink-0 items-center gap-1 md:gap-2">
                 {children}
                 <button className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#003f87]">
-                    <span className="material-symbols-outlined">notifications</span>
+                    <Icon name="notifications" className="h-5 w-5" />
                 </button>
                 <button className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#003f87]">
-                    <span className="material-symbols-outlined">account_circle</span>
+                    <Icon name="account_circle" className="h-5 w-5" />
                 </button>
                 <button
                     onClick={handleLogout}
                     title="Se déconnecter"
                     className="rounded-full p-2 text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
                 >
-                    <span className="material-symbols-outlined">logout</span>
+                    <Icon name="logout" className="h-5 w-5" />
                 </button>
             </div>
         </div>

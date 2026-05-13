@@ -49,6 +49,43 @@ export async function getHarvestsByParcel(parcelId) {
     return res.json()
 }
 
+export function getHarvestById(id) {
+    return loadHarvests().find((h) => h.id === id) ?? null
+}
+
+export async function updateHarvest(id, payload) {
+    if (!API) {
+        const list = loadHarvests()
+        const idx  = list.findIndex((h) => h.id === id)
+        if (idx === -1) throw new Error('Production introuvable')
+        list[idx] = { ...list[idx], ...payload, updatedAt: new Date().toISOString() }
+        saveHarvests(list)
+        return list[idx]
+    }
+    const res = await fetch(`${API}/api/harvests/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        body: JSON.stringify(payload),
+    })
+    if (!res.ok) throw new Error('Erreur lors de la mise à jour de la récolte')
+    return res.json()
+}
+
+export async function deleteHarvest(id) {
+    if (!API) {
+        saveHarvests(loadHarvests().filter((h) => h.id !== id))
+        return
+    }
+    const res = await fetch(`${API}/api/harvests/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+    })
+    if (!res.ok) throw new Error('Erreur lors de la suppression de la récolte')
+}
+
 export async function getRecentHarvests(limit = 10) {
     if (!API) {
         return loadHarvests().slice(0, limit)

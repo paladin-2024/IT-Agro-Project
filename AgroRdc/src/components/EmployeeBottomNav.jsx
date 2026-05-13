@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import Icon from './Icon.jsx'
 
 /**
  * Props
@@ -71,12 +72,7 @@ export default function EmployeeBottomNav({ parcelId }) {
                             active ? 'bg-blue-50 text-[#003f87]' : 'text-slate-500 hover:text-[#003f87]'
                         }`}
                     >
-                        <span
-                            className="material-symbols-outlined text-[22px]"
-                            style={active ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                        >
-                            {item.icon}
-                        </span>
+                        <Icon name={item.icon} className="h-[22px] w-[22px]" />
                         <span className="mt-0.5 text-[10px] font-bold uppercase tracking-wider">
                             {item.label}
                         </span>
@@ -87,7 +83,7 @@ export default function EmployeeBottomNav({ parcelId }) {
                 onClick={handleLogout}
                 className="flex flex-col items-center justify-center rounded-lg px-3 py-1 text-slate-500 transition-all hover:bg-red-50 hover:text-red-600"
             >
-                <span className="material-symbols-outlined text-[22px]">logout</span>
+                <Icon name="logout" className="h-5 w-5 text-[22px]" />
                 <span className="mt-0.5 text-[10px] font-bold uppercase tracking-wider">Quitter</span>
             </button>
         </nav>

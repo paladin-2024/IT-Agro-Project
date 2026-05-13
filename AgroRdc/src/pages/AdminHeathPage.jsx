@@ -1,6 +1,12 @@
 import AdminSidebar from '../components/AdminSidebar.jsx'
+import Icon from '../components/Icon.jsx'
 
 const CIRC = 251.33 // 2 * π * 40
+
+const UPTIME_COLORS = Array.from({ length: 90 }, () => {
+    const r = Math.random()
+    return r > 0.97 ? 'bg-red-400' : r > 0.93 ? 'bg-yellow-400' : 'bg-green-400'
+})
 
 function CircleGauge({ value, color, label, sublabel }) {
     const offset = CIRC * (1 - value / 100)
@@ -91,7 +97,7 @@ export default function AdminHealthPage() {
                 <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white px-6">
                     <div className="flex items-center gap-6">
                         <div className="relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <Icon name="search" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 type="text"
                                 placeholder="Rechercher dans les journaux..."
@@ -108,11 +114,11 @@ export default function AdminHealthPage() {
                     </div>
                     <div className="flex items-center gap-3">
                         <button className="relative rounded-full p-2 text-slate-600 hover:bg-slate-50">
-                            <span className="material-symbols-outlined">notifications</span>
+                            <Icon name="notifications" className="h-5 w-5" />
                             <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full border-2 border-white bg-[#b6171e]" />
                         </button>
                         <button className="rounded-full p-2 text-slate-600 hover:bg-slate-50">
-                            <span className="material-symbols-outlined">help_outline</span>
+                            <Icon name="help_outline" className="h-5 w-5" />
                         </button>
                         <div className="h-8 w-8 overflow-hidden rounded-full border border-slate-200">
                             <img
@@ -136,7 +142,7 @@ export default function AdminHealthPage() {
                         </div>
                         <div className="flex items-center gap-3">
                             <button className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50">
-                                <span className="material-symbols-outlined text-sm">download</span>
+                                <Icon name="download" className="h-4 w-4" />
                                 Exporter
                             </button>
                             <div className="flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-green-700">
@@ -158,7 +164,7 @@ export default function AdminHealthPage() {
                         ].map((card) => (
                             <div key={card.label} className="flex flex-col gap-3 rounded-xl border border-[#DEE2E6] bg-white p-4">
                                 <div className={`w-fit rounded-lg p-2 ${card.iconBg}`}>
-                                    <span className={`material-symbols-outlined text-xl ${card.iconColor}`}>{card.icon}</span>
+                                    <Icon name={card.icon} className={`h-6 w-6 ${card.iconColor}`} />
                                 </div>
                                 <div>
                                     <p className="text-xs text-slate-500">{card.label}</p>
@@ -323,7 +329,7 @@ export default function AdminHealthPage() {
                                     const c = ALERT_COLORS[a.level]
                                     return (
                                         <div key={i} className={`flex items-start gap-3 rounded-lg border p-3 ${c.bg} ${c.border}`}>
-                                            <span className={`material-symbols-outlined text-lg ${c.icon}`}>{a.icon}</span>
+                                            <Icon name={a.icon} className={`h-5 w-5 ${c.icon}`} />
                                             <div className="flex-1">
                                                 <p className={`text-sm font-medium ${c.text}`}>{a.msg}</p>
                                                 <p className="text-xs text-slate-400">{a.time}</p>
@@ -339,11 +345,9 @@ export default function AdminHealthPage() {
                             <h3 className="mb-1 text-sm font-semibold text-[#1b1c1c]">Disponibilité — 90 derniers jours</h3>
                             <p className="mb-4 text-xs text-slate-400">Chaque barre = 1 jour</p>
                             <div className="flex flex-wrap gap-0.5">
-                                {Array.from({ length: 90 }).map((_, i) => {
-                                    const rand = Math.random()
-                                    const color = rand > 0.97 ? 'bg-red-400' : rand > 0.93 ? 'bg-yellow-400' : 'bg-green-400'
-                                    return <div key={i} className={`h-5 w-2 rounded-sm ${color}`} />
-                                })}
+                                {UPTIME_COLORS.map((color, i) => (
+                                    <div key={i} className={`h-5 w-2 rounded-sm ${color}`} />
+                                ))}
                             </div>
                             <div className="mt-3 flex items-center gap-4 text-xs text-slate-500">
                                 <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-green-400" />OK</span>
@@ -372,11 +376,11 @@ export default function AdminHealthPage() {
                             <h3 className="text-sm font-semibold text-[#1b1c1c]">Journal d&apos;audit système</h3>
                             <div className="flex gap-2">
                                 <button className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50">
-                                    <span className="material-symbols-outlined text-sm">filter_list</span>
+                                    <Icon name="filter_list" className="h-4 w-4" />
                                     Filtrer
                                 </button>
                                 <button className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50">
-                                    <span className="material-symbols-outlined text-sm">download</span>
+                                    <Icon name="download" className="h-4 w-4" />
                                     Exporter
                                 </button>
                             </div>

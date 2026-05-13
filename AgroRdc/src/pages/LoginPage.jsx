@@ -1,14 +1,20 @@
-import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import LeftBanner from '../components/LeftBanner.jsx'
 import PageFooter from '../components/PageFooter.jsx'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import logo from '../assets/logo.jpeg'
+import Icon from '../components/Icon.jsx'
 
 const API_URL = import.meta.env.VITE_API_URL
 
 const FOOTER_LINKS = [
-    { icon: 'help', href: '#', ariaLabel: 'Aide' },
+    { icon: 'help',   href: '#', ariaLabel: 'Aide' },
     { icon: 'language', href: '#', ariaLabel: 'Langue' },
     { icon: 'policy', href: '#', ariaLabel: 'Politique de confidentialité' },
 ]
@@ -19,65 +25,66 @@ const AVATAR_URLS = [
     'https://lh3.googleusercontent.com/aida-public/AB6AXuCIRbqkXEdsvuofhkVYIYnlFFK2Lnr01bKYSRVbg9ZU3ShM3RjCnXHhMstQvx9wRHNaU0V45zFdh-kDya88YS9pRGYdjC_qRBvHZjAmWx5nfos4gI2SdQTw0nE0cLUSJ62BoWGKk4mD2ojBSSTqwpiZFpFVEi5yZtYzo8GNIBk4897a8Uooi-hC0mSv88ngbYRT3rFn4HzYDqaccVwuCmC9Bng0zMA3vfmyvueZhCWSoaIDY7GVRLTIXVPNV_2iMNQWOgY1vEddYzY',
 ]
 
+const loginSchema = z.object({
+    email:    z.string().email('Adresse email invalide'),
+    password: z.string().min(1, 'Le mot de passe est requis'),
+    remember: z.boolean().optional(),
+})
+
 export default function LoginPage() {
-    const [showPassword, setShowPassword] = useState(false)
-    const [form, setForm] = useState({ email: '', password: '', remember: false })
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
     const navigate = useNavigate()
     const { login, isAuthenticated, user } = useAuth()
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+        setError,
+    } = useForm({
+        resolver: zodResolver(loginSchema),
+        defaultValues: { email: '', password: '', remember: false },
+    })
+
     if (isAuthenticated) {
-        const dest = user?.role === 'owner' ? '/owner/dashboard'
-            : user?.role === 'employee' ? '/employee/dashboard'
-            : '/dashboard'
+        const dest = user?.role === 'owner'    ? '/owner/dashboard'
+                   : user?.role === 'employee' ? '/employee/dashboard'
+                   : '/dashboard'
         return <Navigate to={dest} replace />
     }
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target
-        setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        setError('')
+    const onSubmit = async ({ email, password, remember }) => {
         try {
             if (!API_URL) {
-                // Dev mode: no backend, use mock credentials
                 const mockUsers = {
-                    'owner@agrordc.cd':    { id: 'usr-owner-1',    role: 'owner',    name: 'Kabangu Mulumba' },
-                    'admin@agrordc.cd':    { id: 'usr-admin-1',    role: 'admin',    name: 'Administrateur' },
-                    'employee@agrordc.cd': { id: 'emp-001',        role: 'employee', name: 'Samuel Mwamba' },
+                    'owner@agrordc.cd':    { id: 'usr-owner-1', role: 'owner',    name: 'Kabangu Mulumba' },
+                    'admin@agrordc.cd':    { id: 'usr-admin-1', role: 'admin',    name: 'Administrateur' },
+                    'employee@agrordc.cd': { id: 'emp-001',     role: 'employee', name: 'Samuel Mwamba' },
                 }
-                const mockUser = mockUsers[form.email]
-                if (!mockUser || form.password !== 'password') {
-                    throw new Error('Email ou mot de passe incorrect (mode dev)')
+                const mockUser = mockUsers[email]
+                if (!mockUser || password !== 'password') {
+                    setError('root', { message: 'Email ou mot de passe incorrect (mode dev)' })
+                    return
                 }
                 login(mockUser, 'dev-token')
                 const dest = mockUser.role === 'owner' ? '/owner/dashboard'
-                    : mockUser.role === 'employee' ? '/employee/dashboard'
-                    : '/dashboard'
+                           : mockUser.role === 'employee' ? '/employee/dashboard'
+                           : '/dashboard'
                 navigate(dest)
                 return
             }
-            const res = await fetch(`${API_URL}/api/auth/login`, {
-                method: 'POST',
+            const res  = await fetch(`${API_URL}/api/auth/login`, {
+                method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ email: form.email, password: form.password, remember: form.remember }),
+                body: JSON.stringify({ email, password, remember }),
             })
             const data = await res.json()
             if (!res.ok) throw new Error(data.message || 'Connexion échouée')
             login(data.user, data.accessToken)
             const role = data.user?.role
-            if (role === 'owner') navigate('/owner/dashboard')
-            else if (role === 'employee') navigate('/employee/dashboard')
-            else navigate('/dashboard')
+            navigate(role === 'owner' ? '/owner/dashboard' : role === 'employee' ? '/employee/dashboard' : '/dashboard')
         } catch (err) {
-            setError(err.message)
-        } finally {
-            setLoading(false)
+            setError('root', { message: err.message })
         }
     }
 
@@ -85,17 +92,10 @@ export default function LoginPage() {
         <div className="flex items-center gap-3">
             <div className="flex -space-x-2">
                 {AVATAR_URLS.map((src, i) => (
-                    <img
-                        key={i}
-                        alt="Profil gestionnaire"
-                        className="w-8 h-8 rounded-full border-2 border-primary"
-                        src={src}
-                    />
+                    <img key={i} alt="Profil gestionnaire" className="w-8 h-8 rounded-full border-2 border-primary" src={src} />
                 ))}
             </div>
-            <span className="text-sm opacity-80">
-                Rejoint par plus de 200 gestionnaires à travers la RDC
-            </span>
+            <span className="text-sm opacity-80">Rejoint par plus de 200 gestionnaires à travers la RDC</span>
         </div>
     )
 
@@ -108,20 +108,14 @@ export default function LoginPage() {
                     subtitle="Hub des plantations RDC : plateforme d'intelligence agricole et de logistique de la chaîne d'approvisionnement."
                     infoIcon="verified_user"
                     infoTitle="Infrastructure sécurisée"
-                    infoText="L'accès est réservé aux gestionnaires de plantation et coordinateurs logistiques autorisés. Les identifiants sont gérés par l'administration centrale."
+                    infoText="L'accès est réservé aux gestionnaires de plantation et coordinateurs logistiques autorisés."
                     footer={bannerFooter}
                 />
 
                 <section className="flex flex-col justify-center p-6 md:p-16 bg-white min-h-screen">
                     <div className="max-w-md mx-auto w-full space-y-8">
                         <div className="md:hidden flex flex-col items-center mb-8 space-y-1">
-
-                            <img
-                                alt="Logo AgriRDC"
-                                src={logo}
-                                className="w-32 h-24 object-contain"
-                            />
-                            {/*<h1 className="text-1xl font-semibold text-primary">AgriRDC</h1>*/}
+                            <img alt="Logo AgriRDC" src={logo} className="w-32 h-24 object-contain" />
                             <p className="text-sm text-outline">Hub des plantations RDC</p>
                         </div>
 
@@ -132,107 +126,91 @@ export default function LoginPage() {
                             </p>
                         </div>
 
-                        <form className="space-y-5" onSubmit={handleSubmit}>
+                        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+                            {/* Email */}
                             <div className="space-y-1">
-                                <label htmlFor="email" className="text-sm font-semibold text-on-surface">
-                                    Email professionnel
-                                </label>
+                                <Label htmlFor="email">Email professionnel</Label>
                                 <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">
-                                        mail
-                                    </span>
-                                    <input
+                                    <Icon name="mail" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-outline" />
+                                    <Input
                                         id="email"
-                                        name="email"
                                         type="email"
-                                        value={form.email}
                                         autoComplete="email"
-                                        onChange={handleChange}
-                                        placeholder="gestionnaire@AgriRDC.cd"
-                                        className="w-full pl-10 pr-4 py-3 bg-white border border-outline rounded-lg outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-                                        required
+                                        placeholder="gestionnaire@agrordc.cd"
+                                        className="pl-10"
+                                        aria-invalid={!!errors.email}
+                                        {...register('email')}
                                     />
                                 </div>
+                                {errors.email && (
+                                    <p className="text-xs text-destructive">{errors.email.message}</p>
+                                )}
                             </div>
 
+                            {/* Password */}
                             <div className="space-y-1">
                                 <div className="flex justify-between items-center">
-                                    <label htmlFor="password" className="text-sm font-semibold text-on-surface">
-                                        Mot de passe
-                                    </label>
+                                    <Label htmlFor="password">Mot de passe</Label>
                                     <Link to="/mot-de-passe-oublie" className="text-sm text-primary hover:underline">
                                         Mot de passe oublié ?
                                     </Link>
                                 </div>
                                 <div className="relative">
-                                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">
-                                        lock
-                                    </span>
-                                    <input
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                    </svg>
+
+                                    {/*<Icon name="lock" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-outline" />*/}
+                                    <Input
                                         id="password"
-                                        name="password"
-                                        type={showPassword ? 'text' : 'password'}
-                                        value={form.password}
+                                        type="password"
                                         autoComplete="current-password"
-                                        onChange={handleChange}
                                         placeholder="••••••••"
-                                        className="w-full pl-10 pr-12 py-3 bg-white border border-outline rounded-lg outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-                                        required
+                                        className="pl-10"
+                                        aria-invalid={!!errors.password}
+                                        {...register('password')}
                                     />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(v => !v)}
-                                        aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary"
-                                    >
-                                        <span className="material-symbols-outlined">
-                                            {showPassword ? 'visibility_off' : 'visibility'}
-                                        </span>
-                                    </button>
                                 </div>
+                                {errors.password && (
+                                    <p className="text-xs text-destructive">{errors.password.message}</p>
+                                )}
                             </div>
 
+                            {/* Remember */}
                             <div className="flex items-center gap-3">
                                 <input
                                     id="remember"
-                                    name="remember"
                                     type="checkbox"
-                                    checked={form.remember}
-                                    onChange={handleChange}
                                     className="w-4 h-4 accent-primary"
+                                    {...register('remember')}
                                 />
-                                <label htmlFor="remember" className="text-sm text-on-surface-variant">
+                                <Label htmlFor="remember" className="font-normal text-on-surface-variant">
                                     Se souvenir de cet appareil pendant 30 jours
-                                </label>
+                                </Label>
                             </div>
 
-                            {error && (
-                                <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3">
-                                    {error}
+                            {/* Root error */}
+                            {errors.root && (
+                                <p className="text-sm text-destructive bg-red-50 border border-red-200 rounded-lg p-3">
+                                    {errors.root.message}
                                 </p>
                             )}
 
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-hover transition-colors shadow-md active:scale-[0.98] disabled:opacity-60"
-                            >
-                                {loading ? 'Connexion en cours...' : 'Se connecter'}
-                            </button>
+                            <Button type="submit" disabled={isSubmitting} className="w-full py-6 bg-primary hover:bg-primary-hover">
+                                {isSubmitting ? 'Connexion en cours…' : 'Se connecter'}
+                            </Button>
                         </form>
 
                         <div className="pt-6 border-t border-outline-variant">
-                            <div className="flex flex-col gap-3">
-                                <p className="text-sm text-on-surface-variant text-center">
-                                    Besoin d&apos;un nouveau compte ou vous avez perdu l&apos;accès ?
-                                </p>
-                                <Link
-                                    to="/contact-admin"
-                                    className="w-full py-3 bg-white border border-primary text-primary font-semibold rounded-lg hover:bg-surface-tint transition-colors block text-center"
-                                >
-                                    Contacter l&apos;administrateur
-                                </Link>
-                            </div>
+                            <p className="text-sm text-on-surface-variant text-center mb-3">
+                                Besoin d&apos;un nouveau compte ou vous avez perdu l&apos;accès ?
+                            </p>
+                            <Link
+                                to="/contact-admin"
+                                className="w-full py-3 bg-white border border-primary text-primary font-semibold rounded-lg hover:bg-surface-tint transition-colors block text-center"
+                            >
+                                Contacter l&apos;administrateur
+                            </Link>
                         </div>
 
                         <PageFooter links={FOOTER_LINKS} />

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import OwnerSidebar from "../components/OwnerSidebar";
 import { computeHarvestStats, getStatsByCrop, getMonthlyBars } from "../api/stats.js";
 import { MOCK_PARCELS } from "../api/mocks.js";
+import Icon from '../components/Icon.jsx'
 
 /* ─── Static data ────────────────────────────────────────────────────── */
 
@@ -29,11 +30,7 @@ const milestones = [
 /* ─── Page component ─────────────────────────────────────────────────── */
 
 export default function OwnerYieldAnalyticsPage() {
-    const [liveStats, setLiveStats] = useState(null);
-
-    useEffect(() => {
-        setLiveStats(computeHarvestStats());
-    }, []);
+    const [liveStats] = useState(() => computeHarvestStats());
 
     const cropStats = getStatsByCrop(liveStats, MOCK_PARCELS);
     const monthlyBars = getMonthlyBars(liveStats, 6);
@@ -56,36 +53,31 @@ export default function OwnerYieldAnalyticsPage() {
         : null;
 
     return (
-        <div className="min-h-screen bg-[#f4f6f9] text-[#1b1c1c]">
+        <div className="min-h-screen bg-background text-foreground">
             <OwnerSidebar />
 
             <main className="ml-64 min-h-screen">
                 {/* Sticky header */}
-                <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8 shadow-sm">
+                <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-border bg-white px-8 shadow-sm">
                     <div>
-                        <h1 className="text-lg font-bold text-[#1b1c1c]">Analyse des Rendements</h1>
-                        <p className="text-xs text-slate-500">Métriques de performance en temps réel sur tous les secteurs</p>
+                        <h1 className="text-lg font-bold text-foreground">Analyse des Rendements</h1>
+                        <p className="text-xs text-muted-foreground">Métriques de performance en temps réel sur tous les secteurs</p>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">search</span>
-                            <input
-                                className="w-56 rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-4 text-sm outline-none focus:border-[#003f87] focus:ring-1 focus:ring-[#003f87]"
-                                placeholder="Rechercher des données…"
-                                type="text"
-                            />
-                        </div>
-                        <span className="material-symbols-outlined cursor-pointer text-slate-500 transition-colors hover:text-[#003f87]">notifications</span>
-                        <span className="material-symbols-outlined cursor-pointer text-slate-500 transition-colors hover:text-[#003f87]">account_circle</span>
+                    <div className="flex items-center gap-2">
+                        <button className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-primary" aria-label="Notifications">
+                            <Icon name="notifications" className="h-5 w-5" />
+                        </button>
+                        <button className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-primary" aria-label="Mon compte">
+                            <Icon name="account_circle" className="h-5 w-5" />
+                        </button>
                     </div>
                 </header>
 
                 <div className="mx-auto max-w-7xl space-y-8 p-8">
-                    {/* Page title + filters */}
+                    {/* Filters row */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-[#003f87]">Analyse des Rendements</h2>
-                            <p className="mt-1 text-sm text-slate-500">
+                            <p className="text-sm text-muted-foreground">
                                 Métriques de performance en temps réel sur tous les secteurs de plantation.
                             </p>
                         </div>
@@ -101,7 +93,7 @@ export default function OwnerYieldAnalyticsPage() {
                                 <option>2022</option>
                             </FilterSelect>
                             <button className="flex h-[42px] items-center gap-2 self-end rounded-lg bg-[#003f87] px-5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95">
-                                <span className="material-symbols-outlined text-base">download</span>
+                                <Icon name="download" className="h-5 w-5 text-base" />
                                 Générer Rapport
                             </button>
                         </div>
@@ -179,7 +171,7 @@ export default function OwnerYieldAnalyticsPage() {
                             <div className="relative flex flex-1 flex-col justify-between overflow-hidden rounded-xl bg-gradient-to-br from-[#003f87] to-[#0056b3] p-6 text-white shadow-md">
                                 <div className="relative z-10">
                                     <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1">
-                                        <span className="material-symbols-outlined text-sm">verified</span>
+                                        <Icon name="verified" className="h-4 w-4" />
                                         <span className="text-[10px] font-bold uppercase tracking-wider">Meilleure Culture</span>
                                     </div>
                                     <h2 className="text-4xl font-extrabold leading-tight">
@@ -216,12 +208,7 @@ export default function OwnerYieldAnalyticsPage() {
 
                                 {/* Decoration */}
                                 <div className="pointer-events-none absolute -bottom-6 -right-6 opacity-10">
-                                    <span
-                                        className="material-symbols-outlined text-[160px]"
-                                        style={{ fontVariationSettings: "'FILL' 1" }}
-                                    >
-                                        eco
-                                    </span>
+                                    <Icon name="eco" className="h-[160px] w-[160px]" />
                                 </div>
                             </div>
 
@@ -229,10 +216,10 @@ export default function OwnerYieldAnalyticsPage() {
                             <div className="rounded-xl bg-white p-5 ring-1 ring-slate-200 shadow-sm">
                                 <div className="mb-3 flex items-center justify-between">
                                     <span className="text-xs font-bold text-slate-500">Kinshasa Nord</span>
-                                    <span className="material-symbols-outlined text-amber-600">cloud_sync</span>
+                                    <Icon name="cloud_sync" className="h-5 w-5 text-amber-600" />
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <span className="material-symbols-outlined text-5xl text-[#003f87]">partly_cloudy_day</span>
+                                    <Icon name="partly_cloudy_day" className="h-12 w-12 text-[#003f87]" />
                                     <div>
                                         <p className="text-2xl font-extrabold text-[#1b1c1c]">31°C</p>
                                         <p className="text-xs text-slate-500">82% Humidité · Vent faible</p>
@@ -256,11 +243,11 @@ export default function OwnerYieldAnalyticsPage() {
                                 </div>
                                 <div className="flex gap-4">
                                     <button className="flex items-center gap-1 text-sm font-semibold text-[#003f87] transition-colors hover:underline">
-                                        <span className="material-symbols-outlined text-base">filter_alt</span>
+                                        <Icon name="filter_alt" className="h-5 w-5 text-base" />
                                         Filtrer
                                     </button>
                                     <button className="flex items-center gap-1 text-sm font-semibold text-[#003f87] transition-colors hover:underline">
-                                        <span className="material-symbols-outlined text-base">ios_share</span>
+                                        <Icon name="ios_share" className="h-5 w-5 text-base" />
                                         Exporter CSV
                                     </button>
                                 </div>
@@ -300,9 +287,7 @@ export default function OwnerYieldAnalyticsPage() {
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-center">
-                                                    <span className={`material-symbols-outlined text-xl ${p.trendClass}`}>
-                                                        {p.trend}
-                                                    </span>
+                                                    <Icon name={p.trend} className={`h-5 w-5 ${p.trendClass}`} />
                                                 </td>
                                             </tr>
                                         ))}
@@ -319,10 +304,10 @@ export default function OwnerYieldAnalyticsPage() {
                                 </span>
                                 <div className="flex gap-1">
                                     <button className="rounded border border-slate-200 p-1 transition-colors hover:bg-white">
-                                        <span className="material-symbols-outlined text-base text-slate-500">chevron_left</span>
+                                        <Icon name="chevron_left" className="h-5 w-5 text-base text-slate-500" />
                                     </button>
                                     <button className="rounded border border-slate-200 p-1 transition-colors hover:bg-white">
-                                        <span className="material-symbols-outlined text-base text-slate-500">chevron_right</span>
+                                        <Icon name="chevron_right" className="h-5 w-5 text-base text-slate-500" />
                                     </button>
                                 </div>
                             </div>
@@ -368,7 +353,7 @@ function LegendDot({ color, label }) {
     );
 }
 
-function MilestoneCard({ icon, fill, label, sub, state }) {
+function MilestoneCard({ icon, label, sub, state }) {
     const styles = {
         done:    { wrap: "border-slate-200 bg-white",       icon: "bg-emerald-100 text-emerald-700", text: "text-[#1b1c1c]" },
         active:  { wrap: "border-slate-200 bg-white border-l-4 border-l-[#003f87]", icon: "bg-blue-100 text-[#003f87]", text: "text-[#1b1c1c]" },
@@ -378,12 +363,7 @@ function MilestoneCard({ icon, fill, label, sub, state }) {
     return (
         <div className={`flex items-center gap-4 rounded-xl border p-4 shadow-sm ${styles.wrap}`}>
             <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${styles.icon}`}>
-                <span
-                    className="material-symbols-outlined"
-                    style={fill ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                >
-                    {icon}
-                </span>
+                <Icon name={icon} className="h-5 w-5" />
             </div>
             <div>
                 <p className={`text-sm font-bold ${styles.text}`}>{label}</p>

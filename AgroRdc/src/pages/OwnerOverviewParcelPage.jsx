@@ -1,4 +1,4 @@
-import React from "react";
+import Icon from '../components/Icon.jsx'
 
 const overviewStats = [
     { label: "Total parcelles", value: "124", icon: "grid_view", tone: "bg-blue-50 text-blue-700" },
@@ -21,11 +21,11 @@ export default function OwnerOverviewParcelPage() {
                     <div>
                         <h2 className="text-2xl font-semibold text-slate-900">Vue d'ensemble des parcelles</h2>
                         <p className="mt-1 text-sm text-slate-600">
-                            Aperçu rapide de l'état global des cultures, des surfaces et des alertes de gestion.
+                            AperÃ§u rapide de l'Ã©tat global des cultures, des surfaces et des alertes de gestion.
                         </p>
                     </div>
                     <button className="rounded-lg border border-[#c2c6d4] bg-white px-4 py-2 text-sm font-semibold text-[#003f87] hover:bg-slate-50">
-                        Voir détails
+                        Voir dÃ©tails
                     </button>
                 </div>
 
@@ -38,7 +38,7 @@ export default function OwnerOverviewParcelPage() {
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
                     <div className="rounded-xl bg-[#f5f3f3] p-5">
                         <div className="mb-4 flex items-center justify-between">
-                            <h3 className="text-sm font-semibold text-slate-900">Répartition par état</h3>
+                            <h3 className="text-sm font-semibold text-slate-900">RÃ©partition par Ã©tat</h3>
                             <span className="text-xs font-medium text-slate-500">En %</span>
                         </div>
 
@@ -60,17 +60,17 @@ export default function OwnerOverviewParcelPage() {
                     <div className="rounded-xl border border-[#c2c6d4] bg-white p-5">
                         <h3 className="mb-3 text-sm font-semibold text-slate-900">Observation rapide</h3>
                         <p className="text-sm leading-6 text-slate-600">
-                            La majorité des parcelles est en état productif, mais 12 parcelles nécessitent une action prioritaire.
-                            Les parcelles en croissance restent stables et les zones en attente doivent être planifiées pour la prochaine phase.
+                            La majoritÃ© des parcelles est en Ã©tat productif, mais 12 parcelles nÃ©cessitent une action prioritaire.
+                            Les parcelles en croissance restent stables et les zones en attente doivent Ãªtre planifiÃ©es pour la prochaine phase.
                         </p>
 
                         <div className="mt-5 rounded-lg bg-[#d7e2ff] p-4">
                             <div className="flex items-start gap-3">
-                                <span className="material-symbols-outlined text-[#003f87]">insights</span>
+                                <Icon name="insights" className="h-5 w-5 text-[#003f87]" />
                                 <div>
                                     <p className="text-sm font-semibold text-[#004491]">Recommandation</p>
                                     <p className="mt-1 text-sm text-[#004491]">
-                                        Prioriser l'irrigation sur les parcelles à faible humidité et suivre les alertes terrain dans les 24 heures.
+                                        Prioriser l'irrigation sur les parcelles Ã  faible humiditÃ© et suivre les alertes terrain dans les 24 heures.
                                     </p>
                                 </div>
                             </div>
@@ -80,18 +80,18 @@ export default function OwnerOverviewParcelPage() {
             </div>
 
             <div className="lg:col-span-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="text-xl font-semibold text-slate-900">Indicateurs clés</h3>
+                <h3 className="text-xl font-semibold text-slate-900">Indicateurs clÃ©s</h3>
                 <div className="mt-5 space-y-4">
-                    <KeyLine label="Surface exploitée" value="82%" />
-                    <KeyLine label="Parcelles surveillées" value="96%" />
-                    <KeyLine label="Taux de conformité" value="91%" />
-                    <KeyLine label="Alertes résolues" value="78%" />
+                    <KeyLine label="Surface exploitÃ©e" value="82%" />
+                    <KeyLine label="Parcelles surveillÃ©es" value="96%" />
+                    <KeyLine label="Taux de conformitÃ©" value="91%" />
+                    <KeyLine label="Alertes rÃ©solues" value="78%" />
                 </div>
 
                 <div className="mt-6 rounded-xl bg-[#f0eded] p-4">
-                    <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Résumé du jour</p>
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-500">RÃ©sumÃ© du jour</p>
                     <p className="mt-2 text-sm text-slate-700">
-                        3 nouvelles parcelles enregistrées, 2 alertes hydriques, et 1 parcelle programmée pour inspection.
+                        3 nouvelles parcelles enregistrÃ©es, 2 alertes hydriques, et 1 parcelle programmÃ©e pour inspection.
                     </p>
                 </div>
             </div>
@@ -103,7 +103,7 @@ function StatCard({ label, value, icon, tone }) {
     return (
         <div className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4">
             <div className={`flex h-11 w-11 items-center justify-center rounded-full ${tone}`}>
-                <span className="material-symbols-outlined">{icon}</span>
+                <Icon name={icon} className="h-5 w-5" />
             </div>
             <div>
                 <p className="text-sm text-slate-500">{label}</p>

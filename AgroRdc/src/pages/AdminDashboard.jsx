@@ -1,21 +1,20 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import AdminSidebar from '../components/AdminSidebar.jsx'
+import Icon from '../components/Icon.jsx'
 
 export default function AdminDashboard() {
     const { user } = useAuth()
 
     return (
-        <div className="min-h-screen bg-[#fbf9f8] text-[#1b1c1c] font-[Inter]">
+        <div className="min-h-screen bg-background text-foreground">
             <AdminSidebar />
 
             <main className="ml-64 min-h-screen">
-                <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-[#DEE2E6] bg-white px-6">
+                <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-border bg-white px-6">
                     <div className="flex flex-1 items-center gap-4">
                         <div className="relative w-full max-w-md">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400">
-                search
-              </span>
+              <Icon name="search" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400" />
                             <input
                                 type="text"
                                 placeholder="Rechercher des utilisateurs, fermes ou rapports..."
@@ -27,10 +26,10 @@ export default function AdminDashboard() {
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
                             <button className="rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-50">
-                                <span className="material-symbols-outlined">notifications</span>
+                                <Icon name="notifications" className="h-5 w-5" />
                             </button>
                             <button className="rounded-full p-2 text-slate-600 transition-colors hover:bg-slate-50">
-                                <span className="material-symbols-outlined">help_outline</span>
+                                <Icon name="help_outline" className="h-5 w-5" />
                             </button>
                         </div>
 
@@ -38,12 +37,12 @@ export default function AdminDashboard() {
 
                         <div className="flex cursor-pointer items-center gap-3">
                             <div className="text-right">
-                                <p className="text-sm font-semibold leading-none">{user?.nom || user?.email || 'Admin'}</p>
-                                <p className="text-xs text-slate-500">{user?.role || 'Super Admin'}</p>
+                                <p className="text-sm font-semibold leading-none">{user?.name || user?.email || 'Admin'}</p>
+                                <p className="text-xs text-muted-foreground">{user?.role || 'Super Admin'}</p>
                             </div>
                             <img
                                 alt="Avatar de l'utilisateur"
-                                className="h-10 w-10 rounded-full border border-[#DEE2E6] object-cover"
+                                className="h-10 w-10 rounded-full border border-border object-cover"
                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuByzF_XvQTBuWaEnjKodstX932NI6w_fk_jo6S6w7m2Uy6eB53_JXF7uFbggz9uUyEekPGuPpzCi5Eim6qUb7eaRgAajDDK7BCuUPxLBQlNq_impBSax5Haj0AftdF4o_izrt0hcxswGi0qj2yadgvIMxHOpvv2mzscl_fQHEzfHRjVCpZCeMW_GNPLY4FVoDDVP5zkLQh37ntCgasCax3kfIyAz9uLWd_bbU9ZsO1_kJqdhjEnywl4hNzA5QznKH4ZBd1vpJr_Ofs"
                             />
                         </div>
@@ -52,25 +51,23 @@ export default function AdminDashboard() {
 
                 <div className="p-8">
                     <div className="mb-10">
-                        <h2 className="font-[Work_Sans] text-[32px] font-semibold leading-10 text-[#1b1c1c]">
+                        <h2 className="text-3xl font-bold text-foreground">
                             Aperçu administrateur
                         </h2>
-                        <p className="text-base text-[#424752]">
+                        <p className="text-base text-on-surface-variant">
                             Performance du système et tableau de bord de gestion des utilisateurs.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-12 gap-6">
                         <div className="col-span-12 grid grid-cols-3 gap-6 lg:col-span-8">
-                            <div className="col-span-1 flex flex-col gap-2 border border-[#DEE2E6] bg-white p-6">
+                            <div className="col-span-1 flex flex-col gap-2 border border-border bg-white p-6">
                                 <div className="flex items-center justify-between">
-                  <span className="material-symbols-outlined rounded bg-blue-50 p-2 text-[#0056B3]">
-                    group
-                  </span>
+                  <Icon name="group" className="h-5 w-5 rounded bg-blue-50 p-2 text-primary" />
                                     <span className="text-xs font-bold text-green-600">+12%</span>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-[#424752]">Nombre total d'utilisateurs</p>
+                                    <p className="text-xs text-on-surface-variant">Nombre total d'utilisateurs</p>
                                     <h3 className="text-xl font-semibold">1,284</h3>
                                 </div>
                                 <div className="flex gap-1 text-[10px] text-slate-400">
@@ -79,40 +76,36 @@ export default function AdminDashboard() {
                                 </div>
                             </div>
 
-                            <div className="col-span-1 flex flex-col gap-2 border border-[#DEE2E6] bg-white p-6">
+                            <div className="col-span-1 flex flex-col gap-2 border border-border bg-white p-6">
                                 <div className="flex items-center justify-between">
-                  <span className="material-symbols-outlined rounded bg-blue-50 p-2 text-[#0056B3]">
-                    agriculture
-                  </span>
+                  <Icon name="agriculture" className="h-5 w-5 rounded bg-blue-50 p-2 text-primary" />
                                     <span className="text-xs font-bold text-green-600">+5%</span>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-[#424752]">Fermes actives</p>
+                                    <p className="text-xs text-on-surface-variant">Fermes actives</p>
                                     <h3 className="text-xl font-semibold">342</h3>
                                 </div>
                                 <p className="text-xs text-slate-400">Réparties dans 14 provinces</p>
                             </div>
 
-                            <Link to="/sante-systeme" className="col-span-1 flex flex-col gap-2 border border-[#DEE2E6] bg-white p-6 hover:border-green-400 transition-colors">
+                            <Link to="/sante-systeme" className="col-span-1 flex flex-col gap-2 border border-border bg-white p-6 hover:border-green-400 transition-colors">
                                 <div className="flex items-center justify-between">
-                  <span className="material-symbols-outlined rounded bg-green-50 p-2 text-green-600">
-                    monitor_heart
-                  </span>
+                  <Icon name="monitor_heart" className="h-5 w-5 rounded bg-green-50 p-2 text-green-600" />
                                     <span className="text-xs font-bold text-green-600">Optimal</span>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-[#424752]">Santé du système</p>
+                                    <p className="text-xs text-on-surface-variant">Santé du système</p>
                                     <h3 className="text-xl font-semibold">99.9%</h3>
                                 </div>
                                 <p className="text-xs text-slate-400">Latence : 142ms ↗</p>
                             </Link>
 
-                            <div className="col-span-3 overflow-hidden border border-[#DEE2E6] bg-white">
-                                <div className="flex items-center justify-between border-b border-[#DEE2E6] p-6">
-                                    <h4 className="text-sm font-semibold text-[#1b1c1c]">
+                            <div className="col-span-3 overflow-hidden border border-border bg-white">
+                                <div className="flex items-center justify-between border-b border-border p-6">
+                                    <h4 className="text-sm font-semibold text-foreground">
                                         Croissance des utilisateurs actifs
                                     </h4>
-                                    <button className="text-xs font-bold text-[#0056B3] hover:underline">
+                                    <button className="text-xs font-bold text-primary hover:underline">
                                         Voir les analyses
                                     </button>
                                 </div>
@@ -125,7 +118,7 @@ export default function AdminDashboard() {
                                     <div className="h-32 flex-1 rounded-t-sm bg-blue-200" />
                                     <div className="h-40 flex-1 rounded-t-sm bg-blue-300" />
                                     <div className="h-48 flex-1 rounded-t-sm bg-blue-400" />
-                                    <div className="group relative h-56 flex-1 rounded-t-sm bg-[#0056B3]">
+                                    <div className="group relative h-56 flex-1 rounded-t-sm bg-primary">
                                         <div className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-[#004491] px-2 py-1 text-[10px] text-white">
                                             1,284
                                         </div>
@@ -135,36 +128,30 @@ export default function AdminDashboard() {
                         </div>
 
                         <div className="col-span-12 flex flex-col gap-6 lg:col-span-4">
-                            <div className="border border-[#DEE2E6] bg-white p-6">
-                                <h4 className="mb-6 text-sm font-semibold text-[#1b1c1c]">
+                            <div className="border border-border bg-white p-6">
+                                <h4 className="mb-6 text-sm font-semibold text-foreground">
                                     Administration rapide
                                 </h4>
                                 <div className="flex flex-col gap-2">
-                                    <Link to="/utilisateurs/nouveau" className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-[#c2c6d4] hover:bg-slate-100">
-                    <span className="material-symbols-outlined text-[#0056B3]">
-                      person_add
-                    </span>
+                                    <Link to="/utilisateurs/nouveau" className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-outline-variant hover:bg-slate-100">
+                    <Icon name="person_add" className="h-5 w-5 text-primary" />
                                         Ajouter un nouvel admin
                                     </Link>
-                                    <button className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-[#c2c6d4] hover:bg-slate-100">
-                    <span className="material-symbols-outlined text-[#0056B3]">
-                      domain_verification
-                    </span>
+                                    <button className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-outline-variant hover:bg-slate-100">
+                    <Icon name="domain_verification" className="h-5 w-5 text-primary" />
                                         File de validation des fermes
-                                        <span className="ml-auto rounded-full bg-[#da3433] px-2 py-0.5 text-[10px] text-white">
+                                        <span className="ml-auto rounded-full bg-destructive px-2 py-0.5 text-[10px] text-white">
                       8
                     </span>
                                     </button>
-                                    <button className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-[#c2c6d4] hover:bg-slate-100">
-                    <span className="material-symbols-outlined text-[#0056B3]">
-                      database
-                    </span>
+                                    <button className="flex items-center gap-3 border border-transparent bg-slate-50 p-3 text-sm font-medium transition-all hover:border-outline-variant hover:bg-slate-100">
+                    <Icon name="database" className="h-5 w-5 text-primary" />
                                         Sauvegarde de la base de données
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="relative overflow-hidden bg-[#0056B3] p-6 text-white">
+                            <div className="relative overflow-hidden bg-primary p-6 text-white">
                                 <div className="relative z-10">
                                     <div className="mb-4 flex items-start justify-between">
                                         <div>
@@ -173,9 +160,7 @@ export default function AdminDashboard() {
                                             </p>
                                             <h4 className="text-xl font-semibold">31°C</h4>
                                         </div>
-                                        <span className="material-symbols-outlined text-4xl">
-                      wb_sunny
-                    </span>
+                                        <Icon name="wb_sunny" className="h-10 w-10" />
                                     </div>
                                     <p className="mb-4 text-xs opacity-90">
                                         Forte humidité prévue. Conditions optimales pour le suivi de l'irrigation du riz.
@@ -196,30 +181,28 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
                                 <div className="absolute -right-10 -bottom-10 opacity-10">
-                  <span className="material-symbols-outlined text-[160px]">
-                    cloud
-                  </span>
+                  <Icon name="cloud" className="h-[160px] w-[160px]" />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="col-span-12 overflow-hidden border border-[#DEE2E6] bg-white">
-                            <div className="flex items-center justify-between border-b border-[#DEE2E6] p-6">
-                                <h4 className="text-sm font-semibold text-[#1b1c1c]">
+                        <div className="col-span-12 overflow-hidden border border-border bg-white">
+                            <div className="flex items-center justify-between border-b border-border p-6">
+                                <h4 className="text-sm font-semibold text-foreground">
                                     Inscriptions récentes des utilisateurs
                                 </h4>
                                 <div className="flex gap-2">
-                                    <button className="border border-[#DEE2E6] p-2 transition-colors hover:bg-slate-50">
-                                        <span className="material-symbols-outlined text-sm">filter_list</span>
+                                    <button className="border border-border p-2 transition-colors hover:bg-slate-50">
+                                        <Icon name="filter_list" className="h-4 w-4" />
                                     </button>
-                                    <button className="border border-[#DEE2E6] p-2 transition-colors hover:bg-slate-50">
-                                        <span className="material-symbols-outlined text-sm">download</span>
+                                    <button className="border border-border p-2 transition-colors hover:bg-slate-50">
+                                        <Icon name="download" className="h-4 w-4" />
                                     </button>
                                     <Link
                                         to="/utilisateurs"
-                                        className="flex items-center gap-1 border border-[#003f87] px-3 py-1.5 text-xs font-medium text-[#003f87] transition-colors hover:bg-blue-50"
+                                        className="flex items-center gap-1 border border-primary px-3 py-1.5 text-xs font-medium text-[#003f87] transition-colors hover:bg-blue-50"
                                     >
-                                        <span className="material-symbols-outlined text-sm">open_in_new</span>
+                                        <Icon name="open_in_new" className="h-4 w-4" />
                                         Gérer
                                     </Link>
                                 </div>
@@ -228,7 +211,7 @@ export default function AdminDashboard() {
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left text-sm">
                                     <thead>
-                                    <tr className="border-b border-[#DEE2E6] bg-slate-50 text-xs font-semibold">
+                                    <tr className="border-b border-border bg-slate-50 text-xs font-semibold">
                                         <th className="px-6 py-4">Utilisateur</th>
                                         <th className="px-6 py-4">Rôle</th>
                                         <th className="px-6 py-4">Organisation/Ferme</th>
@@ -238,7 +221,7 @@ export default function AdminDashboard() {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr className="border-b border-[#DEE2E6] transition-colors hover:bg-slate-50">
+                                    <tr className="border-b border-border transition-colors hover:bg-slate-50">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-[#003f87]">
@@ -261,15 +244,13 @@ export default function AdminDashboard() {
                         </span>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <button className="text-slate-400 hover:text-[#0056B3]">
-                          <span className="material-symbols-outlined text-sm">
-                            more_vert
-                          </span>
+                                            <button className="text-slate-400 hover:text-primary">
+                          <Icon name="more_vert" className="h-4 w-4" />
                                             </button>
                                         </td>
                                     </tr>
 
-                                    <tr className="border-b border-[#DEE2E6] bg-slate-50 transition-colors hover:bg-slate-100">
+                                    <tr className="border-b border-border bg-slate-50 transition-colors hover:bg-slate-100">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-xs font-bold text-orange-600">
@@ -292,15 +273,13 @@ export default function AdminDashboard() {
                         </span>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <button className="text-slate-400 hover:text-[#0056B3]">
-                          <span className="material-symbols-outlined text-sm">
-                            more_vert
-                          </span>
+                                            <button className="text-slate-400 hover:text-primary">
+                          <Icon name="more_vert" className="h-4 w-4" />
                                             </button>
                                         </td>
                                     </tr>
 
-                                    <tr className="border-b border-[#DEE2E6] transition-colors hover:bg-slate-50">
+                                    <tr className="border-b border-border transition-colors hover:bg-slate-50">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-[#003f87]">
@@ -323,10 +302,8 @@ export default function AdminDashboard() {
                         </span>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <button className="text-slate-400 hover:text-[#0056B3]">
-                          <span className="material-symbols-outlined text-sm">
-                            more_vert
-                          </span>
+                                            <button className="text-slate-400 hover:text-primary">
+                          <Icon name="more_vert" className="h-4 w-4" />
                                             </button>
                                         </td>
                                     </tr>
@@ -335,9 +312,9 @@ export default function AdminDashboard() {
                             </div>
                         </div>
 
-                        <div className="col-span-12 lg:col-span-6 border border-[#DEE2E6] bg-white">
-                            <div className="flex items-center justify-between border-b border-[#DEE2E6] p-6">
-                                <h4 className="text-sm font-semibold text-[#1b1c1c]">
+                        <div className="col-span-12 lg:col-span-6 border border-border bg-white">
+                            <div className="flex items-center justify-between border-b border-border p-6">
+                                <h4 className="text-sm font-semibold text-foreground">
                                     Carte de validation géospatiale
                                 </h4>
                                 <span className="text-xs text-slate-400">République démocratique du Congo</span>
@@ -350,16 +327,11 @@ export default function AdminDashboard() {
                                 />
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <div className="relative">
-                                        <div className="absolute -top-4 -left-4 h-8 w-8 rounded-full bg-[#0056B3]/20 animate-ping" />
-                                        <span
-                                            className="material-symbols-outlined text-4xl text-[#0056B3]"
-                                            style={{ fontVariationSettings: "'FILL' 1" }}
-                                        >
-                      location_on
-                    </span>
+                                        <div className="absolute -top-4 -left-4 h-8 w-8 rounded-full bg-primary/20 animate-ping" />
+                                        <Icon name="location_on" className="h-10 w-10 text-primary" />
                                     </div>
                                 </div>
-                                <div className="absolute bottom-4 left-4 rounded border border-[#DEE2E6] bg-white/90 p-2 text-[10px] shadow-sm">
+                                <div className="absolute bottom-4 left-4 rounded border border-border bg-white/90 p-2 text-[10px] shadow-sm">
                                     <div className="mb-1 flex items-center gap-2">
                                         <span className="h-2 w-2 rounded-full bg-green-500" />
                                         Ferme vérifiée
@@ -372,9 +344,9 @@ export default function AdminDashboard() {
                             </div>
                         </div>
 
-                        <div className="col-span-12 lg:col-span-6 border border-[#DEE2E6] bg-white">
-                            <div className="border-b border-[#DEE2E6] p-6">
-                                <h4 className="text-sm font-semibold text-[#1b1c1c]">
+                        <div className="col-span-12 lg:col-span-6 border border-border bg-white">
+                            <div className="border-b border-border p-6">
+                                <h4 className="text-sm font-semibold text-foreground">
                                     Journal d'activité du système
                                 </h4>
                             </div>
@@ -423,7 +395,7 @@ export default function AdminDashboard() {
                                 </div>
                             </div>
                             <div className="border-t border-[#DEE2E6] p-6 text-center">
-                                <button className="text-xs font-bold text-[#0056B3] hover:underline">
+                                <button className="text-xs font-bold text-primary hover:underline">
                                     Voir le journal d'audit complet
                                 </button>
                             </div>

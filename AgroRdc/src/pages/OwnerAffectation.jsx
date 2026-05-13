@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import OwnerSidebar from "../components/OwnerSidebar.jsx";
-import { setAssignment } from "../api/assignments.js";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import Icon from '../components/Icon.jsx'
 
 const PARCEL_LIST = [
     {
@@ -119,14 +122,14 @@ export default function OwnerAffectation() {
                     </div>
                     <div className="flex gap-3">
                         <button className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition-all hover:border-[#003f87] hover:text-[#003f87]">
-                            <span className="material-symbols-outlined text-sm">filter_list</span>
+                            <Icon name="filter_list" className="h-4 w-4" />
                             Filtrer
                         </button>
                         <button
                             onClick={() => openDrawer(selectedParcelId)}
                             className="flex items-center gap-2 rounded-lg bg-[#003f87] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95"
                         >
-                            <span className="material-symbols-outlined text-base">person_add</span>
+                            <Icon name="person_add" className="h-5 w-5 text-base" />
                             Affecter Employé
                         </button>
                     </div>
@@ -164,7 +167,7 @@ export default function OwnerAffectation() {
 
                         <section className="relative col-span-12 overflow-hidden rounded-xl bg-gradient-to-br from-[#003f87] to-[#0056b3] p-6 text-white shadow-md lg:col-span-4">
                             <div className="pointer-events-none absolute -bottom-8 -right-8 opacity-10">
-                                <span className="material-symbols-outlined text-[140px]">groups</span>
+                                <Icon name="groups" className="h-5 w-5 text-[140px]" />
                             </div>
                             <h2 className="text-sm font-bold">Taux d'Affectation</h2>
                             <p className="mt-1 text-xs text-white/70">84% des parcelles critiques couvertes</p>
@@ -182,18 +185,64 @@ export default function OwnerAffectation() {
                 </div>
             </main>
 
-            {drawerOpen && (
-                <AssignmentDrawer
-                    parcelId={selectedParcelId}
-                    parcelTitle={PARCEL_LIST.find((p) => p.id === selectedParcelId)?.title ?? selectedParcelId}
-                    parcelCrop={PARCEL_LIST.find((p) => p.id === selectedParcelId)?.crop ?? ""}
-                    onClose={() => setDrawerOpen(false)}
-                    employees={employees}
-                    onToggle={toggleEmployee}
-                    onConfirm={handleConfirm}
-                    saving={saving}
-                />
-            )}
+            {/* shadcn Sheet replaces the hand-rolled drawer — handles focus trapping, Escape key, scroll lock */}
+            <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
+                <SheetContent side="right" className="w-full max-w-md flex flex-col p-0">
+                    <SheetHeader className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-6 py-4">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                                <Icon name="person_add" className="h-5 w-5 text-base text-primary" />
+                            </div>
+                            <div>
+                                <SheetTitle className="text-sm font-bold text-foreground">Affecter du Personnel</SheetTitle>
+                                <p className="text-xs text-muted-foreground">
+                                    {PARCEL_LIST.find((p) => p.id === selectedParcelId)?.title ?? selectedParcelId}
+                                    {' · '}
+                                    {PARCEL_LIST.find((p) => p.id === selectedParcelId)?.crop ?? ''}
+                                </p>
+                            </div>
+                        </div>
+                    </SheetHeader>
+
+                    <div className="flex-1 space-y-5 overflow-y-auto p-6">
+                        <div className="relative">
+                            <Icon name="search" className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                className="w-full rounded-lg border border-border bg-white py-2.5 pl-9 pr-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400"
+                                placeholder="Rechercher par nom ou compétence…"
+                                type="text"
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Employés Disponibles</h3>
+                            {employees.map((emp, i) => (
+                                <motion.div
+                                    key={emp.id}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.2, delay: i * 0.06 }}
+                                >
+                                    <EmployeeRow {...emp} onToggle={() => toggleEmployee(emp.id)} />
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <SheetFooter className="flex gap-3 border-t border-slate-100 bg-slate-50 px-6 py-4">
+                        <Button variant="outline" className="flex-1" onClick={() => setDrawerOpen(false)}>
+                            Annuler
+                        </Button>
+                        <Button
+                            className="flex-[2] bg-primary hover:bg-primary-hover"
+                            onClick={handleConfirm}
+                            disabled={saving}
+                        >
+                            {saving ? 'Enregistrement…' : `Confirmer (${employees.filter(e => e.assigned).length})`}
+                        </Button>
+                    </SheetFooter>
+                </SheetContent>
+            </Sheet>
         </div>
     );
 }
@@ -219,9 +268,7 @@ function ParcelCard({ parcel, onAssign }) {
                 </span>
                 {selected && (
                     <div className="absolute right-2 top-2">
-                        <span className="material-symbols-outlined rounded-full bg-white text-[#003f87]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                            check_circle
-                        </span>
+                        <Icon name="check_circle" className="h-5 w-5 rounded-full bg-white text-[#003f87]" />
                     </div>
                 )}
             </div>
@@ -265,89 +312,11 @@ function WorkforceStat({ icon, value, label }) {
     return (
         <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-4 ring-1 ring-slate-100">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#003f87]/10">
-                <span className="material-symbols-outlined text-base text-[#003f87]">{icon}</span>
+                <Icon name={icon} className="h-5 w-5 text-[#003f87]" />
             </div>
             <div>
                 <p className="text-xl font-extrabold text-[#1b1c1c]">{value}</p>
                 <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">{label}</p>
-            </div>
-        </div>
-    );
-}
-
-function AssignmentDrawer({ parcelTitle, parcelCrop, onClose, employees, onToggle, onConfirm, saving }) {
-    const assignedCount = employees.filter((e) => e.assigned).length;
-
-    return (
-        <div className="fixed inset-0 z-[60] flex justify-end bg-[#1b1c1c]/40 backdrop-blur-sm" onClick={onClose}>
-            <div
-                className="flex h-full w-full max-w-md flex-col bg-white shadow-2xl"
-                onClick={(e) => e.stopPropagation()}
-            >
-                {/* Drawer header */}
-                <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-6 py-4">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#003f87]/10">
-                            <span className="material-symbols-outlined text-base text-[#003f87]">person_add</span>
-                        </div>
-                        <div>
-                            <h2 className="text-sm font-bold text-[#1b1c1c]">Affecter du Personnel</h2>
-                            <p className="text-[11px] text-slate-500">{parcelTitle} · {parcelCrop}</p>
-                        </div>
-                    </div>
-                    <button onClick={onClose} className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-200">
-                        <span className="material-symbols-outlined text-lg">close</span>
-                    </button>
-                </div>
-
-                {/* Drawer body */}
-                <div className="flex-1 space-y-5 overflow-y-auto p-6">
-                    <div className="relative">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">search</span>
-                        <input
-                            className="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-9 pr-4 text-sm outline-none transition-all focus:border-[#003f87] focus:ring-2 focus:ring-[#003f87]/20 placeholder:text-slate-400"
-                            placeholder="Rechercher par nom ou compétence…"
-                            type="text"
-                        />
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                        {["Tous", "Agronome", "Technicien", "Irrigation"].map((chip, i) => (
-                            <span
-                                key={chip}
-                                className={`cursor-pointer rounded-full px-3 py-1 text-xs font-semibold ${
-                                    i === 0 ? "bg-[#003f87] text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                                }`}
-                            >
-                                {chip}
-                            </span>
-                        ))}
-                    </div>
-
-                    <div className="space-y-3">
-                        <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Employés Disponibles</h3>
-                        {employees.map((emp) => (
-                            <EmployeeRow key={emp.id} {...emp} onToggle={() => onToggle(emp.id)} />
-                        ))}
-                    </div>
-                </div>
-
-                {/* Drawer footer */}
-                <div className="flex gap-3 border-t border-slate-100 bg-slate-50 px-6 py-4">
-                    <button
-                        onClick={onClose}
-                        className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100"
-                    >
-                        Annuler
-                    </button>
-                    <button
-                        onClick={onConfirm}
-                        disabled={saving}
-                        className="flex-[2] rounded-lg bg-[#003f87] py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#002d63] active:scale-95 disabled:opacity-60"
-                    >
-                        {saving ? "Enregistrement…" : `Confirmer (${assignedCount})`}
-                    </button>
-                </div>
             </div>
         </div>
     );
@@ -358,7 +327,7 @@ function EmployeeRow({ name, role, assigned, onToggle }) {
         <div className={`flex items-center justify-between rounded-xl border p-3 transition-colors ${assigned ? "border-blue-200 bg-blue-50/40" : "border-slate-200 hover:bg-slate-50"}`}>
             <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100">
-                    <span className="material-symbols-outlined text-base text-slate-400">person</span>
+                    <Icon name="person" className="h-5 w-5 text-base text-slate-400" />
                 </div>
                 <div>
                     <p className="text-sm font-bold text-[#1b1c1c]">{name}</p>
@@ -370,7 +339,7 @@ function EmployeeRow({ name, role, assigned, onToggle }) {
                     onClick={onToggle}
                     className="flex items-center gap-1.5 text-emerald-600 hover:text-red-500 transition-colors"
                 >
-                    <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                    <Icon name="check_circle" className="h-5 w-5 text-base" />
                     <span className="text-xs font-bold">Assigné</span>
                 </button>
             ) : (
@@ -388,7 +357,7 @@ function EmployeeRow({ name, role, assigned, onToggle }) {
 function AvatarCircle() {
     return (
         <div className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-slate-200">
-            <span className="material-symbols-outlined text-sm text-slate-400">person</span>
+            <Icon name="person" className="h-4 w-4 text-slate-400" />
         </div>
     );
 }

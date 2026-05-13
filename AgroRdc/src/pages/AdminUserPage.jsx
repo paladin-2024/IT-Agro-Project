@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import AdminSidebar from '../components/AdminSidebar.jsx'
+import Icon from '../components/Icon.jsx'
 
 export default function AdminUsersPage() {
     return (
@@ -11,9 +12,7 @@ export default function AdminUsersPage() {
                 <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white px-8">
                     <div className="flex flex-1 items-center max-w-xl">
                         <div className="relative w-full">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400">
-                                search
-                            </span>
+                            <Icon name="search" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400" />
                             <input
                                 type="text"
                                 placeholder="Rechercher un utilisateur, une ferme ou un ID..."
@@ -24,11 +23,11 @@ export default function AdminUsersPage() {
 
                     <div className="flex items-center gap-4">
                         <button className="relative rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-50">
-                            <span className="material-symbols-outlined">notifications</span>
+                            <Icon name="notifications" className="h-5 w-5" />
                             <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full border-2 border-white bg-[#b6171e]" />
                         </button>
                         <button className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-50">
-                            <span className="material-symbols-outlined">help_outline</span>
+                            <Icon name="help_outline" className="h-5 w-5" />
                         </button>
                         <div className="mx-2 h-8 w-px bg-slate-200" />
                         <div className="flex items-center gap-3">
@@ -58,11 +57,11 @@ export default function AdminUsersPage() {
                         </div>
                         <div className="flex gap-3">
                             <button className="flex items-center gap-2 rounded-lg border border-[#003f87] px-4 py-2 text-sm font-medium text-[#003f87] transition-colors hover:bg-blue-50">
-                                <span className="material-symbols-outlined text-sm">file_download</span>
+                                <Icon name="file_download" className="h-4 w-4" />
                                 Exporter la liste
                             </button>
                             <Link to="/utilisateurs/nouveau" className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#0056b3]">
-                                <span className="material-symbols-outlined text-sm">person_add</span>
+                                <Icon name="person_add" className="h-4 w-4" />
                                 Nouvel utilisateur
                             </Link>
                         </div>
@@ -79,7 +78,7 @@ export default function AdminUsersPage() {
                     {/* Admins table */}
                     <section>
                         <div className="mb-4 flex items-center gap-3">
-                            <span className="material-symbols-outlined text-[#003f87]">shield_person</span>
+                            <Icon name="shield_person" className="h-5 w-5 text-[#003f87]" />
                             <h3 className="text-xl font-semibold text-slate-900">Administrateurs système</h3>
                         </div>
                         <div className="overflow-hidden rounded-xl border border-[#DEE2E6] bg-white">
@@ -131,7 +130,7 @@ export default function AdminUsersPage() {
                     {/* Owners + employees */}
                     <section>
                         <div className="mb-5 flex items-center gap-3">
-                            <span className="material-symbols-outlined text-[#003f87]">agriculture</span>
+                            <Icon name="agriculture" className="h-5 w-5 text-[#003f87]" />
                             <h3 className="text-xl font-semibold text-slate-900">Propriétaires et leurs employés</h3>
                         </div>
                         <div className="space-y-5">
@@ -175,7 +174,7 @@ export default function AdminUsersPage() {
             {/* FAB */}
             <div className="fixed bottom-8 right-8 z-50">
                 <Link to="/utilisateurs/nouveau" className="flex h-14 w-14 items-center justify-center rounded-full bg-[#003f87] text-white shadow-lg transition-transform hover:scale-110 active:scale-95">
-                    <span className="material-symbols-outlined text-2xl">add</span>
+                    <Icon name="add" className="h-6 w-6" />
                 </Link>
             </div>
         </div>
@@ -188,7 +187,7 @@ function StatCard({ title, value, icon, iconBg, iconText }) {
     return (
         <div className="flex items-center gap-4 rounded-xl border border-[#DEE2E6] bg-white p-5">
             <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${iconBg}`}>
-                <span className={`material-symbols-outlined text-2xl ${iconText}`}>{icon}</span>
+                <Icon name={icon} className={`h-6 w-6 ${iconText}`} />
             </div>
             <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">{title}</p>
@@ -239,10 +238,10 @@ function UserRow({ initials, name, id, role, email, lastLogin, status = 'actif',
             <td className="px-6 py-4">
                 <div className="flex justify-end gap-1">
                     <button className="rounded p-1.5 text-slate-400 transition-colors hover:bg-blue-50 hover:text-[#003f87]">
-                        <span className="material-symbols-outlined text-lg">edit</span>
+                        <Icon name="edit" className="h-5 w-5 text-lg" />
                     </button>
                     <button className="rounded p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-[#b6171e]">
-                        <span className="material-symbols-outlined text-lg">delete</span>
+                        <Icon name="delete" className="h-5 w-5 text-lg" />
                     </button>
                 </div>
             </td>
@@ -256,7 +255,7 @@ function OwnerCard({ icon, owner, farm, employees, employeesRows, moreText }) {
             <div className="flex items-center justify-between border-b border-[#DEE2E6] bg-slate-50 px-6 py-4">
                 <div className="flex items-center gap-4">
                     <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#003f87]/10 text-[#003f87]">
-                        <span className="material-symbols-outlined">{icon}</span>
+                        <Icon name={icon} className="h-5 w-5" />
                     </div>
                     <div>
                         <h4 className="font-semibold text-slate-900">{owner}</h4>
@@ -275,7 +274,7 @@ function OwnerCard({ icon, owner, farm, employees, employeesRows, moreText }) {
                         Gérer la ferme
                     </button>
                     <button className="rounded p-1.5 text-slate-400 hover:bg-slate-100 hover:text-[#003f87]">
-                        <span className="material-symbols-outlined text-lg">more_vert</span>
+                        <Icon name="more_vert" className="h-5 w-5 text-lg" />
                     </button>
                 </div>
             </div>
@@ -317,7 +316,7 @@ function OwnerCard({ icon, owner, farm, employees, employeesRows, moreText }) {
             {moreText && (
                 <div className="border-t border-slate-100 bg-slate-50/50 px-8 py-3 text-center">
                     <button className="mx-auto flex items-center justify-center gap-1 text-sm font-medium text-[#003f87] transition-all hover:gap-2">
-                        <span className="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+                        <Icon name="keyboard_arrow_down" className="h-4 w-4" />
                         {moreText}
                     </button>
                 </div>

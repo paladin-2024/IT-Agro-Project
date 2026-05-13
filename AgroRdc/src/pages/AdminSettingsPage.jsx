@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import AdminSidebar from '../components/AdminSidebar.jsx'
+import Icon from '../components/Icon.jsx'
 
 const INITIAL_GENERAL = {
     appName: 'AgriRDC',
@@ -73,12 +74,12 @@ export default function AdminSettingsPage() {
                 {/* Topbar */}
                 <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white px-6">
                     <div className="flex items-center gap-3">
-                        <span className="material-symbols-outlined text-[#003f87]">settings</span>
+                        <Icon name="settings" className="h-5 w-5 text-[#003f87]" />
                         <span className="text-sm font-semibold text-[#1b1c1c]">Paramètres du système</span>
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="relative hidden md:block">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <Icon name="search" className="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 className="w-52 rounded-lg border-none bg-slate-50 py-2 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-[#003f87]"
                                 placeholder="Rechercher une configuration..."
@@ -86,10 +87,10 @@ export default function AdminSettingsPage() {
                             />
                         </div>
                         <button className="relative rounded-full p-2 text-slate-500 hover:bg-slate-50">
-                            <span className="material-symbols-outlined">notifications</span>
+                            <Icon name="notifications" className="h-5 w-5" />
                         </button>
                         <button className="rounded-full p-2 text-slate-500 hover:bg-slate-50">
-                            <span className="material-symbols-outlined">help_outline</span>
+                            <Icon name="help_outline" className="h-5 w-5" />
                         </button>
                         <img
                             alt="Profil administrateur"
@@ -110,7 +111,7 @@ export default function AdminSettingsPage() {
                         </div>
                         {savedSection && (
                             <div className="flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-4 py-1.5 text-sm font-medium text-green-700">
-                                <span className="material-symbols-outlined text-sm">check_circle</span>
+                                <Icon name="check_circle" className="h-4 w-4" />
                                 Modifications enregistrées
                             </div>
                         )}
@@ -122,7 +123,7 @@ export default function AdminSettingsPage() {
                         {/* General config */}
                         <section className="flex flex-col gap-5 rounded-xl border border-[#DEE2E6] bg-white p-6 md:col-span-7">
                             <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined text-[#003f87]">tune</span>
+                                <Icon name="tune" className="h-5 w-5 text-[#003f87]" />
                                 <h3 className="text-base font-semibold">Configuration générale</h3>
                             </div>
 
@@ -186,7 +187,7 @@ export default function AdminSettingsPage() {
                                     onClick={() => saveSection('general')}
                                     className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0056b3]"
                                 >
-                                    <span className="material-symbols-outlined text-sm">save</span>
+                                    <Icon name="save" className="h-4 w-4" />
                                     Enregistrer
                                 </button>
                             </div>
@@ -195,7 +196,7 @@ export default function AdminSettingsPage() {
                         {/* Backup & retention */}
                         <section className="rounded-xl border border-[#DEE2E6] bg-slate-50 p-6 md:col-span-5">
                             <div className="mb-5 flex items-center gap-3">
-                                <span className="material-symbols-outlined text-[#003f87]">database</span>
+                                <Icon name="database" className="h-5 w-5 text-[#003f87]" />
                                 <h3 className="text-base font-semibold">Sauvegarde &amp; données</h3>
                             </div>
 
@@ -229,7 +230,7 @@ export default function AdminSettingsPage() {
                                         onClick={() => saveSection('backup')}
                                         className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0056b3]"
                                     >
-                                        <span className="material-symbols-outlined text-sm">save</span>
+                                        <Icon name="save" className="h-4 w-4" />
                                         Enregistrer
                                     </button>
                                 </div>
@@ -241,11 +242,11 @@ export default function AdminSettingsPage() {
                     <section className="overflow-hidden rounded-xl border border-[#DEE2E6] bg-white">
                         <div className="flex items-center justify-between border-b border-[#DEE2E6] bg-slate-50 p-6">
                             <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined text-[#003f87]">admin_panel_settings</span>
+                                <Icon name="admin_panel_settings" className="h-5 w-5 text-[#003f87]" />
                                 <h3 className="text-base font-semibold">Rôles et permissions</h3>
                             </div>
                             <button className="flex items-center gap-2 rounded-lg border border-[#003f87] px-4 py-1.5 text-sm font-semibold text-[#003f87] hover:bg-blue-50">
-                                <span className="material-symbols-outlined text-sm">group_add</span>
+                                <Icon name="group_add" className="h-4 w-4" />
                                 Gérer les groupes
                             </button>
                         </div>
@@ -276,7 +277,7 @@ export default function AdminSettingsPage() {
                         {/* Security */}
                         <section className="rounded-xl border border-[#DEE2E6] bg-white p-6 space-y-5">
                             <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined text-[#003f87]">verified_user</span>
+                                <Icon name="verified_user" className="h-5 w-5 text-[#003f87]" />
                                 <h3 className="text-base font-semibold">Sécurité</h3>
                             </div>
 
@@ -325,7 +326,7 @@ export default function AdminSettingsPage() {
 
                             <div className="flex justify-end border-t border-slate-100 pt-2">
                                 <button onClick={() => saveSection('security')} className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0056b3]">
-                                    <span className="material-symbols-outlined text-sm">save</span>
+                                    <Icon name="save" className="h-4 w-4" />
                                     Enregistrer
                                 </button>
                             </div>
@@ -334,7 +335,7 @@ export default function AdminSettingsPage() {
                         {/* Notifications */}
                         <section className="rounded-xl border border-[#DEE2E6] bg-white p-6 space-y-5">
                             <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined text-[#003f87]">notifications_active</span>
+                                <Icon name="notifications_active" className="h-5 w-5 text-[#003f87]" />
                                 <h3 className="text-base font-semibold">Notifications</h3>
                             </div>
 
@@ -375,7 +376,7 @@ export default function AdminSettingsPage() {
 
                             <div className="flex justify-end border-t border-slate-100 pt-2">
                                 <button onClick={() => saveSection('notif')} className="flex items-center gap-2 rounded-lg bg-[#003f87] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0056b3]">
-                                    <span className="material-symbols-outlined text-sm">save</span>
+                                    <Icon name="save" className="h-4 w-4" />
                                     Enregistrer
                                 </button>
                             </div>
@@ -385,7 +386,7 @@ export default function AdminSettingsPage() {
                     {/* ── Row 4 : Danger zone ── */}
                     <section className="rounded-xl border border-red-200 bg-red-50 p-6">
                         <div className="mb-3 flex items-center gap-3">
-                            <span className="material-symbols-outlined text-red-600">bolt</span>
+                            <Icon name="bolt" className="h-5 w-5 text-red-600" />
                             <h3 className="text-base font-semibold text-red-800">Zone de danger — Opérations irréversibles</h3>
                         </div>
                         <p className="mb-5 text-sm text-red-700">
@@ -471,8 +472,8 @@ function RoleRow({ label, admin, proprietaire, employe, analyste, logisticien })
             {[admin, proprietaire, employe, analyste, logisticien].map((val, i) => (
                 <td key={i} className="px-6 py-3 text-center">
                     {val
-                        ? <span className="material-symbols-outlined text-green-600 text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                        : <span className="material-symbols-outlined text-slate-300 text-lg">remove</span>
+                        ? <Icon name="check_circle" className="h-5 w-5 text-green-600 text-lg" />
+                        : <Icon name="remove" className="h-5 w-5 text-slate-300 text-lg" />
                     }
                 </td>
             ))}
@@ -489,7 +490,7 @@ function DangerButton({ icon, label, enabled, variant }) {
     }
     return (
         <button disabled={!enabled} className={`${base} ${variants[variant]}`}>
-            <span className="material-symbols-outlined text-sm">{icon}</span>
+            <Icon name={icon} className="h-4 w-4" />
             {label}
         </button>
     )
