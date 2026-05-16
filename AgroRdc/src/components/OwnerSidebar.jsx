@@ -24,6 +24,7 @@ export default function OwnerSidebar() {
             <div className="mb-8 px-5">
                 <img src={logo} alt="AgriRDC" className="h-12 w-auto object-contain" />
                 <p className="mt-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Espace Propriétaire</p>
+                <div className="mt-4 border-t border-border" />
             </div>
 
             <nav className="flex-1 space-y-1 px-3">
