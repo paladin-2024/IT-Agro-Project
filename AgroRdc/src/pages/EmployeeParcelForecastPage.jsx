@@ -1,6 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
-import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import EmployeeSidebar from '../components/EmployeeSidebar.jsx'
 import Icon from '../components/Icon.jsx'
 
 const RISKS = [
@@ -36,13 +35,9 @@ export default function EmployeeParcelForecastPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            <EmployeeTopNav
-                backTo={`/employee/parcelles/${parcelId}`}
-                backLabel={`Parcelle ${parcelId}`}
-                title="Prévisions"
-            />
+            <EmployeeSidebar />
 
-            <main className="mx-auto max-w-7xl space-y-6 px-6 pb-32 pt-8 md:pb-10">
+            <main className="ml-64 space-y-6 px-8 pt-8 pb-10">
                 {/* Page title row */}
                 <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                     <div>
@@ -288,7 +283,6 @@ export default function EmployeeParcelForecastPage() {
                 <Icon name="add_chart" className="h-6 w-6" />
             </button>
 
-            <EmployeeBottomNav parcelId={parcelId} />
         </div>
     )
 }

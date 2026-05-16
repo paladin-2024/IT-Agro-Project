@@ -1,10 +1,10 @@
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/logo.png";
 import Icon from './Icon.jsx'
 
 export default function LeftBanner({ imageUrl, subtitle, infoIcon, infoTitle, infoText, footer }) {
     const backgroundImage = imageUrl
-        ? `linear-gradient(rgba(0,63,135,0.85),rgba(0,63,135,0.95)),url('${imageUrl}')`
-        : `linear-gradient(rgba(0,63,135,0.85),rgba(0,63,135,0.95))`
+        ? `linear-gradient(160deg,rgba(89, 169, 255, 0.92) 0%,rgba(0, 48, 105, 0.97) 100%),url('${imageUrl}')`
+        : `linear-gradient(160deg,rgba(89, 169, 255, 0.92) 0%,rgba(0, 48, 105, 0.97) 100%)`
 
     return (
         <section
@@ -14,11 +14,11 @@ export default function LeftBanner({ imageUrl, subtitle, infoIcon, infoTitle, in
             <div className="space-y-4">
                 <div className="flex items-center gap-2">
                     {/*<Icon name={icon} className="h-5 w-5 text-[40px]" />*/}
-                    <div className="w-48 h-16 rounded-lg overflow-hidden">
+                    <div>
                         <img
                             alt="Logo AgriRDC"
                             src={logo}
-                            className="w-full h-full object-cover"
+                            className="h-14 w-auto object-contain"
                         />
                     </div>
                     {/*<h1 className="text-2xl font-bold tracking-tight">{title}</h1>*/}

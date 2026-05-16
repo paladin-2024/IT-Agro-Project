@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
-import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import EmployeeSidebar from '../components/EmployeeSidebar.jsx'
 import { useAuth } from '../hooks/useAuth.js'
 import { getAssignedParcels } from '../api/assignments.js'
 import { MOCK_CROPS } from '../api/mocks.js'
@@ -63,9 +62,9 @@ export default function EmployeeCulturesPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            <EmployeeTopNav title="Mes Cultures" />
+            <EmployeeSidebar />
 
-            <div className="mx-auto max-w-3xl space-y-6 px-4 pb-32 pt-6 md:pb-10">
+            <div className="ml-64 space-y-6 px-8 pt-6 pb-10">
 
                 {/* Page title */}
                 <div>
@@ -206,7 +205,6 @@ export default function EmployeeCulturesPage() {
                 )}
             </div>
 
-            <EmployeeBottomNav />
         </div>
     )
 }

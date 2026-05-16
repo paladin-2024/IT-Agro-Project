@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
-import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
-import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import EmployeeSidebar from '../components/EmployeeSidebar.jsx'
 import Icon from '../components/Icon.jsx'
 
 const TEAM = [
@@ -38,13 +37,9 @@ export default function EmployeeParcelTeamPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            <EmployeeTopNav
-                backTo={`/employee/parcelles/${parcelId}`}
-                backLabel={`Parcelle ${parcelId}`}
-                title="Personnel Assigné"
-            />
+            <EmployeeSidebar />
 
-            <main className="mx-auto max-w-3xl space-y-6 px-6 pb-32 pt-8 md:pb-10">
+            <main className="ml-64 space-y-6 px-8 pt-8 pb-10">
                 {/* Page title */}
                 <div>
                     <h1 className="text-3xl font-black text-[#003f87]">
@@ -124,7 +119,6 @@ export default function EmployeeParcelTeamPage() {
                 </div>
             </main>
 
-            <EmployeeBottomNav parcelId={parcelId} />
         </div>
     )
 }

@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
-import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import EmployeeSidebar from '../components/EmployeeSidebar.jsx'
 import { useAuth } from '../hooks/useAuth.js'
 import { MOCK_CROPS } from '../api/mocks.js'
 import Icon from '../components/Icon.jsx'
@@ -80,24 +79,23 @@ export default function EmployeeCropDetailPage() {
     if (!meta && decodedName) {
         return (
             <div className="min-h-screen bg-[#f9f9ff]">
-                <EmployeeTopNav backTo="/employee/cultures" backLabel="Cultures" title={decodedName} />
-                <div className="flex flex-col items-center justify-center py-32 text-center">
+                <EmployeeSidebar />
+                <div className="ml-64 flex flex-col items-center justify-center py-32 text-center">
                     <Icon name="eco" className="h-12 w-12 text-slate-300" />
                     <p className="mt-4 text-lg font-bold text-slate-500">Culture introuvable</p>
                     <Link to="/employee/cultures" className="mt-4 text-sm font-semibold text-[#003f87] hover:underline">
                         Retour aux cultures
                     </Link>
                 </div>
-                <EmployeeBottomNav />
             </div>
         )
     }
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            <EmployeeTopNav backTo="/employee/cultures" backLabel="Cultures" title={decodedName} />
+            <EmployeeSidebar />
 
-            <main className="mx-auto max-w-3xl space-y-6 px-4 pb-32 pt-6 md:pb-10">
+            <main className="ml-64 space-y-6 px-8 pt-6 pb-10">
 
                 {/* Hero card */}
                 <div className="overflow-hidden rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 p-6 text-white shadow-lg">
@@ -251,7 +249,6 @@ export default function EmployeeCropDetailPage() {
                 </div>
             </main>
 
-            <EmployeeBottomNav />
         </div>
     )
 }

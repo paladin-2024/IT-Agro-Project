@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
-import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import EmployeeSidebar from '../components/EmployeeSidebar.jsx'
 import { useAuth } from '../hooks/useAuth.js'
 import Icon from '../components/Icon.jsx'
 
@@ -117,14 +116,10 @@ export default function EmployeeDailyReportPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            <EmployeeTopNav
-                backTo={backPath}
-                backLabel={`Parcelle ${parcelId}`}
-                title="Rapport Quotidien"
-            />
+            <EmployeeSidebar />
 
             <form onSubmit={handleSubmit}>
-                <div className="mx-auto max-w-7xl space-y-6 px-6 pb-32 pt-8 md:pb-10">
+                <div className="ml-64 space-y-6 px-8 pt-8 pb-10">
                     {/* Page title */}
                     <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                         <div>
@@ -415,7 +410,6 @@ export default function EmployeeDailyReportPage() {
                 </div>
             </form>
 
-            <EmployeeBottomNav parcelId={parcelId} />
         </div>
     )
 }

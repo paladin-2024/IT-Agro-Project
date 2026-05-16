@@ -4,31 +4,34 @@ import Icon from './Icon.jsx'
 import logo from '../assets/logo.png'
 
 const navItems = [
-    { label: 'Tableau de bord', icon: 'space_dashboard', to: '/owner/dashboard' },
-    { label: 'Mes Fermes',      icon: 'agriculture',     to: '/owner/fermes' },
-    { label: 'Parcelles',       icon: 'grid_view',       to: '/owner/parcelles' },
-    { label: 'Cultures',        icon: 'eco',             to: '/owner/cultures' },
-    { label: 'Rendements',      icon: 'show_chart',      to: '/owner/analytics' },
-    { label: 'Affectation',     icon: 'group',           to: '/owner/affectation' },
+    { label: 'Tableau de bord', icon: 'space_dashboard', to: '/employee/dashboard' },
+    { label: 'Cultures',        icon: 'eco',             to: '/employee/cultures'  },
+    { label: 'Saisir Récolte',  icon: 'add_task',        to: '/employee/saisir-recolte' },
 ]
 
-export default function OwnerSidebar() {
+export default function EmployeeSidebar() {
     const { logout } = useAuth()
     const navigate   = useNavigate()
     const { pathname } = useLocation()
 
     const handleLogout = () => { logout(); navigate('/login') }
 
+    function isActive(to) {
+        if (to === '/employee/dashboard')
+            return pathname === to || pathname.startsWith('/employee/parcelles')
+        return pathname === to || pathname.startsWith(to)
+    }
+
     return (
         <aside className="fixed left-0 top-0 z-50 flex h-full w-64 flex-col border-r border-border bg-white py-6">
             <div className="mb-8 px-5">
                 <img src={logo} alt="AgriRDC" className="h-12 w-auto object-contain" />
-                <p className="mt-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Espace Propriétaire</p>
+                <p className="mt-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Espace Employé</p>
             </div>
 
             <nav className="flex-1 space-y-1 px-3">
                 {navItems.map((item) => {
-                    const active = pathname === item.to
+                    const active = isActive(item.to)
                     return (
                         <Link
                             key={item.label}
@@ -47,9 +50,12 @@ export default function OwnerSidebar() {
             </nav>
 
             <div className="mt-auto space-y-4 px-4">
-                <button className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary-hover">
-                    Générer un rapport
-                </button>
+                <Link
+                    to="/employee/saisir-recolte"
+                    className="block w-full rounded-lg bg-primary py-2.5 text-center text-sm font-medium text-primary-foreground transition-all hover:bg-primary-hover"
+                >
+                    Saisir une Récolte
+                </Link>
                 <div className="border-t border-border pt-4">
                     <button
                         onClick={handleLogout}

@@ -3,8 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
-import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import EmployeeSidebar from '../components/EmployeeSidebar.jsx'
 import { getHarvestById, updateHarvest } from '../api/harvests.js'
 import Icon from '../components/Icon.jsx'
 
@@ -57,15 +56,14 @@ export default function EmployeeProductionEditPage() {
     if (notFound) {
         return (
             <div className="min-h-screen bg-[#f9f9ff]">
-                <EmployeeTopNav backTo="/employee/dashboard" backLabel="Accueil" title="Introuvable" />
-                <div className="flex flex-col items-center justify-center py-24 text-center px-6">
+                <EmployeeSidebar />
+                <div className="ml-64 flex flex-col items-center justify-center py-24 text-center px-6">
                     <Icon name="error_outline" className="h-12 w-12 text-slate-300" />
                     <p className="mt-4 text-lg font-bold text-slate-600">Production introuvable</p>
                     <p className="mt-1 text-sm text-slate-400">
                         L&apos;identifiant <strong>{id}</strong> ne correspond à aucun enregistrement local.
                     </p>
                 </div>
-                <EmployeeBottomNav />
             </div>
         )
     }
@@ -73,8 +71,8 @@ export default function EmployeeProductionEditPage() {
     if (submitted) {
         return (
             <div className="min-h-screen bg-[#f9f9ff]">
-                <EmployeeTopNav backTo={backTo} backLabel="Détails" title="Modification réussie" />
-                <div className="mx-6 mt-10 flex flex-col items-center justify-center rounded-xl border border-emerald-200 bg-white py-20 text-center shadow-sm">
+                <EmployeeSidebar />
+                <div className="ml-64 mx-6 mt-10 flex flex-col items-center justify-center rounded-xl border border-emerald-200 bg-white py-20 text-center shadow-sm">
                     <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
                         <Icon name="check_circle" className="h-10 w-10 text-emerald-600" />
                     </div>
@@ -89,16 +87,15 @@ export default function EmployeeProductionEditPage() {
                         Voir la production
                     </button>
                 </div>
-                <EmployeeBottomNav />
             </div>
         )
     }
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            <EmployeeTopNav backTo={backTo} backLabel="Détails" title={`Modifier #${id}`} />
+            <EmployeeSidebar />
 
-            <main className="mx-auto max-w-6xl px-6 pb-32 pt-8 md:pb-10">
+            <main className="ml-64 px-8 pt-8 pb-10">
                 {/* Breadcrumb + title */}
                 <div className="mb-8">
                     <nav className="mb-2 flex items-center gap-1 text-xs text-slate-400">
@@ -255,7 +252,6 @@ export default function EmployeeProductionEditPage() {
                 </div>
             </main>
 
-            <EmployeeBottomNav />
         </div>
     )
 }

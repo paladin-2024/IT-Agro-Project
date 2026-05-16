@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
-import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
-import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import EmployeeSidebar from '../components/EmployeeSidebar.jsx'
 import { getHarvestById } from '../api/harvests.js'
 import Icon from '../components/Icon.jsx'
 
@@ -71,13 +70,9 @@ export default function EmployeeProductionDetailPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            <EmployeeTopNav
-                backTo={`/employee/parcelles/${parcelId}`}
-                backLabel={`Parcelle ${parcelId}`}
-                title={`#${recordId}`}
-            />
+            <EmployeeSidebar />
 
-            <main className="mx-auto max-w-7xl space-y-6 px-6 pb-32 pt-8 md:pb-10">
+            <main className="ml-64 space-y-6 px-8 pt-8 pb-10">
                 {/* Title row */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
@@ -254,7 +249,6 @@ export default function EmployeeProductionDetailPage() {
                 </div>
             </main>
 
-            <EmployeeBottomNav />
         </div>
     )
 }

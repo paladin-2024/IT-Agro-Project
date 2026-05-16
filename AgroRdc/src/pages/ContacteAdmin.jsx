@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import logo from '../assets/logo.jpeg'
+import logo from '../assets/logo.png'
 import Icon from '../components/Icon.jsx'
 
 const API_URL = import.meta.env.VITE_API_URL

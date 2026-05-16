@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import Icon from './Icon.jsx'
+import logo from '../assets/logo.png'
 
 const navItems = [
     { label: 'Tableau de bord', icon: 'space_dashboard', to: '/dashboard' },
@@ -19,11 +20,9 @@ export default function AdminSidebar() {
 
     return (
         <aside className="fixed left-0 top-0 z-50 flex h-full w-64 flex-col border-r border-border bg-white py-6">
-            <div className="mb-8 flex items-center gap-3 px-6">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-                    <Icon name="agriculture" className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">Administration</p>
+            <div className="mb-8 px-5">
+                <img src={logo} alt="AgriRDC" className="h-12 w-auto object-contain" />
+                <p className="mt-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Administration</p>
             </div>
 
             <nav className="flex-1 space-y-1 px-3">

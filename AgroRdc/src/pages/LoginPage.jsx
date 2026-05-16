@@ -8,7 +8,7 @@ import PageFooter from '../components/PageFooter.jsx'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import logo from '../assets/logo.jpeg'
+import logo from '../assets/logo.png'
 import Icon from '../components/Icon.jsx'
 
 const API_URL = import.meta.env.VITE_API_URL

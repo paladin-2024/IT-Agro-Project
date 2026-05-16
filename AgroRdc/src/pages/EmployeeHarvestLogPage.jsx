@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import EmployeeTopNav from '../components/EmployeeTopNav.jsx'
-import EmployeeBottomNav from '../components/EmployeeBottomNav.jsx'
+import EmployeeSidebar from '../components/EmployeeSidebar.jsx'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import { createHarvest } from '../api/harvests.js'
 import Icon from '../components/Icon.jsx'
@@ -74,13 +73,9 @@ export default function EmployeeHarvestLogPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            <EmployeeTopNav
-                backTo={backPath}
-                backLabel="Retour"
-                title="Saisir une Récolte"
-            />
+            <EmployeeSidebar />
 
-            <main className="mx-auto max-w-6xl px-6 pb-32 pt-8 md:pb-10">
+            <main className="ml-64 px-8 pt-8 pb-10">
                 {/* Page title */}
                 <div className="mb-8">
                     <nav className="mb-2 flex items-center gap-1 text-xs text-slate-400">
@@ -353,7 +348,6 @@ export default function EmployeeHarvestLogPage() {
                 )}
             </main>
 
-            <EmployeeBottomNav parcelId={urlParcelId} />
         </div>
     )
 }

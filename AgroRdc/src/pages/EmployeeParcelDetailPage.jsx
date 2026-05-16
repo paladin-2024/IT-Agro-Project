@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getHarvestsByParcel } from "../api/harvests.js";
-import EmployeeTopNav from "../components/EmployeeTopNav.jsx";
-import EmployeeBottomNav from "../components/EmployeeBottomNav.jsx";
+import EmployeeSidebar from "../components/EmployeeSidebar.jsx";
 import Icon from '../components/Icon.jsx'
 
 /* ─── Static data ────────────────────────────────────────────────────── */
@@ -45,14 +44,9 @@ export default function EmployeeParcelDetailPage() {
 
     return (
         <div className="min-h-screen bg-[#f9f9ff] text-[#171c25]">
-            <EmployeeTopNav
-                backTo="/employee/dashboard"
-                backLabel="Parcelles"
-                title={`Parcelle ${parcelId}`}
-                badge="Zone Sud"
-            />
+            <EmployeeSidebar />
 
-            <main className="mx-auto max-w-7xl space-y-6 p-8">
+            <main className="ml-64 space-y-6 p-8">
                 {/* Hero section */}
                 <div className="grid grid-cols-12 gap-6">
                     {/* Parcel hero card */}
@@ -322,7 +316,6 @@ export default function EmployeeParcelDetailPage() {
                 </div>
             </main>
 
-            <EmployeeBottomNav parcelId={parcelId} />
         </div>
     );
 }

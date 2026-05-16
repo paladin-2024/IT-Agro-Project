@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import EmployeeTopNav from "../components/EmployeeTopNav.jsx";
-import EmployeeBottomNav from "../components/EmployeeBottomNav.jsx";
+import EmployeeSidebar from "../components/EmployeeSidebar.jsx";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { getAssignedParcels } from "../api/assignments.js";
 import Icon from '../components/Icon.jsx'
@@ -100,33 +99,9 @@ export default function EmployeeDashboard() {
 
     return (
         <div className="min-h-screen bg-[#fbf9f8] text-[#1b1c1c]">
-            <EmployeeTopNav title="Mes Parcelles Assignées">
-                <div className="hidden items-center gap-1 md:flex">
-                    <button
-                        onClick={() => setActiveTab("assignments")}
-                        className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors ${
-                            activeTab === "assignments"
-                                ? "bg-blue-50 text-[#003f87]"
-                                : "text-slate-500 hover:text-[#003f87]"
-                        }`}
-                    >
-                        Mes Missions
-                    </button>
-                    <button
-                        onClick={() => setActiveTab("history")}
-                        className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors ${
-                            activeTab === "history"
-                                ? "bg-blue-50 text-[#003f87]"
-                                : "text-slate-500 hover:text-[#003f87]"
-                        }`}
-                    >
-                        Historique
-                    </button>
-                </div>
-            </EmployeeTopNav>
+            <EmployeeSidebar />
 
-            {/* Main content — extra bottom padding for mobile bottom nav */}
-            <main className="mx-auto max-w-7xl px-6 pb-32 pt-10 md:pb-16">
+            <main className="ml-64 px-8 pt-10 pb-10">
                 {/* Page header + search */}
                 <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
                     <div>
@@ -240,12 +215,11 @@ export default function EmployeeDashboard() {
             {/* FAB */}
             <Link
                 to="/employee/saisir-recolte"
-                className="fixed bottom-20 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#b6171e] text-white shadow-lg transition-transform hover:scale-110 active:scale-95 md:bottom-12 md:right-12"
+                className="fixed bottom-8 right-8 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#b6171e] text-white shadow-lg transition-transform hover:scale-110 active:scale-95"
             >
                 <Icon name="add_task" className="h-6 w-6" />
             </Link>
 
-            <EmployeeBottomNav />
         </div>
     );
 }
